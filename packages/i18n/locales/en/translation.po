@@ -1,0 +1,1248 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"mime-version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: en\n"
+
+msgid "sidebar.button.newPage"
+msgstr "New note"
+
+msgid "sidebar.button.create"
+msgstr "Create"
+
+msgid "common.cancel"
+msgstr "Cancel"
+
+msgid "rename.folderTitle"
+msgstr "Rename folder"
+
+msgid "rename.documentTitle"
+msgstr "Rename document"
+
+msgid "rename.placeholder"
+msgstr "Name"
+
+msgid "rename.save"
+msgstr "Save"
+
+msgid "folders.title"
+msgstr "Folders"
+
+msgid "folders.newFolder"
+msgstr "New folder"
+
+msgid "folders.createTitle"
+msgstr "Create folder"
+
+msgid "folders.namePlaceholder"
+msgstr "Folder name"
+
+msgid "folders.create"
+msgstr "Create"
+
+msgid "folders.gridView"
+msgstr "Grid view"
+
+msgid "folders.listView"
+msgstr "List view"
+
+msgid "folders.untitled"
+msgstr "Untitled folder"
+
+msgid "folders.emptySidebar"
+msgstr "No folders here"
+
+msgid "folders.empty"
+msgstr "This folder is empty"
+
+msgid "folders.root"
+msgstr "Home"
+
+msgid "folders.itemCount"
+msgstr "{{count}} items"
+
+msgid "folders.itemType"
+msgstr "Folder"
+
+msgid "quickSwitch.documents"
+msgstr "Documents"
+
+msgid "quickSwitch.documentType"
+msgstr "Document"
+
+msgid "quickPreview.loading"
+msgstr "Loading preview…"
+
+msgid "quickPreview.loadError"
+msgstr "The preview could not be loaded."
+
+msgid "quickPreview.emptyDocument"
+msgstr "This document is empty."
+
+msgid "quickPreview.emptyFolder"
+msgstr "This folder is empty."
+
+msgid "quickPreview.closeHint"
+msgstr "Press Space again to close"
+
+msgid "folders.rename"
+msgstr "Rename"
+
+msgid "folders.renameTitle"
+msgstr "Rename folder"
+
+msgid "folders.save"
+msgstr "Save"
+
+msgid "folders.color.title"
+msgstr "Folder color"
+
+msgid "folders.color.default"
+msgstr "Default color"
+
+msgid "folders.color.custom"
+msgstr "Custom color"
+
+msgid "folders.color.customTitle"
+msgstr "Custom folder color"
+
+msgid "folders.color.hex"
+msgstr "HEX"
+
+msgid "folders.color.red"
+msgstr "Red"
+
+msgid "folders.color.green"
+msgstr "Green"
+
+msgid "folders.color.blue"
+msgstr "Blue"
+
+msgid "folders.color.apply"
+msgstr "Apply"
+
+msgid "folders.sort.manual"
+msgstr "Manual"
+
+msgid "folders.sort.nameAsc"
+msgstr "Name: A–Z"
+
+msgid "folders.sort.nameDesc"
+msgstr "Name: Z–A"
+
+msgid "folders.sort.newest"
+msgstr "Newest first"
+
+msgid "folders.sort.oldest"
+msgstr "Oldest first"
+
+msgid "sidebar.button.home"
+msgstr "Home"
+
+msgid "sidebar.button.settings"
+msgstr "Settings"
+
+msgid "sidebar.button.trash"
+msgstr "Trash"
+
+msgid "sidebar.button.hideSidebar"
+msgstr "Hide sidebar"
+
+msgid "sidebar.button.showSidebar"
+msgstr "Show sidebar"
+
+msgid "sidebar.button.editSidebar"
+msgstr "Edit sidebar"
+
+msgid "sidebar.button.search"
+msgstr "Search"
+
+msgid "sidebar.button.menu"
+msgstr "Menu"
+
+msgid "sidebar.workspace.offline"
+msgstr "On your device"
+
+msgid "sidebar.workspace.cloud"
+msgstr "In the cloud"
+
+msgid "sidebar.workspace.newWorkspace"
+msgstr "Create new workspace"
+
+msgid "sidebar.workspace.newWorkspaceError"
+msgstr "Failed to create workspace"
+
+msgid "sidebar.workspace.offlineHeading"
+msgstr "Workspaces on your device"
+
+msgid "sidebar.workspace.cloudHeading"
+msgstr "Workspaces in the cloud"
+
+msgid "sidebar.workspace.currentWorkspace"
+msgstr "Current workspace"
+
+msgid "sidebar.title.favorites"
+msgstr "Pinned"
+
+msgid "pinned.title"
+msgstr "Pinned"
+
+msgid "sidebar.title.allNotes"
+msgstr "All notes"
+
+msgid "sidebar.favorites.emptyHint"
+msgstr "No favorites yet, click the star ⭐ icon to pin notes, or drag one here."
+
+msgid "sidebar.trash.title"
+msgstr "Trash"
+
+msgid "sidebar.trash.restore"
+msgstr "Restore"
+
+msgid "sidebar.trash.delete"
+msgstr "Delete permanently"
+
+msgid "sidebar.trash.search"
+msgstr "Search in trash"
+
+msgid "sidebar.trash.empty"
+msgstr "Clear trash"
+
+msgid "sidebar.trash.emptyState"
+msgstr "Trash is empty"
+
+msgid "sidebar.trash.noMatches"
+msgstr "No items match your search"
+
+msgid "sidebar.trash.selectItem"
+msgstr "Select {{name}}"
+
+msgid "sidebar.trash.done"
+msgstr "Done"
+
+msgid "sidebar.trash.selectedCount"
+msgstr "{{count}} selected"
+
+msgid "sidebar.trash.restoreSelected"
+msgstr "Restore"
+
+msgid "sidebar.trash.deleteSelected"
+msgstr "Delete"
+
+msgid "sidebar.trash.deleteSelectedTitle"
+msgstr "Permanently delete {{count}} items?"
+
+msgid "sidebar.trash.deleteSelectedDescription"
+msgstr "This also deletes the contents of selected folders. This cannot be undone."
+
+msgid "sidebar.trash.bulkRestoreSuccess"
+msgstr "Selected items restored."
+
+msgid "sidebar.trash.bulkRestoreFailed"
+msgstr "Could not restore selected items."
+
+msgid "sidebar.trash.bulkDeleteSuccess"
+msgstr "Selected items permanently deleted."
+
+msgid "sidebar.trash.bulkDeleteFailed"
+msgstr "Could not delete {{count}} items. The remaining items were kept."
+
+msgid "sidebar.notes.contextmenu.addFavorite"
+msgstr "Pin"
+
+msgid "sidebar.notes.contextmenu.removeFavorite"
+msgstr "Unpin"
+
+msgid "sidebar.notes.contextmenu.newSubpage"
+msgstr "New subpage"
+
+msgid "sidebar.notes.contextmenu.rename"
+msgstr "Rename"
+
+msgid "sidebar.notes.contextmenu.moveTo"
+msgstr "Move to"
+
+msgid "sidebar.notes.contextmenu.duplicate"
+msgstr "Duplicate"
+
+msgid "sidebar.notes.contextmenu.export"
+msgstr "Export"
+
+msgid "sidebar.notes.contextmenu.trash"
+msgstr "Move to trash"
+
+msgid "sidebar.notes.contextmenu.lastModified"
+msgstr "Last edited:"
+
+msgid "sidebar.notes.contextmenu.openInCenter"
+msgstr "Open in center view"
+
+msgid "sidebar.notes.noPages"
+msgstr "No pages."
+
+msgid "defaults.pageTitle"
+msgstr "Untitled"
+
+msgid "home.welcome"
+msgstr "Welcome back"
+
+msgid "home.recents"
+msgstr "Recent notes"
+
+msgid "home.noPages"
+msgstr "You don't have any pages yet."
+
+msgid "home.recentsEmpty"
+msgstr "Nothing to see here yet. Create your first note to get started!"
+
+msgid "home.createPage"
+msgstr "Create a page"
+
+msgid "settings.workspace.title"
+msgstr "Workspace"
+
+msgid "settings.workspace.dataManagement"
+msgstr "Data management"
+
+msgid "settings.workspace.exportAllText"
+msgstr "Export all notes as HTML"
+
+msgid "settings.workspace.exportAllButton"
+msgstr "Export"
+
+msgid "settings.workspace.backupAndRestoreText"
+msgstr "Backup and restore data"
+
+msgid "settings.workspace.backupButton"
+msgstr "Backup"
+
+msgid "settings.workspace.importButton"
+msgstr "Import data"
+
+msgid "settings.workspace.exporting"
+msgstr "Exporting..."
+
+msgid "settings.workspace.restoreDialog.title"
+msgstr "Import data"
+
+msgid "settings.workspace.restoreDialog.description"
+msgstr "Choose a previously exported Darkwrite data archive to import. "
+
+msgid "settings.workspace.restoreDialog.warningText"
+msgstr ""
+"Importing replaces your current data with the archive contents. They will "
+"NOT be merged."
+
+msgid "settings.workspace.restoreDialog.chooseFile"
+msgstr "Choose file"
+
+msgid "settings.workspace.restoreDialog.cancel"
+msgstr "Cancel"
+
+msgid "settings.workspace.restoreDialog.restore"
+msgstr "Import"
+
+msgid "settings.workspace.languageText"
+msgstr "Language"
+
+msgid "settings.workspace.startupBehaviourText"
+msgstr "Startup behaviour"
+
+msgid "settings.workspace.startupBehaviour.openHome"
+msgstr "Always open home page"
+
+msgid "settings.workspace.startupBehaviour.openLastPage"
+msgstr "Continue where I left off"
+
+msgid "settings.workspace.startupBehaviour.openSpecificPage"
+msgstr "Open a specific page"
+
+msgid "settings.workspace.deleteWorkspace"
+msgstr "Delete workspace"
+
+msgid "settings.workspace.deleteWorkspaceDialog.title"
+msgstr "Delete workspace"
+
+msgid "settings.workspace.deleteWorkspaceDialog.description"
+msgstr ""
+"This action is permanent and cannot be undone. All notes in this workspace "
+"will be permanently deleted."
+
+msgid "settings.workspace.deleteWorkspaceDialog.confirmLabel"
+msgstr "Type \"{{name}}\" to confirm:"
+
+msgid "settings.workspace.deleteWorkspaceDialog.cancel"
+msgstr "Cancel"
+
+msgid "settings.workspace.deleteWorkspaceDialog.delete"
+msgstr "Delete workspace"
+
+msgid "settings.workspace.deleteWorkspaceDialog.successMessage"
+msgstr "Workspace deleted successfully."
+
+msgid "settings.workspace.deleteWorkspaceDialog.errorMessage"
+msgstr "Failed to delete workspace."
+
+msgid "settings.workspace.editWorkspace"
+msgstr "Edit workspace"
+
+msgid "settings.workspace.editWorkspaceDialog.title"
+msgstr "Edit workspace"
+
+msgid "settings.workspace.editWorkspaceDialog.changeIcon"
+msgstr "Change icon"
+
+msgid "settings.workspace.editWorkspaceDialog.removeIcon"
+msgstr "Remove icon"
+
+msgid "settings.workspace.editWorkspaceDialog.workspaceName"
+msgstr "Workspace name"
+
+msgid "settings.workspace.editWorkspaceDialog.save"
+msgstr "Save"
+
+msgid "settings.workspace.editWorkspaceDialog.cancel"
+msgstr "Cancel"
+
+msgid "settings.workspace.alwaysShowWordCount"
+msgstr "Always show word count"
+
+msgid "settings.workspace.codeBlockIndentSize"
+msgstr "Indent size in code blocks"
+
+msgid "settings.workspace.codeBlockIndentSizeDescription"
+msgstr "Number of spaces to be inserted when you hit the Tab⇥ key."
+
+msgid "settings.workspace.showRtlControls"
+msgstr "Show text direction controls in the editor toolbar"
+
+msgid "settings.workspace.openFilesOnDoubleClick"
+msgstr "Open linked files on double click"
+
+msgid "settings.workspace.openItemsOnDoubleClick"
+msgstr "Open folders and documents with a double-click"
+
+msgid "settings.workspace.openItemsOnDoubleClickDescription"
+msgstr "When off, a plain click opens instead of selecting. Space preview and bulk actions will not work after a plain click; use Cmd/Shift-click or drag a selection box first."
+
+msgid "settings.appearance.title"
+msgstr "Appearance"
+
+msgid "settings.appearance.canvasWidth"
+msgstr "Workspace content width"
+
+msgid "settings.appearance.canvasWidthDescription"
+msgstr "One width for folders and documents. Hold Cmd+Option (Ctrl+Alt on Windows/Linux) to drag the side handles. A document's Wide page mode overrides this width."
+
+msgid "settings.appearance.canvasResizeLeft"
+msgstr "Resize workspace content from the left"
+
+msgid "settings.appearance.canvasResizeRight"
+msgstr "Resize workspace content from the right"
+
+msgid "settings.appearance.colorThemeText"
+msgstr "Color theme"
+
+msgid "settings.appearance.importTooltip"
+msgstr "Import theme"
+
+msgid "settings.appearance.accentColorText"
+msgstr "Accent color"
+
+msgid "settings.appearance.useSystemWindowFrame"
+msgstr "Use system window frame (requires restart)"
+
+msgid "settings.appearance.useSystemAccentColor"
+msgstr "Use system accent color (only Windows or macOS)"
+
+msgid "settings.appearance.useSystemAccentColorDescription"
+msgstr ""
+"This option may not work correctly when using automatic accent color on "
+"Windows."
+
+msgid "settings.appearance.lightMode"
+msgstr "Light"
+
+msgid "settings.appearance.systemMode"
+msgstr "System"
+
+msgid "settings.appearance.darkMode"
+msgstr "Dark"
+
+msgid "settings.appearance.lightColorScheme"
+msgstr "Light color theme"
+
+msgid "settings.appearance.darkColorScheme"
+msgstr "Dark color theme"
+
+msgid "settings.appearance.compactSidebar"
+msgstr "Compact sidebar layout"
+
+msgid "settings.appearance.compactSidebarDescription"
+msgstr "Makes a few more notes fit into the sidebar"
+
+msgid "settings.fonts.title"
+msgstr "Fonts"
+
+msgid "settings.fonts.description"
+msgstr "Choose installed fonts for the interface and text, and a monospaced font for code."
+
+msgid "settings.fonts.uiText"
+msgstr "App font"
+
+msgid "settings.fonts.sansText"
+msgstr "Writing font"
+
+msgid "settings.fonts.serifText"
+msgstr "Serif font:"
+
+msgid "settings.fonts.monoText"
+msgstr "Code font"
+
+msgid "settings.fonts.applyButton"
+msgstr "Apply"
+
+msgid "settings.fonts.systemDefault"
+msgstr "System default"
+
+msgid "settings.fonts.systemDefaultUi"
+msgstr "System app font"
+
+msgid "settings.fonts.systemDefaultSans"
+msgstr "System text font"
+
+msgid "settings.fonts.systemDefaultCode"
+msgstr "System code font"
+
+msgid "settings.experimental.title"
+msgstr "Experimental features"
+
+msgid "settings.experimental.enableCustomTitlebarOnMac"
+msgstr "Enable custom titlebar on macOS (requires restart)"
+
+msgid "settings.about.title"
+msgstr "About"
+
+msgid "settings.about.sourceCode"
+msgstr "Source code"
+
+msgid "settings.about.forkDescription"
+msgstr "An independently maintained fork of Darkwrite."
+
+msgid "settings.about.developmentBuild"
+msgstr "Development build"
+
+msgid "settings.about.supportProject"
+msgstr "Support the project"
+
+msgid "settings.about.upstreamProject"
+msgstr "Original Darkwrite project"
+
+msgid "settings.about.upstreamWebsite"
+msgstr "Original project website"
+
+msgid "settings.about.reportBugs"
+msgstr "Report bugs"
+
+msgid "settings.about.checkUpdates"
+msgstr "Check for updates"
+
+msgid "settings.about.checkUpdatesPending"
+msgstr "Checking for updates..."
+
+msgid "settings.about.website"
+msgstr "Website"
+
+msgid "settings.about.privacy"
+msgstr "Privacy"
+
+msgid "settings.about.license"
+msgstr "License (AGPL v3)"
+
+msgid "settings.privacy.autoUpdateCheckLabel"
+msgstr "Check for updates on startup"
+
+msgid "editor.menu.checkSpelling"
+msgstr "Check spelling"
+
+msgid "editor.menu.readerMode"
+msgstr "Reader mode"
+
+msgid "editor.readerMode.enable"
+msgstr "Enable reader mode"
+
+msgid "editor.readerMode.disable"
+msgstr "Disable reader mode"
+
+msgid "editor.menu.export"
+msgstr "Export"
+
+msgid "editor.menu.import"
+msgstr "Import"
+
+msgid "editor.menu.duplicate"
+msgstr "Duplicate"
+
+msgid "editor.menu.wordCount"
+msgstr "{{count}} words"
+
+msgid "editor.menu.undo"
+msgstr "Undo"
+
+msgid "editor.menu.redo"
+msgstr "Redo"
+
+msgid "editor.menu.imageWarning"
+msgstr "We cannot include images for now."
+
+msgid "editor.menu.jsonExport"
+msgstr "Darkwrite document (JSON)"
+
+msgid "editor.menu.htmlExport"
+msgstr "HTML (plain)"
+
+msgid "editor.menu.tooltip"
+msgstr "Other options"
+
+msgid "editor.database.newView.titleLabel"
+msgstr "View name"
+
+msgid "editor.database.newView.cancel"
+msgstr "Cancel"
+
+msgid "editor.database.newView.create"
+msgstr "Create"
+
+msgid "editor.database.newView.dataSource"
+msgstr "Data source"
+
+msgid "editor.database.picker.placeholder"
+msgstr "Choose a database"
+
+msgid "editor.slashCommand.text"
+msgstr "Text"
+
+msgid "editor.slashCommand.textDescription"
+msgstr "Express it in plain text."
+
+msgid "editor.slashCommand.toDoList"
+msgstr "To-do list"
+
+msgid "editor.slashCommand.toDoListDescription"
+msgstr "Track tasks with a simple list."
+
+msgid "editor.slashCommand.heading1"
+msgstr "Heading 1"
+
+msgid "editor.slashCommand.heading1Description"
+msgstr "A large heading for sections."
+
+msgid "editor.slashCommand.heading2"
+msgstr "Heading 2"
+
+msgid "editor.slashCommand.heading2Description"
+msgstr "A smaller heading for sub-sections."
+
+msgid "editor.slashCommand.heading3"
+msgstr "Heading 3"
+
+msgid "editor.slashCommand.heading3Description"
+msgstr "A smaller heading for sub-sections."
+
+msgid "editor.slashCommand.heading4"
+msgstr "Heading 4"
+
+msgid "editor.slashCommand.heading4Description"
+msgstr "A smaller heading for sub-sections."
+
+msgid "editor.slashCommand.bulletList"
+msgstr "Bullet list"
+
+msgid "editor.slashCommand.bulletListDescription"
+msgstr "List things away without order."
+
+msgid "editor.slashCommand.numberedList"
+msgstr "Numbered list"
+
+msgid "editor.slashCommand.numberedListDescription"
+msgstr "List things away in an organized way."
+
+msgid "editor.slashCommand.quote"
+msgstr "Quote"
+
+msgid "editor.slashCommand.quoteDescription"
+msgstr "Capture a quote."
+
+msgid "editor.slashCommand.callout"
+msgstr "Callout"
+
+msgid "editor.slashCommand.calloutDescription"
+msgstr "Highlight an important note in a styled block."
+
+msgid "editor.slashCommand.code"
+msgstr "Code"
+
+msgid "editor.slashCommand.codeDescription"
+msgstr "Capture a code snippet inside your note."
+
+msgid "editor.slashCommand.divider"
+msgstr "Divider"
+
+msgid "editor.slashCommand.dividerDescription"
+msgstr "Divide your note horizontally."
+
+msgid "editor.slashCommand.linkToPage"
+msgstr "Link to page"
+
+msgid "editor.slashCommand.linkToPageDescription"
+msgstr "Add a clickable link to another note of yours."
+
+msgid "editor.slashCommand.image"
+msgstr "Image"
+
+msgid "editor.slashCommand.imageDescription"
+msgstr "Embed an image."
+
+msgid "editor.slashCommand.table"
+msgstr "Table"
+
+msgid "editor.slashCommand.tableDescription"
+msgstr "Add a good old table"
+
+msgid "editor.slashCommand.fileLink"
+msgstr "File link"
+
+msgid "editor.slashCommand.fileLinkDescription"
+msgstr "Link a local file for quick access."
+
+msgid "editor.bubble.h1"
+msgstr "Heading 1"
+
+msgid "editor.bubble.h2"
+msgstr "Heading 2"
+
+msgid "editor.bubble.h3"
+msgstr "Heading 3"
+
+msgid "editor.bubble.h4"
+msgstr "Heading 4"
+
+msgid "editor.bubble.clearHeading"
+msgstr "Clear heading"
+
+msgid "editor.bubble.removeLink"
+msgstr "Remove link"
+
+msgid "editor.bubble.saveLink"
+msgstr "Save link"
+
+msgid "editor.bubble.linkPlaceholder"
+msgstr "Paste URL or search"
+
+msgid "editor.bubble.bulletList"
+msgstr "Bullet list"
+
+msgid "editor.bubble.numberedList"
+msgstr "Numbered list"
+
+msgid "editor.bubble.toDoList"
+msgstr "To-do list"
+
+msgid "editor.bubble.bold"
+msgstr "Bold"
+
+msgid "editor.bubble.italic"
+msgstr "Italic"
+
+msgid "editor.bubble.underline"
+msgstr "Underline"
+
+msgid "editor.bubble.strike"
+msgstr "Strikethrough"
+
+msgid "editor.bubble.code"
+msgstr "Inline code"
+
+msgid "editor.bubble.blockquote"
+msgstr "Quote"
+
+msgid "editor.bubble.textDirection.label"
+msgstr "Text direction"
+
+msgid "editor.bubble.textDirection.ltr"
+msgstr "Left to right"
+
+msgid "editor.bubble.textDirection.rtl"
+msgstr "Right to left"
+
+msgid "editor.bubble.textDirection.auto"
+msgstr "Auto"
+
+msgid "editor.table.addColBefore"
+msgstr "Add column to the left"
+
+msgid "editor.table.addColAfter"
+msgstr "Add column to the right"
+
+msgid "editor.table.deleteCol"
+msgstr "Delete column"
+
+msgid "editor.table.addRowBefore"
+msgstr "Add row above"
+
+msgid "editor.table.addRowAfter"
+msgstr "Add row below"
+
+msgid "editor.table.deleteRow"
+msgstr "Delete row"
+
+msgid "editor.table.headerRow"
+msgstr "Toggle header row"
+
+msgid "editor.table.headerCol"
+msgstr "Toggle header column"
+
+msgid "editor.table.delete"
+msgstr "Delete table"
+
+msgid "editor.customizations.sansText"
+msgstr "Sans"
+
+msgid "editor.customizations.serifText"
+msgstr "Serif"
+
+msgid "editor.customizations.monoText"
+msgstr "Mono"
+
+msgid "editor.customizations.customText"
+msgstr "Custom"
+
+msgid "editor.customizations.backgroundColorText"
+msgstr "Background color"
+
+msgid "editor.customizations.foregroundColorText"
+msgstr "Default text color"
+
+msgid "editor.customizations.customFontNamePlaceholer"
+msgstr "Custom font name"
+
+msgid "editor.customizations.widePage"
+msgstr "Fill width"
+
+msgid "editor.customizations.tooltip"
+msgstr "Customize page appearance"
+
+msgid "editor.blocks.linkToPage.placeholder"
+msgstr "Select a note"
+
+msgid "editor.blocks.linkToPage.turnIntoInlineLink"
+msgstr "Turn into inline link"
+
+msgid "editor.blocks.fileLink.placeholder"
+msgstr "Choose a file for quick access"
+
+msgid "editor.blocks.fileLink.open"
+msgstr "Open"
+
+msgid "editor.blocks.fileLink.copyPath"
+msgstr "Copy full path"
+
+msgid "editor.blocks.fileLink.revealInFolder"
+msgstr "Reveal in folder"
+
+msgid "editor.blocks.fileLink.changeFile"
+msgstr "Change file"
+
+msgid "editor.cover.changeCover"
+msgstr "Change cover"
+
+msgid "editor.cover.removeCover"
+msgstr "Remove cover"
+
+msgid "editor.cover.addIcon"
+msgstr "Add icon"
+
+msgid "editor.cover.removeIcon"
+msgstr "Remove icon"
+
+msgid "editor.cover.addCover"
+msgstr "Add cover"
+
+msgid "editor.cover.trashWarning"
+msgstr "This page is currently in the trash."
+
+msgid "editor.placeholder"
+msgstr "Press '/' for commands"
+
+msgid "search.placeholder"
+msgstr "Search folders and documents"
+
+msgid "search.chooserPlaceholder"
+msgstr "Choose a note"
+
+msgid "search.noResult"
+msgstr "No results"
+
+msgid "toast.update.description"
+msgstr "Update available: {{version}}"
+
+msgid "toast.update.releasePageButton"
+msgstr "Show release"
+
+msgid "toast.update.upToDate"
+msgstr "Darkwrite is up to date."
+
+msgid "toast.movePage.success"
+msgstr "Item moved successfully."
+
+msgid "toast.movePage.error"
+msgstr "Failed to move item."
+
+msgid "toast.clearTrash.success"
+msgstr "Trash cleared successfully"
+
+msgid "toast.clearTrash.error"
+msgstr "Failed to clear trash."
+
+msgid "toast.restorePage.success"
+msgstr "Page restored from trash."
+
+msgid "toast.restorePage.error"
+msgstr "Failed to restore page."
+
+msgid "toast.deletePage.success"
+msgstr "Page deleted."
+
+msgid "toast.deletePage.error"
+msgstr "Failed to delete page"
+
+msgid "toast.trashPage.success"
+msgstr "Page moved to trash."
+
+msgid "toast.trashPage.error"
+msgstr "Failed to move page to trash."
+
+msgid "toast.exportPage.success"
+msgstr "Page exported."
+
+msgid "toast.exportPage.error"
+msgstr "Could not export page."
+
+msgid "titlebar.noPagesAbove"
+msgstr "No pages above."
+
+msgid "titlebar.locationPath"
+msgstr "Location path"
+
+msgid "onboarding.chooseLanguage"
+msgstr "Choose a language to get started."
+
+msgid "onboarding.welcome"
+msgstr "Welcome to Darkwrite"
+
+msgid "onboarding.welcomeDesc"
+msgstr "Let's create your first workspace"
+
+msgid "onboarding.nameWorkspaceHint"
+msgstr "Name your workspace"
+
+msgid "onboarding.themeTitle"
+msgstr "Let's make it yours"
+
+msgid "onboarding.themeDesc"
+msgstr ""
+"Choose a theme to get started with. You can change it at any time in "
+"settings."
+
+msgid "onboarding.finishedHeading"
+msgstr "You're all set."
+
+msgid "onboarding.finishedDesc"
+msgstr "Your truly personal workspace is ready. Happy writing!"
+
+msgid "onboarding.letsBegin"
+msgstr "Let's begin"
+
+msgid "onboarding.checkForUpdates"
+msgstr "Check for updates on startup"
+
+msgid "ui.font.typeFontName"
+msgstr "Type a font name"
+
+msgid "ui.font.search"
+msgstr "Search fonts"
+
+msgid "ui.font.placeholder"
+msgstr "Select a font"
+
+msgid "ui.moveToDialog.title"
+msgstr "Move <0></0> to:"
+
+msgid "ui.clearTrashDialog.title"
+msgstr "Clear trash"
+
+msgid "ui.clearTrashDialog.description"
+msgstr ""
+"Are you sure you want to permanently delete all notes in the trash? This "
+"action cannot be undone."
+
+msgid "ui.clearTrashDialog.cancel"
+msgstr "Cancel"
+
+msgid "ui.clearTrashDialog.clear"
+msgstr "Clear trash"
+
+msgid "ui.contextmenu.copy"
+msgstr "Copy"
+
+msgid "ui.contextmenu.cut"
+msgstr "Cut"
+
+msgid "ui.contextmenu.paste"
+msgstr "Paste"
+
+msgid "ui.contextmenu.delete"
+msgstr "Delete"
+
+msgid "ui.contextmenu.downloadImage"
+msgstr "Download image"
+
+msgid "ui.contextmenu.resetImageSize"
+msgstr "Reset size"
+
+msgid "ui.contextmenu.selectAll"
+msgstr "Select all"
+
+msgid "ui.contextmenu.pasteWithoutFormatting"
+msgstr "Paste without formatting"
+
+msgid "ui.contextmenu.fixSpelling"
+msgstr "Fix spelling"
+
+msgid "ui.showInFolder"
+msgstr "Reval in file manager"
+
+msgid "ui.history.back"
+msgstr "Back"
+
+msgid "ui.history.forward"
+msgstr "Forward"
+
+msgid "menu.newNote"
+msgstr "New Note"
+
+msgid "menu.tools"
+msgstr "Tools"
+
+msgid "menu.alwaysOnTop"
+msgstr "Always on top"
+
+msgid "menu.openDataDirectory"
+msgstr "Open data directory"
+
+msgid "menu.zoomIn"
+msgstr "Zoom in"
+
+msgid "menu.zoomOut"
+msgstr "Zoom out"
+
+msgid "menu.resetZoom"
+msgstr "Reset zoom"
+
+msgid "menu.history"
+msgstr "History"
+
+msgid "menu.back"
+msgstr "Back"
+
+msgid "menu.forward"
+msgstr "Forward"
+
+msgid "menu.help.reportBugs"
+msgstr "Report issue"
+
+msgid "menu.help.website"
+msgstr "Visit Darkwrite website"
+
+msgid "menu.help.documentation"
+msgstr "Darkwrite documentation"
+
+msgid "note.property.type.text"
+msgstr "Text"
+
+msgid "note.property.type.date"
+msgstr "Date"
+
+msgid "note.property.type.checkbox"
+msgstr "Checkbox"
+
+msgid "note.property.action.addProperty"
+msgstr "Add property"
+
+msgid "note.property.action.deleteProperty"
+msgstr "Delete property"
+
+msgid "note.property.placeholder"
+msgstr "New property"
+
+msgid "note.property.showProperties"
+msgstr "Properties"
+
+msgid "ui.datepicker.hint"
+msgstr "Pick date"
+
+msgid "ui.datepicker.today"
+msgstr "Today"
+
+msgid "ui.datepicker.tomorrow"
+msgstr "Tomorrow"
+
+msgid "ui.datepicker.nextWeek"
+msgstr "In a week"
+
+msgid "selectionTrashDialog.singleTitle"
+msgstr "Move “{{name}}” to Trash?"
+
+msgid "selectionTrashDialog.multipleTitle"
+msgstr "Move {{count}} items to Trash?"
+
+msgid "selectionTrashDialog.folderDescription"
+msgstr "The folder and everything inside it will be moved to Trash. You can restore it later."
+
+msgid "selectionTrashDialog.documentDescription"
+msgstr "The document will be moved to Trash. You can restore it later."
+
+msgid "selectionTrashDialog.multipleDescription"
+msgstr "The selected items and the contents of selected folders will be moved to Trash. You can restore them later."
+
+msgid "selectionTrashDialog.confirm"
+msgstr "Move to Trash"
+
+msgid "selectionTrashDialog.success"
+msgstr "Selection moved to Trash."
+
+msgid "selectionTrashDialog.error"
+msgstr "Failed to move the selection to Trash."
+
+msgid "settings.shortcuts.title"
+msgstr "Keyboard shortcuts"
+
+msgid "settings.shortcuts.description"
+msgstr "Customize Darkwrite commands without changing editor or system shortcuts."
+
+msgid "settings.shortcuts.resetAll"
+msgstr "Reset all"
+
+msgid "settings.shortcuts.resetOne"
+msgstr "Reset shortcut"
+
+msgid "settings.shortcuts.pressKeys"
+msgstr "Press keys…"
+
+msgid "settings.shortcuts.unsupported"
+msgstr "Use a modifier with a letter, number, or navigation key."
+
+msgid "settings.shortcuts.conflict"
+msgstr "This shortcut is already assigned to {{command}}."
+
+msgid "settings.shortcuts.groups.objects"
+msgstr "Objects"
+
+msgid "settings.shortcuts.groups.navigation"
+msgstr "Navigation"
+
+msgid "settings.shortcuts.groups.view"
+msgstr "View"
+
+msgid "settings.shortcuts.groups.history"
+msgstr "History"
+
+msgid "settings.shortcuts.commands.newNote"
+msgstr "New document"
+
+msgid "settings.shortcuts.commands.quickSwitch"
+msgstr "Quick switcher"
+
+msgid "settings.shortcuts.commands.openSettings"
+msgstr "Open settings"
+
+msgid "settings.shortcuts.commands.duplicate"
+msgstr "Duplicate documents"
+
+msgid "settings.shortcuts.commands.toggleFavorite"
+msgstr "Pin or unpin"
+
+msgid "settings.shortcuts.commands.moveToTrash"
+msgstr "Move to Trash"
+
+msgid "settings.shortcuts.commands.quickPreview"
+msgstr "Quick preview"
+
+msgid "settings.shortcuts.commands.gridView"
+msgstr "Grid view"
+
+msgid "settings.shortcuts.commands.listView"
+msgstr "List view"
+
+msgid "settings.shortcuts.commands.parentFolder"
+msgstr "Parent folder"
+
+msgid "settings.shortcuts.commands.historyBack"
+msgstr "Go back"
+
+msgid "settings.shortcuts.commands.historyForward"
+msgstr "Go forward"
+
+msgid "settings.shortcuts.commands.undo"
+msgstr "Undo object action"
+
+msgid "settings.shortcuts.commands.redo"
+msgstr "Redo object action"
+
+msgid "settings.shortcuts.commands.toggleSidebar"
+msgstr "Show or hide sidebar"
+
+msgid "settings.shortcuts.commands.zoomIn"
+msgstr "Zoom in"
+
+msgid "settings.shortcuts.commands.zoomOut"
+msgstr "Zoom out"
+
+msgid "settings.shortcuts.commands.zoomReset"
+msgstr "Reset zoom"
+
+msgid "common.close"
+msgstr "Close"
+
+msgid "editor.image.loading"
+msgstr "Loading image…"
+
+msgid "backup.saveNotes"
+msgstr "Save your notes"
+
+msgid "backup.saveBackup"
+msgstr "Backup your data"
+
+msgid "backup.invalidArchive"
+msgstr "This file does not appear to be a valid backup archive."
+
+msgid "backup.restoredNeedsRestart"
+msgstr "We restored your backup. Darkwrite needs to relaunch for the changes to take effect."
+
+msgid "backup.restoredWillRestart"
+msgstr "We restored your backup. Darkwrite will now relaunch for the changes to take effect."
+
+msgid "backup.restoreFailed"
+msgstr "Something went wrong while restoring your backup. Your current data won't be affected."
+
+msgid "backup.chooseArchive"
+msgstr "Choose a backup"
+
+msgid "backup.zipArchive"
+msgstr "ZIP archive"
+
+msgid "rename.error"
+msgstr "Could not rename the item."

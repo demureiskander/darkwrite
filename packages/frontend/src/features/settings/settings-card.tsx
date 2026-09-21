@@ -1,5 +1,5 @@
+import type * as React from "react";
 import { cn } from "@/lib/utils";
-import * as React from "react";
 
 type SettingsCardProps = React.ComponentProps<"div">;
 
@@ -10,7 +10,7 @@ export default function SettingsCard({
   return (
     <div
       className={cn(
-        "flex flex-col w-160 bg-view-2 p-4 gap-4 rounded-lg drop-shadow-sm top-highlight",
+        "flex w-full max-w-160 flex-col gap-4 rounded-xl border border-border/50 bg-view-2/95 p-5 shadow-sm top-highlight",
         className,
       )}
     >

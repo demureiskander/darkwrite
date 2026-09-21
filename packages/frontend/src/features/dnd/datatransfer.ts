@@ -1,11 +1,11 @@
-import { tryParse } from "@darkwrite/common";
-import { DragEvent as ReactDragEvent } from "react";
+import { parseJson } from "@darkwrite/common";
+import type { DragEvent as ReactDragEvent } from "react";
 
 export const DRAG_DATA_TYPE = "application/darkwrite-drag-internal";
 
 export enum DragType {
   NOTE = "note",
-  FAVORITE = "favorite",
+  NoteProperty = "note-property",
 }
 
 export interface NoteDragData {
@@ -13,9 +13,12 @@ export interface NoteDragData {
   noteId: string;
 }
 
-export type FavoriteDragData = NoteDragData;
+export interface NotePropertyDragData {
+  type: DragType.NoteProperty;
+  propertyName: string;
+}
 
-export type IDragData = NoteDragData | FavoriteDragData;
+export type IDragData = NoteDragData | NotePropertyDragData;
 
 export function beginDrag(
   data: IDragData,
@@ -35,9 +38,9 @@ export function isDragging(event: ReactDragEvent<HTMLElement> | DragEvent) {
 export function parseDragData(event: ReactDragEvent<HTMLElement> | DragEvent) {
   if (!event.dataTransfer) return null;
   const dataString = event.dataTransfer.getData(DRAG_DATA_TYPE);
-  const dataOptional = tryParse(dataString);
-  if (dataOptional.error) return null;
-  const data = dataOptional.result;
+  const parseResult = parseJson<IDragData>(dataString);
+  if (parseResult.isErr()) return null;
+  const data = parseResult.value;
   if (!("type" in data) || typeof data.type !== "string") return null;
   else return data as IDragData;
 }

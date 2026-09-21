@@ -1,7 +1,9 @@
+import { ArchiveRestore, FileArchive } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -11,9 +13,6 @@ import {
   Button,
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { ArchiveRestore, FileArchive } from "lucide-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 export function RestoreDataDialog() {
   const [path, setPath] = useState<string | null>(null);
@@ -22,13 +21,12 @@ export function RestoreDataDialog() {
   const restore = () => {
     if (!path) return;
     setPending(true);
-    DarkwriteAPIClient.backup.restoreBackup(path).finally(() => {
+    DarkwriteAPIClient.backup.restoreBackup(path).then(() => {
       setPending(false);
     });
   };
   const chooseFile = async () => {
-    const filename = await DarkwriteAPIClient.backup.chooseArchive();
-    setPath(filename);
+    DarkwriteAPIClient.backup.chooseArchive().map(setPath);
   };
   return (
     <AlertDialog
@@ -40,7 +38,7 @@ export function RestoreDataDialog() {
         <Button variant={"secondary"} className="shrink-0 w-fit">
           <span className="flex gap-2 items-center">
             <ArchiveRestore size={18} className="inline" />
-            {t("restoreButton")}
+            {t("importButton")}
           </span>
         </Button>
       </AlertDialogTrigger>
@@ -73,15 +71,15 @@ export function RestoreDataDialog() {
           <AlertDialogCancel disabled={pending}>
             {t("restoreDialog.cancel")}
           </AlertDialogCancel>
-          <AlertDialogAction
+          <Button
             disabled={pending || path == null}
+            variant={"destructive"}
             onClick={() => {
               if (path) restore();
             }}
-            className="bg-transparent border-destructive border text-foreground hover:bg-destructive hover:text-destructive-foreground"
           >
             {t("restoreDialog.restore")}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

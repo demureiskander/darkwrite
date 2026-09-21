@@ -1,49 +1,84 @@
-import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "@darkwrite/common";
-import { Workspace } from "../entity";
-import { WorkspaceDAO } from "./workspace.dao";
 import {
-  NotFoundError,
+  type CreateWorkspaceDTO,
   getDefaultWorkspaceConfiguration,
+  type UpdateWorkspaceDTO,
 } from "@darkwrite/common";
+import log from "electron-log";
+import { okAsync, ResultAsync } from "neverthrow";
+import type { DatabaseType } from "@/db";
+import { resolveTx, transactional } from "@/db/transactional";
+import { NoteDAO } from "@/note/note.dao";
+import type { IDocumentService } from "@/service/document.service";
+import { WorkspaceDAO } from "./workspace.dao";
 
-export class WorkspaceService {
-  constructor(private workspaceDAO = WorkspaceDAO) {}
+export function WorkspaceService(
+  db: DatabaseType,
+  documentService: IDocumentService,
+) {
+  const noteDAO = NoteDAO(() => resolveTx(db));
+  const workspaceDAO = WorkspaceDAO(() => resolveTx(db));
 
-  async createWorkspace(dto: CreateWorkspaceDTO): Promise<Workspace> {
-    const { config, name, icon_url } = dto;
-    const workspace = new Workspace();
-    workspace.config = config;
-    workspace.name = name;
-    workspace.icon_url = icon_url;
-    workspace.created_at = new Date();
-    return this.workspaceDAO.save(workspace);
-  }
+  const createWorkspace = ({ config, name, iconUrl }: CreateWorkspaceDTO) =>
+    workspaceDAO.create({
+      config,
+      name,
+      iconUrl,
+      createdAt: new Date(),
+    });
 
-  async initializeDefaultWorkspace() {
-    const workspaces = await this.workspaceDAO.findAll();
-    if (workspaces.length > 0) return true;
-    else
-      return this.createWorkspace({
-        name: "My Workspace",
-        config: getDefaultWorkspaceConfiguration(),
-      });
-  }
+  /** Initializes a default workspace if no workspaces exist. Returns true if a workspace already exists, or the newly created workspace if not.
+   * This method is idempotent, and calling it again is harmless. */
+  const initializeDefaultWorkspace = () =>
+    workspaceDAO
+      .findAll()
+      .map((w) => w.length)
+      .andThen((count) =>
+        count > 0
+          ? okAsync(true)
+          : createWorkspace({
+              name: "My Workspace",
+              config: getDefaultWorkspaceConfiguration(),
+            }),
+      );
 
-  async findWorkspaceOrThrow(id: string): Promise<Workspace> {
-    const result = await this.workspaceDAO.findById(id);
-    if (result == null) {
-      throw new NotFoundError("Workspace", id);
-    }
-    return result;
-  }
+  const findById = (id: string) => workspaceDAO.findById(id);
 
-  async getWorkspaces(): Promise<Workspace[]> {
-    return await this.workspaceDAO.findAll();
-  }
+  const getWorkspaces = () => workspaceDAO.findAll();
 
-  async update(id: string, dto: UpdateWorkspaceDTO) {
-    const workspace = await this.findWorkspaceOrThrow(id);
-    Object.assign(workspace, dto);
-    return await this.workspaceDAO.save(workspace);
-  }
+  const update = (id: string, dto: UpdateWorkspaceDTO) =>
+    workspaceDAO.update({ id, ...dto });
+
+  const deleteWorkspace = (id: string) =>
+    transactional(
+      () =>
+        workspaceDAO
+          .findById(id)
+          .andThen(() =>
+            noteDAO
+              .findAllByWorkspaceId(id)
+              .map((notes) => notes.map((n) => n.id)),
+          )
+          .andThen((ids) => workspaceDAO.deleteById(id).map(() => ids)),
+      db,
+    ).andThen((ids) =>
+      ResultAsync.combine(ids.map(documentService.deleteNoteContent))
+        .orTee((err) =>
+          log.error(
+            "Failed to delete note contents from disk after workspace deletion. The notes have been removed from the database, but their contents may still exist on disk. Error: ",
+            err,
+          ),
+        )
+        .orElse(() => okAsync()),
+    );
+
+  return {
+    createWorkspace,
+    initializeDefaultWorkspace,
+    findById,
+    deleteWorkspace,
+    update,
+    getWorkspaces,
+  };
 }
+
+export type IWorkspaceService = ReturnType<typeof WorkspaceService>;

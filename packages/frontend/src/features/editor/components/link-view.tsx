@@ -1,0 +1,109 @@
+import { DarkwriteResource, getResourceRefFromUrl } from "@darkwrite/common";
+import type { MarkViewRendererProps } from "@tiptap/core";
+import { MarkViewContent } from "@tiptap/react";
+import { Check, Copy, Link } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { navigateToNote } from "@/features/navigation/navigator";
+import { useNoteById } from "@/features/note/hooks/use-note-by-id";
+import { getNoteIcon } from "@/lib/utils";
+
+function NotePreview(props: { noteId: string }) {
+  const { note } = useNoteById(props.noteId);
+  const { t } = useTranslation();
+  return (
+    <TooltipContent
+      sideOffset={-2}
+      side="bottom"
+      onClick={(e) => {
+        e.preventDefault();
+        navigateToNote(props.noteId);
+      }}
+      className="flex gap-2 bg-view-2/85 hover:bg-view-2/75 cursor-pointer items-center"
+    >
+      <span>{getNoteIcon(note?.icon)}</span>
+      <Button
+        variant="link"
+        className="max-w-64 w-full p-0 text-foreground cursor-default h-fit justify-start text-start hover:underline overflow-x-hidden text-ellipsis whitespace-nowrap flex"
+      >
+        {note?.title || t("defaults.pageTitle")}
+      </Button>
+    </TooltipContent>
+  );
+}
+
+function ExternalLinkPreview(props: { url: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <TooltipContent
+      sideOffset={0}
+      side="bottom"
+      align="start"
+      className="flex gap-1 bg-view-2/85 hover:bg-view-2/75 items-center overflow-x-hidden p-1 pl-2 cursor-pointer *:shrink-0 w-fit drop-shadow-xl border-border"
+    >
+      <Link size={16} />
+      <a
+        target="_blank"
+        rel="noopener"
+        className="max-w-48 ml-2 hover:underline cursor-pointer overflow-x-hidden text-ellipsis whitespace-nowrap flex"
+        href={props.url}
+      >
+        {props.url}
+      </a>
+      <Button
+        variant="ghost"
+        className="p-0 rounded-full w-6 h-6"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setCopied(true);
+          navigator.clipboard.writeText(props.url);
+          setTimeout(() => setCopied(false), 2000);
+        }}
+      >
+        {copied ? <Check size={16} /> : <Copy size={16} />}
+      </Button>
+    </TooltipContent>
+  );
+}
+
+export function LinkView(props: MarkViewRendererProps) {
+  const url = props.mark.attrs.href;
+  if (!url) return null;
+  const resource = getResourceRefFromUrl(url);
+
+  return (
+    <TooltipProvider delayDuration={300}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="[&_a]:cursor-pointer [&_a]:hover:text-primary-text [&_span]:items-start text-start [&_span]:justify-start [&_a]:text-(--dw-editor-foreground)">
+            <MarkViewContent
+              as="a"
+              onClick={(e) => {
+                if (resource?.type === DarkwriteResource.Note) {
+                  e.preventDefault();
+                  navigateToNote(resource.id);
+                }
+              }}
+            />
+          </span>
+        </TooltipTrigger>
+        <TooltipPortal container={document.body}>
+          {resource?.type === DarkwriteResource.Note ? (
+            <NotePreview noteId={resource.id} />
+          ) : (
+            <ExternalLinkPreview url={url} />
+          )}
+        </TooltipPortal>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}

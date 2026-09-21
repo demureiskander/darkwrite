@@ -1,10 +1,9 @@
-import { Layout } from "@/features/layout";
 import { Provider } from "react-redux";
 import { HashRouter, Route, Routes } from "react-router-dom";
+import { Layout } from "@/features/layout";
 import { EditorViewRouteHandler } from "./features/editor/editor-view";
 import HomePage from "./features/home/home-page";
-import { AppStore } from "./features/store/redux";
-import UpdateChecker from "./features/update/update-checker";
+import type { AppStore } from "./features/store/redux";
 import { noteLoader } from "./lib/note-loader";
 
 function App({ store }: { store: AppStore }) {
@@ -24,7 +23,6 @@ function App({ store }: { store: AppStore }) {
             </Route>
           </Routes>
         </HashRouter>
-        <UpdateChecker />
       </Provider>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Attributes } from "@tiptap/core";
+import type { Attributes } from "@tiptap/core";
 
 const ImageAttributes: Attributes = {
   embedId: {
@@ -30,6 +30,9 @@ const ImageAttributes: Attributes = {
   "data-export": {
     default: null,
     isRequired: false,
+  },
+  widthPercent: {
+    default: 100,
   },
 };
 

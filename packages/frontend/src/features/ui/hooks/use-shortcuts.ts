@@ -1,81 +1,136 @@
-import { OS } from "@darkwrite/common";
-import { toggleSidebar } from "@/context/local-state";
-import { showSearch } from "@/features/search/search-state";
-import { getOperatingSystem } from "@/lib/platform";
+import { DEFAULT_APP_SHORTCUTS, NoteKind } from "@darkwrite/common";
 import { useEffect } from "react";
+import { toggleSidebar, useLocalStore } from "@/context/local-state";
+import { useFolderSelection } from "@/features/folders/use-folder-selection";
+import {
+  redoStructuralAction,
+  undoStructuralAction,
+} from "@/features/history/structural-history";
+import {
+  duplicateNotes,
+  toggleFavorites,
+} from "@/features/note/store/note.thunk";
+import { selectNoteById } from "@/features/note/store/note-selectors";
+import { navigateToFolder } from "@/features/navigation/navigator";
+import { showSearch } from "@/features/search/search-state";
+import { showSettings } from "@/features/settings/settings-state";
+import { useAppDispatch, useAppStore } from "@/features/store/hooks";
+import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace.thunk";
+import { matchesShortcut } from "../app-shortcuts";
 
-const isMac = () => getOperatingSystem() == OS.MACOS;
+const isTextEntryTarget = (target: EventTarget | null) =>
+  target instanceof Element &&
+  target.closest("input, textarea, select, [contenteditable='true']") !== null;
 
-/**
- * Checks if the currently focused element is editable (input, textarea,
- * or contenteditable). Used to prevent shortcut conflicts with text editing.
- */
-function isEditableElementFocused(): boolean {
-  const activeElement = document.activeElement;
-  if (!activeElement) return false;
+export const useShortcuts = (openNoteId: string | null) => {
+  const dispatch = useAppDispatch();
+  const store = useAppStore();
 
-  const tagName = activeElement.tagName.toLowerCase();
-  if (tagName === "input" || tagName === "textarea") {
-    return true;
-  }
-
-  if (activeElement.getAttribute("contenteditable") === "true") {
-    return true;
-  }
-
-  // Check if inside a contenteditable parent (e.g., TipTap editor)
-  if (activeElement.closest("[contenteditable='true']")) {
-    return true;
-  }
-
-  return false;
-}
-
-export const useShortcuts = () => {
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      const cmd = (key: string) => {
-        return e.key === key && (e.metaKey || e.ctrlKey);
-      };
-      const alt = (key: string) => {
-        return e.key === key && e.altKey;
+      const shortcuts = store.getState().settings.client.shortcuts;
+      const command = (id: keyof typeof shortcuts) =>
+        matchesShortcut(e, shortcuts[id] ?? DEFAULT_APP_SHORTCUTS[id]);
+      const shortcutTargets = () => {
+        if (openNoteId) {
+          const openNote = selectNoteById(store.getState(), openNoteId);
+          return openNote ? [openNote] : [];
+        }
+        return useFolderSelection
+          .getState()
+          .selectedItemIds.map((id) => selectNoteById(store.getState(), id))
+          .filter((note) => note !== undefined);
       };
 
-      if (cmd("n")) {
+      if (command("openSettings")) {
         e.preventDefault();
-      } else if (cmd("k")) {
-        showSearch();
-      } else if (alt("b")) {
-        toggleSidebar();
-      } else if (isMac()) {
-        // macOS: Cmd+Arrow for history navigation
-        // (Option+Arrow is reserved for word-by-word text navigation)
-        // Skip if focus is on an editable element to preserve line start/end
+        showSettings();
+        return;
+      }
+
+      if (isTextEntryTarget(e.target)) return;
+
+      if (command("quickPreview") && !e.repeat) {
+        const selection = useFolderSelection.getState();
+        if (selection.previewItemId) {
+          e.preventDefault();
+          selection.closePreview();
+          return;
+        }
         if (
-          e.metaKey &&
-          !e.altKey &&
-          !e.ctrlKey &&
-          !isEditableElementFocused()
-        ) {
-          if (e.key === "ArrowLeft") {
+          document.querySelector(
+            '[role="dialog"], [role="alertdialog"], [role="menu"]',
+          )
+        )
+          return;
+
+        const previewItemId =
+          selection.anchorItemId &&
+          selection.selectedItemIds.includes(selection.anchorItemId)
+            ? selection.anchorItemId
+            : selection.selectedItemIds.at(-1);
+        if (previewItemId) {
+          e.preventDefault();
+          selection.openPreview(previewItemId);
+        }
+        return;
+      }
+
+      if (command("parentFolder")) {
+        const currentId = openNoteId ?? useLocalStore.getState().activeFolderId;
+        if (currentId) {
+          const current = selectNoteById(store.getState(), currentId);
+          if (current) {
             e.preventDefault();
-            window.history.back();
-          } else if (e.key === "ArrowRight") {
-            e.preventDefault();
-            window.history.forward();
+            navigateToFolder(current.parentId);
           }
         }
-      } else {
-        // Windows/Linux: Alt+Arrow for history navigation
-        if (alt("ArrowLeft")) {
-          window.history.back();
-        } else if (alt("ArrowRight")) {
-          window.history.forward();
+      } else if (command("quickSwitch")) {
+        e.preventDefault();
+        showSearch();
+      } else if (command("duplicate")) {
+        const documentIds = shortcutTargets()
+          .filter((item) => item.kind === NoteKind.Document)
+          .map((item) => item.id);
+        if (documentIds.length > 0) {
+          e.preventDefault();
+          dispatch(duplicateNotes(documentIds));
         }
+      } else if (command("toggleFavorite")) {
+        const itemIds = shortcutTargets().map((item) => item.id);
+        if (itemIds.length > 0) {
+          e.preventDefault();
+          dispatch(toggleFavorites(itemIds));
+        }
+      } else if (command("redo")) {
+        const workspaceId = getCurrentWorkspaceId(store.getState);
+        if (workspaceId) {
+          e.preventDefault();
+          void redoStructuralAction(workspaceId);
+        }
+      } else if (command("undo")) {
+        const workspaceId = getCurrentWorkspaceId(store.getState);
+        if (workspaceId) {
+          e.preventDefault();
+          void undoStructuralAction(workspaceId);
+        }
+      } else if (command("moveToTrash")) {
+        const selection = useFolderSelection.getState();
+        if (selection.selectedItemIds.length > 0) {
+          e.preventDefault();
+          selection.requestTrashConfirmation(selection.selectedItemIds);
+        }
+      } else if (command("gridView")) {
+        e.preventDefault();
+        useLocalStore.getState().setFolderViewMode("grid");
+      } else if (command("listView")) {
+        e.preventDefault();
+        useLocalStore.getState().setFolderViewMode("list");
+      } else if (command("toggleSidebar")) {
+        toggleSidebar();
       }
     };
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-    // we'll get rid of react query.
-  }, []);
+  }, [dispatch, openNoteId, store]);
 };

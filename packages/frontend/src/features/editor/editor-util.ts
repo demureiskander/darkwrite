@@ -1,7 +1,14 @@
-import { Editor } from "@tiptap/core";
-import { UtilityNodes } from "./node-types";
-import { useCurrentEditor } from "@tiptap/react";
 import { MarkdownConverter } from "@darkwrite/common";
+import type { Editor } from "@tiptap/core";
+import { useCurrentEditor } from "@tiptap/react";
+import { UtilityNodes } from "./node-types";
+import type { FormattingState } from "./store/editor-slice";
+import {
+  type HeadingLevel,
+  ListType,
+  TextDirection,
+  TextFormat,
+} from "./types";
 
 export default function EditorUtil(editor: Editor) {
   return {
@@ -13,15 +20,19 @@ export default function EditorUtil(editor: Editor) {
       return editor.getHTML();
     },
 
-    getActiveHeading() {
+    getActiveHeading(): HeadingLevel | null {
       for (let i = 1; i < 5; i++) {
-        if (editor.isActive("heading", { level: i })) return i;
+        if (editor.isActive("heading", { level: i })) return i as HeadingLevel;
       }
       return null;
     },
 
-    getActiveList() {
-      const lists = ["bulletList", "toDoList", "numberedList"];
+    getActiveList(): ListType | null {
+      const lists: ListType[] = [
+        ListType.Bullet,
+        ListType.Ordered,
+        ListType.Task,
+      ];
       for (const list of lists) if (editor.isActive(list)) return list;
       return null;
     },
@@ -136,6 +147,21 @@ export default function EditorUtil(editor: Editor) {
         .focus()
         .insertContentAt(editor.state.doc.content.size, html)
         .run();
+    },
+
+    getFormattingState(): FormattingState {
+      return {
+        isBold: editor.isActive(TextFormat.Bold),
+        isItalic: editor.isActive(TextFormat.Italic),
+        isUnderline: editor.isActive(TextFormat.Underline),
+        isStrikethrough: editor.isActive(TextFormat.Strike),
+        isCode: editor.isActive(TextFormat.Code),
+        isQuote: editor.isActive(TextFormat.Quote),
+        isLink: editor.isActive(TextFormat.Link),
+        currentLinkUrl: editor.getAttributes(TextFormat.Link).href,
+        textDirection:
+          editor.getAttributes("paragraph").dir || TextDirection.Auto,
+      };
     },
   };
 }

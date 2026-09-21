@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
+import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -31,6 +31,7 @@ function PopoverContent({
         sideOffset={sideOffset}
         className={cn(
           "bg-popover/70 backdrop-blur-lg text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 rounded-xl border p-4 shadow-md outline-hidden",
+          "data-[side=top]:origin-bottom data-[side=bottom]:origin-top data-[side=left]:origin-right data-[side=right]:origin-left",
           className,
         )}
         {...props}
@@ -45,4 +46,4 @@ function PopoverAnchor({
   return <PopoverPrimitive.Anchor data-slot="popover-anchor" {...props} />;
 }
 
-export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor };
+export { Popover, PopoverAnchor, PopoverContent, PopoverTrigger };

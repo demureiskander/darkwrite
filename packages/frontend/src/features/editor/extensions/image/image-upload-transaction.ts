@@ -1,6 +1,8 @@
-import { EditorView } from "@tiptap/pm/view";
+import { getEmbedUrl } from "@darkwrite/common";
+import type { EditorView } from "@tiptap/pm/view";
 import { nanoid } from "nanoid";
-import { ImageExtensionConfig } from "./image-config";
+import { Block } from "../../types";
+import type { ImageExtensionConfig } from "./image-config";
 
 function createImageNode(
   file: File,
@@ -10,7 +12,7 @@ function createImageNode(
 ) {
   const pendingId = `image-${nanoid(8)}`;
   const { state, dispatch } = view;
-  const node = state.schema.nodes.dwimage.create({
+  const node = state.schema.nodes[Block.Image].create({
     pendingId: pendingId,
     src: "",
   });
@@ -22,13 +24,16 @@ function createImageNode(
     const tr = view.state.tr;
     if (!pendingId) return;
     tr.doc.descendants((node, pos) => {
-      if (node.type.name === "dwimage" && node.attrs.pendingId === pendingId) {
-        tr.setNodeAttribute(pos, "src", `embed://${embedId}`);
+      if (
+        node.type.name === Block.Image &&
+        node.attrs.pendingId === pendingId
+      ) {
+        tr.setNodeAttribute(pos, "src", getEmbedUrl(embedId));
         tr.setNodeAttribute(pos, "embedId", embedId);
         tr.setNodeAttribute(pos, "pendingId", "");
       }
     });
-    if (tr.docChanged) view.dispatch(tr);
+    if (tr.docChanged) view.dispatch(tr.setMeta("addToHistory", false));
   });
 }
 

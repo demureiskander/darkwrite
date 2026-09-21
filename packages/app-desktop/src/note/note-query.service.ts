@@ -1,17 +1,12 @@
+import type { DatabaseType } from "@/db";
+import { resolveTx } from "@/db/transactional";
 import { NoteDAO } from "./note.dao";
 
-const noteDAO = new NoteDAO();
+export function NoteQueryService(db: DatabaseType) {
+  const noteDAO = NoteDAO(() => resolveTx(db));
+  return {
+    getAllByWorkspaceId: noteDAO.findAllByWorkspaceId,
+  };
+}
 
-export const NoteQueryService = {
-  getAllByWorkspaceId: noteDAO.findAllByWorkspaceId.bind(noteDAO),
-  getByParentId: noteDAO.findAllByParentId.bind(noteDAO),
-  getById: noteDAO.findById.bind(noteDAO),
-  getFavorites: noteDAO.findAllFavorites.bind(noteDAO),
-  getTrashed: noteDAO.findAllTrashed.bind(noteDAO),
-  search: noteDAO.searchByTitle.bind(noteDAO),
-  getRecents(workspaceId: string) {
-    const recents = noteDAO.getRecentlyModifiedNotes(workspaceId, 5);
-    return recents;
-  },
-  getParentTree: noteDAO.resolveParentTree.bind(noteDAO),
-};
+export type INoteQueryService = ReturnType<typeof NoteQueryService>;

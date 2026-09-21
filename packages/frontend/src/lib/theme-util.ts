@@ -1,5 +1,4 @@
-import { DarkwriteUserSettings } from "@darkwrite/common";
-import { Theme } from "@darkwrite/common";
+import type { DarkwriteUserSettings, Theme } from "@darkwrite/common";
 
 export function applyTheme(theme: Theme) {
   const entries = Object.entries(theme.colors);
@@ -18,14 +17,14 @@ export function applyFonts(
   document.documentElement.style.setProperty("font-family", fontSettings.ui);
   document.documentElement.style.setProperty(
     "--darkwrite-mono",
-    fontSettings.code,
+    `${fontSettings.code}, ui-monospace, monospace`,
   );
   document.documentElement.style.setProperty(
     "--darkwrite-serif",
-    fontSettings.serif,
+    `${fontSettings.serif}, ui-serif, serif`,
   );
   document.documentElement.style.setProperty(
     "--darkwrite-sans",
-    fontSettings.sans,
+    `${fontSettings.sans}, system-ui, sans-serif`,
   );
 }

@@ -1,20 +1,11 @@
+import { buildDwError, type UpdateServerResponse } from "@darkwrite/common";
 import { app } from "electron";
-import semver from "semver";
 import log from "electron-log";
-import { UpdateServerResponse } from "@darkwrite/common";
-
-interface UpdateStatus extends UpdateServerResponse {
-  updateAvailable: boolean;
-}
+import { ResultAsync } from "neverthrow";
+import semver from "semver";
+import { handler } from "@/types";
 
 async function checkUpdateFromGithub() {
-  // return {
-  //   name: "v0.6.0-alpha.1",
-  //   latest: "0.6.0-alpha.1",
-  //   release_page:
-  //     "https://github.com/astudentinearth/darkwrite/releases/tag/v0.5.0-alpha.1",
-  // };
-
   const response = await fetch(
     "https://api.github.com/repos/astudentinearth/darkwrite/releases/latest",
     {
@@ -38,20 +29,21 @@ async function checkUpdateFromGithub() {
   };
 }
 
-async function checkUpdate(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  url: string = "http://localhost:3000/api/latest-release",
-) {
-  // const res = await (await fetch(url)).json();
+async function checkUpdate() {
   const res = await checkUpdateFromGithub();
   if (!res || !("latest" in res || "release_page" in res)) return undefined;
-  const info = <UpdateServerResponse>res;
   return {
-    ...info,
-    updateAvailable: semver.gt(info.latest, app.getVersion()),
-  } satisfies UpdateStatus;
+    ...res,
+    updateAvailable: semver.gt(res.latest, app.getVersion()),
+  } satisfies UpdateServerResponse;
 }
 
 export const Updater = {
   checkUpdate,
 };
+
+export const updateCheckHandler = handler(() =>
+  ResultAsync.fromPromise(checkUpdate(), (e) =>
+    buildDwError("Failed to check for updates.", String(e)),
+  ),
+);

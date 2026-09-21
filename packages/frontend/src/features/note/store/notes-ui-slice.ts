@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export const NOTE_UI_SLICE_NAME = "noteUi";
 
@@ -7,14 +7,42 @@ export type MoveNoteDialogState = {
   noteId: string | null;
 };
 
+export type ClearTrashDialogState = {
+  open: boolean;
+};
+
+export type RenameNoteDialogState = {
+  open: boolean;
+  noteId: string | null;
+};
+
 export type NotesUiState = {
   moveNoteDialog: MoveNoteDialogState;
+  renameNoteDialog: RenameNoteDialogState;
+  trashDialog: ClearTrashDialogState;
+  sidebar: SidebarUiState;
+};
+
+export type SidebarUiState = {
+  expandedFavorites: string[];
+  expandedNotes: string[];
 };
 
 export const initialNotesUiState: NotesUiState = {
   moveNoteDialog: {
     open: false,
     noteId: null,
+  },
+  renameNoteDialog: {
+    open: false,
+    noteId: null,
+  },
+  trashDialog: {
+    open: false,
+  },
+  sidebar: {
+    expandedFavorites: [],
+    expandedNotes: [],
   },
 };
 
@@ -29,6 +57,40 @@ export const notesUiSlice = createSlice({
     closeMoveNoteDialog(state) {
       state.moveNoteDialog.open = false;
       state.moveNoteDialog.noteId = null;
+    },
+    showRenameNoteDialog(state, action: PayloadAction<{ noteId: string }>) {
+      state.renameNoteDialog.open = true;
+      state.renameNoteDialog.noteId = action.payload.noteId;
+    },
+    closeRenameNoteDialog(state) {
+      state.renameNoteDialog.open = false;
+      state.renameNoteDialog.noteId = null;
+    },
+    showClearTrashDialog(state) {
+      state.trashDialog.open = true;
+    },
+    closeClearTrashDialog(state) {
+      state.trashDialog.open = false;
+    },
+    expandNote(state, { payload: id }: PayloadAction<string>) {
+      state.sidebar.expandedNotes = Array.from(
+        new Set(state.sidebar.expandedNotes).add(id),
+      );
+    },
+    expandFavorite(state, { payload: id }: PayloadAction<string>) {
+      state.sidebar.expandedFavorites = Array.from(
+        new Set(state.sidebar.expandedFavorites).add(id),
+      );
+    },
+    collapseNote(state, { payload: id }: PayloadAction<string>) {
+      state.sidebar.expandedNotes = state.sidebar.expandedNotes.filter(
+        (n) => n !== id,
+      );
+    },
+    collapseFavorite(state, { payload: id }: PayloadAction<string>) {
+      state.sidebar.expandedFavorites = state.sidebar.expandedFavorites.filter(
+        (n) => n !== id,
+      );
     },
   },
 });

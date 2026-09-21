@@ -1,8 +1,18 @@
-import path from "path";
-import { defineConfig, build, type InlineConfig } from "vite";
+import path from "node:path";
+import { build, defineConfig, type InlineConfig } from "vite";
 import electron from "vite-plugin-electron";
+import frontendConfig from "../frontend/vite.config";
 
-const resolve = {
+const desktopRoot = path.resolve(".");
+const frontendRoot = path.resolve("../frontend");
+
+const frontendResolve = {
+  alias: {
+    "@": path.resolve(frontendRoot, "src"),
+  },
+};
+
+const desktopResolve = {
   alias: {
     "@": path.resolve("src/"),
     "font-list": path.resolve("node_modules/font-list/index.js"),
@@ -12,7 +22,7 @@ const resolve = {
 const DISTDIR = path.resolve("dist-electron");
 
 const preloadConfig: InlineConfig = {
-  resolve,
+  resolve: desktopResolve,
   configFile: false,
   build: {
     outDir: DISTDIR,
@@ -30,24 +40,45 @@ const preloadConfig: InlineConfig = {
   },
 };
 
-
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  root: command === "serve" ? frontendRoot : desktopRoot,
+  server:
+    command === "serve"
+      ? {
+          watch: {
+            ignored: ["**/dist/**"],
+          },
+        }
+      : undefined,
   plugins: [
+    ...(command === "serve" ? (frontendConfig.plugins ?? []) : []),
     {
       name: "build-preload",
       async buildStart() {
-        await build(preloadConfig)
-      }
+        await build(preloadConfig);
+      },
     },
     electron([
       {
         entry: "src/main.ts",
+        onstart({ startup }) {
+          startup(["dist-electron/main.js"]);
+        },
         vite: {
-          resolve,
+          root: desktopRoot,
+          resolve: desktopResolve,
           build: {
             outDir: path.resolve(DISTDIR),
             rollupOptions: {
-              external: ["typeorm"],
+              platform: "node",
+              external: [
+                "electron",
+                /^node:/,
+                "typeorm",
+                "better-sqlite3",
+                "@libsql/client",
+                /^@libsql\/.*/,
+              ],
             },
             license: {
               fileName: "thirdparty.main.md",
@@ -55,10 +86,10 @@ export default defineConfig({
           },
         },
       },
-      
     ]),
   ],
+  resolve: command === "serve" ? frontendResolve : desktopResolve,
   build: {
     outDir: path.resolve("dist_discarded"),
   },
-});
+}));

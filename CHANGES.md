@@ -1,3 +1,174 @@
+# 1.3.0-beta.1
+
+## 🌟 Features
+- Add custom properties to notes
+    - Text, checkbox and date properties supported
+    - Properties can be reordered
+    - Properties can be collapsed to make them get out of the way
+    - Properties are exported into Markdown frontmatter
+- Window controls on Linux now follow your ordering, including left + right mixed setups
+- [New documentation site](https://darkwrite.app/docs)
+  - Rebuilt entirely with Starlight
+  - Supports search
+  - FAQ, Themes, Workspaces and troubleshooting guides covered with images
+- Add link to documentation under `Help` menu
+
+## ✨ Improvements and fixes
+- Fix global context menu catching focus in uneditable surfaces
+- Fix sidebar items touching the main pane on macOS when overlay scrollbars are enabled
+- Improved accessbility for "Remove icon" and "Add cover" buttons: they now stay visible when focused. They also fade in/out smoothly.
+- Window controls on Linux now follow the GTK theme
+    - The old ugly controls are gone thanks to the Electron 44 update
+- Minimum sidebar width now reacts to changing window decorations on Linux
+- Reduce horizontal padding in the editor view (96px → 64px)
+- Fix regression causing import and undo not working in main editor view
+
+## 🛠️ Technical changes
+- Upgrade to Electron 44
+- Drag-and-drop logic used to sort the tree can now be used to sort any list
+- Website builds are now analyzed for broken links before publish
+- Biome configurations are now shared across packages
+
+# 1.2.6-beta.1
+## 🌟 Features
+- Add fuzzy search (search should feel actually usable now)
+- Revamped search UI
+- Revamped onboarding
+  - It's now a single step you can immediately finish.
+
+## ✨ Improvements and fixes
+- Disable "Always on top" menu item on Wayland
+    - [Wayland doesn't support it](https://github.com/electron/electron/pull/50560). Use the window menu of your desktop environment instead. For example, KDE users can hit `ALT+F3` or right click the titlebar and pick "Keep Above Others".
+- Fix disappearing workspace icon when the edit workspace dialog is closed and reopened
+- Fix "Import theme" button not letting you pick any files at all on macOS
+- Fix missing "Untitled" text in some search surfaces
+- Fix value collision in link selector that caused notes with the same title to get highlighted all at once
+- `Ctrl-k` no longer turns the search UI off and correctly performs vi-style navigation
+- Search now shows recent notes by default, and doesn't lag on open
+- Onboarding now triggers a full page reload instead of force rendering the app root
+  - This should prevent invisible first use bugs
+
+# 1.2.5-beta.2
+## 🌟 Features
+- Add Simplified Chinese translations (by @wcxu21) (#37)
+
+# 1.2.5-beta.1
+## 🌟 Features
+- Add Markdown export (#32)
+
+## ✨ Improvements and fixes
+- Security updates for dependencies
+
+## 🛠️ Technical changes
+- Upgrade to Electron 43
+
+# 1.2.4-beta.1
+## 🌟 Features
+- Updated sidebar
+- Revamped parent tree dropdown
+- Menu bar now includes the `Help` section (macOS users can search the menu bar)
+    - Added links to website and issue tracker
+- Add reader mode (#32)
+
+## ✨ Improvements and fixes
+- Significantly improve trash performance
+- Sidebar no longer lags
+- Removed the 4px gaps between note items
+    - Drag/drop is now proximity based, the drop gaps don't need to exist anymore
+- Notes are now easier to reorder
+    - Total drop area for a slot is now ~3x as large
+- You can drop notes directly to the trash
+- Expanded notes now remember that they were expanded even if its parent note gets collapsed
+- Updated workspace switcher
+- Menu bar items are now localized
+- Add back missing bottom padding to the editor
+- Linked files no longer overflow horizontally
+
+
+## 🛠️ Technical changes
+- Move translations to a separate `@darkwrite/i18n` package, using gettext (.po) files
+
+# 1.2.3-beta.1
+## 🌟 Features
+- Add center view
+
+## ✨ Improvements and fixes
+- Update onboarding screens
+
+## 🛠️ Technical changes
+- Full main process refactor to use functional programming patterns
+
+# 1.2.2-beta.1
+## ✨ Improvements and fixes
+- Fix the image regression introduced in 1.2.1-beta.1 (#30)
+- Pending note saves now get properly flushed before the UI unloads (no more lost updates)
+
+# 1.2.1-beta.1
+## 🌟 Features
+- Add image resize (percentage based)
+
+## ✨ Improvements and fixes
+- Fix images reverting to a placeholder when Ctrl+Z is hit after adding an image
+- Fix images flickering when resizing tables
+- Remove excess vertical margins from images
+- The editor now scrolls smoothly
+
+## 🛠️ Technical changes
+- Update to Electron 42
+
+# 1.2.0-beta.1
+
+## 💥 Breaking changes
+- This update includes database related changes. This is a safe operation, however creating a backup from the settings screen is advised just in case.
+- Code to migrate data from alpha versions has been removed. **If you are updating from an alpha, update to [1.1.0-beta.1](https://github.com/astudentinearth/darkwrite/releases/tag/v1.1.0-beta.1) first, go through the onboarding process, then update to this release. You will not be able to view your notes otherwise.** (They won't get deleted, but you will need help.)
+
+## 🌟 Features
+- You can now delete workspaces
+- Add option to clear the trash at once (#25)
+- Add bubble menu option to convert a heading to a plain paragraph
+- Add "system default" font option to font settings (`windows`, `linux`)
+- Added global context menu actions with spellchecking support (#21)
+- Add a button to reveal an exported note in the system file manager
+- Add tooltips
+- Add support for RTL languages and manual text direction (#26)
+  - The button can be turned on/off from settings
+- Reworked menu bar, add "Create Note" to `File` menu
+- Inline links can now link to other notes directly
+- Added hover tooltips to inline links
+- Links can now be copied
+- Add ability to link local files directly from notes (#24)
+  - You can opt into double clicking in settings if you prefer
+  - You can launch apps with this block, though I don't know why you would want to do that
+- "Link to page" blocks can now be turned into inline links from the context menu (#22)
+
+## ✨ Improvements and fixes
+- Fix code blocks breaking when all content is deleted with ⌘+⌫ ⌘+Del, Ctrl+⌫ or Ctrl+Del
+- Fix bubble menu not correctly reacting to the selected heading or list type
+- Fix bubble menu not correctly displaying bold, italic, strike, quote, code or link state
+- Bubble menu now slides smoothly instead of suddenly teleporting
+- Fix illegible emoji picker when system theme mode is different than app theme mode
+- Improved hover colors on light mode
+- Fix trash sliding down the screen when many notes are visible on the sidebar
+- Some UI elements now push into the screen on press and/or react better to active states
+- Favorites now always fetched to ensure they appear in search
+- Creating a subpage now navigates to the new page and expands its parent
+- Bubble menu no longer shows up when the only selection is a horizontal rule
+- Hide scrollbars when the view is not hovered on
+- Added notification feedback to various actions (trash, restore, delete etc.)
+- Change drag handle extension (now using tiptap's official one)
+- ⌘N works again
+- Changed back/forward navigation to follow platform conventions
+- Add missing backgrounds to code blocks in HTML and PDF exports
+- Code blocks in exports now correctly follow your monospace font choice
+- Long lines in code blocks are now properly wrapped in HTML and PDF exports
+- Notes with no title now display "Untitled" placeholders correctly, with localization
+- Notes no longer get created with the title "Untitled" (or its localized variant). The default title is now empty (`""`)
+- Typing next to a link doesn't annoyingly add text to the link
+- "Press '/' for commands" placeholder is now localized
+
+## 🛠️ Technical changes
+- Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql
+
 # 1.1.0-beta.1
 
 ## 🌟 Features

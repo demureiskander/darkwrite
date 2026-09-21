@@ -1,31 +1,69 @@
+import { IconLink, IconTrash } from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
 import {
   Button,
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Input,
 } from "@/components/ui";
-import { cn } from "@/lib/utils";
-import { useCurrentEditor } from "@tiptap/react";
-import { Check, Link, Trash } from "lucide-react";
-import { KeyboardEvent, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { NoteTitle } from "@/features/note/components/note-title";
+import { useNoteById } from "@/features/note/hooks/use-note-by-id";
+import { useSearch } from "@/features/note/hooks/use-search";
+import { cn, getNoteIcon } from "@/lib/utils";
+import { isValidLinkUrl, useLinkOptions } from "../../hooks/use-link-options";
+
+function NoteItem({
+  noteId,
+  onSelect,
+}: {
+  noteId: string;
+  onSelect: () => void;
+}) {
+  const { note } = useNoteById(noteId);
+  if (!note) return null;
+  return (
+    <CommandItem
+      className="px-2 py-1.5 flex items-center gap-2"
+      onSelect={onSelect}
+      value={`${note.id} ${note.title}`}
+    >
+      <span>{getNoteIcon(note.icon)}</span>
+      <NoteTitle>{note.title}</NoteTitle>
+    </CommandItem>
+  );
+}
+
+function Results({
+  query,
+  onSelect,
+}: {
+  query: string;
+  onSelect: (noteId: string) => void;
+}) {
+  const { results } = useSearch(query);
+  return results.map((noteId) => (
+    <NoteItem key={noteId} noteId={noteId} onSelect={() => onSelect(noteId)} />
+  ));
+}
 
 export function BubbleLink() {
-  const { editor } = useCurrentEditor();
-  const [open, setOpen] = useState(false);
-  const url = editor?.getAttributes("link").href;
-  const urlRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation(undefined, { keyPrefix: "editor.bubble" });
-
-  const setLink = () => {
-    if (!urlRef.current) return;
-    editor?.chain().focus().setLink({ href: urlRef.current.value }).run();
-    setOpen(false);
-  };
-
-  const keydown = (e: KeyboardEvent<HTMLInputElement>) =>
-    e.key == "Enter" && setLink();
+  const {
+    open,
+    setOpen,
+    urlRef,
+    isLink,
+    query,
+    setQuery,
+    setLink,
+    setLinkToNote,
+    removeLink,
+  } = useLinkOptions();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -33,35 +71,50 @@ export function BubbleLink() {
         <Button
           variant="ghost"
           className={cn(
-            "rounded-lg gap-1 px-2 text-foreground shrink-0 size-9",
+            "rounded-lg gap-1 px-2 text-foreground shrink-0 size-9 active:pushdown-98%",
             open && "bg-secondary/80",
+            isLink && "text-primary-text",
           )}
         >
-          <Link size={18} />
+          <IconLink size={18} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="bg-popover/80 backdrop-blur-lg rounded-2xl flex flex-col gap-2 p-2 data-[state=closed]:animate-none! w-fit">
-        <Input
-          onKeyDown={keydown}
-          defaultValue={url}
-          ref={urlRef}
-          className="bg-view-2"
-          placeholder="URL"
-        />
-
+      <PopoverContent className="bg-view-2/80 mt-2 backdrop-blur-lg w-80 rounded-xl flex flex-col gap-2 p-2 data-[state=closed]:animate-none! px-1 py-1">
+        <Command shouldFilter={false} className="w-full px-0">
+          <CommandInput
+            value={query}
+            onValueChange={setQuery}
+            ref={urlRef}
+            className="bg-transparent h-9 w-full"
+            placeholder={t("linkPlaceholder")}
+          />
+          <hr className="mt-1" />
+          <CommandList className="scroll-view max-h-48 w-full px-0">
+            {isValidLinkUrl(query) && (
+              <>
+                <CommandItem
+                  onSelect={setLink}
+                  className="px-2 py-1.5 my-1 flex items-center gap-2"
+                >
+                  <IconLink size={18} />
+                  <span>{query}</span>
+                </CommandItem>
+                <hr />
+              </>
+            )}
+            <CommandGroup className="px-0">
+              <Results query={query} onSelect={setLinkToNote} />
+            </CommandGroup>
+          </CommandList>
+        </Command>
+        <hr />
         <div className="flex flex-col items-center gap-1 w-full [&>button]:w-full [&>button]:justify-start [&>button]:pl-2">
-          <Button variant={"ghost"} onClick={setLink}>
-            <Check />
-            {t("saveLink")}
-          </Button>
           <Button
             variant={"ghost"}
-            onClick={() => {
-              editor?.chain().focus().unsetLink().run();
-              setOpen(false);
-            }}
+            className="h-fit py-1.5"
+            onClick={removeLink}
           >
-            <Trash />
+            <IconTrash size={18} />
             {t("removeLink")}
           </Button>
         </div>

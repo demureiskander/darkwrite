@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// biome-ignore-all lint/suspicious/noExplicitAny: variadic functions, tuples
 /**
  * Removes the first parameter of given function type.
  */
@@ -35,7 +35,7 @@ export type PromisfyFunction<Func extends (...args: any[]) => any> = (
 ) => Promisfy<ReturnType<Func>>;
 
 export type ExcludeFunctions<Obj extends { [key: string]: any }> = {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  // biome-ignore lint/complexity/noBannedTypes: we don't care what function it is
   [Key in keyof Obj]: Obj[Key] extends Function ? never : Key;
 };
 
@@ -49,3 +49,7 @@ export type Optional<T, E extends Error = Error> =
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
+
+export function isNotUndefined<T>(value: T | undefined): value is T {
+  return value !== undefined;
+}

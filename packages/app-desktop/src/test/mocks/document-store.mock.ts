@@ -1,28 +1,44 @@
-import { IDocumentStore } from "@/lib/document-store";
+import { dwErrAsync } from "@darkwrite/common";
+import { okAsync } from "neverthrow";
+import type { IDocumentStore } from "@/lib/document-store";
 
-export class MockDocumentStore implements IDocumentStore {
-  docs: Map<string, string> = new Map();
-  async create(noteId: string) {
-    this.docs.set(noteId, "");
+export function MockDocumentStore(): IDocumentStore {
+  const docs: Map<string, string> = new Map();
+  function create(noteId: string) {
+    docs.set(noteId, "");
+    return okAsync();
   }
 
-  async exists(noteId: string) {
-    return this.docs.has(noteId);
+  function exists(noteId: string) {
+    return okAsync(docs.has(noteId));
   }
 
-  async read(noteId: string) {
-    return this.docs.get(noteId) ?? "";
+  function read(noteId: string) {
+    return docs.has(noteId)
+      ? okAsync(docs.get(noteId) ?? "")
+      : dwErrAsync(`Document ${noteId} not found.`);
   }
 
-  async write(noteId: string, content: string) {
-    this.docs.set(noteId, content);
+  function write(noteId: string, content: string) {
+    docs.set(noteId, content);
+    return okAsync();
   }
 
-  async ls() {
-    return Array.from(this.docs.keys());
+  function ls() {
+    return okAsync(Array.from(docs.keys()));
   }
 
-  async delete(key: string) {
-    this.docs.delete(key);
+  function del(key: string) {
+    docs.delete(key);
+    return okAsync();
   }
+
+  return {
+    create,
+    exists,
+    read,
+    write,
+    ls,
+    delete: del,
+  };
 }

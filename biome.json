@@ -1,0 +1,66 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
+  "extends": [
+    "@darkwrite/config/biome/default"
+  ],
+  "files": {
+    "includes": [
+      "**",
+      "!!**/dist",
+      "!!**/node_modules",
+      "!!**/release",
+      "!!**/out",
+      "!!**/coverage",
+      "!!**/dist-electron",
+      "!!**/.astro",
+      "!!**/drizzle",
+      "!!**/resources",
+      "!!**/build"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "useArrowFunction": "off",
+        "noImportantStyles": "off",
+        "noUselessFragments": "off"
+      },
+      "suspicious": {
+        "useIterableCallbackReturn": "off"
+      },
+      "a11y": {
+        "useAltText": "off",
+        "useKeyWithClickEvents": "off",
+        "noStaticElementInteractions": "off",
+        "noLabelWithoutControl": "off",
+        "noNoninteractiveTabindex": "off",
+        "useButtonType": "off",
+        "useValidAnchor": "off"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "packages/app-desktop/src/**/*.ts",
+        "packages/app-desktop/src/**/*.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": {
+              "level": "error",
+              "options": {
+                "allow": [
+                  "error"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

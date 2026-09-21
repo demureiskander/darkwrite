@@ -1,3 +1,16 @@
+import { IconMarkdown } from "@tabler/icons-react";
+import {
+  Copy,
+  FileCode,
+  FilePlus2,
+  FileText,
+  Forward,
+  GalleryVertical,
+  Pencil,
+  Trash,
+} from "lucide-react";
+import { type ReactNode, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -5,20 +18,10 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { useNoteContextMenu } from "./hooks/use-note-context-menu";
-import {
-  Copy,
-  FileCode,
-  FilePlus2,
-  FileText,
-  Forward,
-  Trash,
-} from "lucide-react";
-import { ReactNode, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { ToggleFavoriteContextMenuItem } from "./components/toggle-favorite-item";
-import { ModificationDateLabel } from "./components/modification-date-label";
 import { cn } from "@/lib/utils";
+import { ModificationDateLabel } from "./components/modification-date-label";
+import { ToggleFavoriteContextMenuItem } from "./components/toggle-favorite-item";
+import { useNoteContextMenu } from "./hooks/use-note-context-menu";
 
 export function NoteContextMenuContainer({
   children,
@@ -47,7 +50,15 @@ export function NoteContextMenuContainer({
         {children}
       </ContextMenuTrigger>
       <ContextMenuContent className="min-w-64">
-        <ToggleFavoriteContextMenuItem noteId={noteId} />
+        <ToggleFavoriteContextMenuItem noteId={noteId} />{" "}
+        <ContextMenuItem onSelect={actions.rename}>
+          <Pencil className="opacity-75" size={20} />
+          {t("rename")}
+        </ContextMenuItem>
+        <ContextMenuItem onSelect={actions.openInCenter}>
+          <GalleryVertical className="opacity-75" size={20}></GalleryVertical>
+          {t("openInCenter")}
+        </ContextMenuItem>
         <ContextMenuItem onSelect={actions.newSubpage}>
           <FilePlus2 className="opacity-75" size={20}></FilePlus2>
           {t("newSubpage")}
@@ -69,6 +80,10 @@ export function NoteContextMenuContainer({
         <ContextMenuItem onSelect={actions.exportJSON}>
           <FileText size={18} />
           {_t("editor.menu.jsonExport")}
+        </ContextMenuItem>
+        <ContextMenuItem onSelect={actions.exportMarkdown}>
+          <IconMarkdown size={18} />
+          Markdown
         </ContextMenuItem>
         <ContextMenuItem onSelect={actions.exportPDF}>
           <FileText size={18} />

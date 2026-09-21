@@ -1,3 +1,6 @@
+import { memo, useRef } from "react";
+import { Home } from "lucide-react";
+import { Trans, useTranslation } from "react-i18next";
 import {
   CommandDialog,
   CommandEmpty,
@@ -7,13 +10,12 @@ import {
   CommandList,
   DialogTitle,
 } from "@/components/ui";
-import { getNoteIcon } from "@/lib/utils";
-import { memo, useRef } from "react";
-import { Trans, useTranslation } from "react-i18next";
-import { useNoteById } from "../hooks/use-note-by-id";
-import { useMoveNoteDialog } from "../hooks/use-move-note-dialog";
-import { useNoteActions } from "../store/note-actions";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { getNoteIcon } from "@/lib/utils";
+import { useMoveNoteDialog } from "../hooks/use-move-note-dialog";
+import { useNoteById } from "../hooks/use-note-by-id";
+import { moveFailToast, moveSuccessToast } from "../note.toast";
+import { moveNote } from "../store/note.thunk";
 import { selectNoteIcon, selectNoteTitle } from "../store/note-selectors";
 import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
 
@@ -40,19 +42,22 @@ const SearchItem = memo(function ({
   noteId,
   targetNoteId,
 }: {
+  /** the note we are moving **into** */
   noteId: string;
+  /** the note we are moving */
   targetNoteId: string;
 }) {
   const { note } = useNoteById(noteId);
-  const { moveInto } = useNoteActions();
   const dispatch = useAppDispatch();
   if (!note) return <></>;
   return (
     <CommandItem
       className="px-2 py-4 flex items-center gap-2"
-      value={note.id + " " + note.title}
+      value={`${note.id} ${note.title}`}
       onSelect={() => {
-        moveInto(targetNoteId, noteId);
+        dispatch(moveNote(targetNoteId, noteId))
+          .andTee(moveSuccessToast)
+          .orTee(moveFailToast);
         MoveNoteDialogPortal(dispatch).hideMoveNoteDialog();
       }}
     >
@@ -64,16 +69,11 @@ const SearchItem = memo(function ({
 
 export default function MoveNoteDialog() {
   const { t } = useTranslation();
-  const {
-    hideMoveNoteDialog,
-    noteId,
-    open,
-    setQuery,
-    results,
-    isLoading,
-    query,
-  } = useMoveNoteDialog();
+  const dispatch = useAppDispatch();
+  const { hideMoveNoteDialog, noteId, open, setQuery, results, query } =
+    useMoveNoteDialog();
 
+  // biome-ignore lint/style/noNonNullAssertion: ref is always set
   const listRef = useRef<HTMLDivElement>(null!);
   return (
     <CommandDialog
@@ -100,11 +100,25 @@ export default function MoveNoteDialog() {
       <CommandList ref={listRef} className="scroll-view">
         <CommandEmpty>{t("search.noResult")}</CommandEmpty>
         <CommandGroup>
+          {noteId && (
+            <CommandItem
+              className="flex items-center gap-2 px-2 py-4"
+              value={`root ${t("folders.root")}`}
+              onSelect={() => {
+                dispatch(moveNote(noteId, null))
+                  .andTee(moveSuccessToast)
+                  .orTee(moveFailToast);
+                MoveNoteDialogPortal(dispatch).hideMoveNoteDialog();
+              }}
+            >
+              <Home size={18} />
+              {t("folders.root")}
+            </CommandItem>
+          )}
           {noteId &&
             results.map((id) => (
               <SearchItem key={id} noteId={id} targetNoteId={noteId} />
             ))}
-          {isLoading && "Loading"}
         </CommandGroup>
       </CommandList>
     </CommandDialog>

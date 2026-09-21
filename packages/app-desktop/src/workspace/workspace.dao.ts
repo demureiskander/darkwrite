@@ -1,21 +1,62 @@
-import { NotFoundError } from "@darkwrite/common";
-import { AppDataSource } from "../db";
-import { Workspace } from "../entity";
+import { type DwResultAsync, dwErr } from "@darkwrite/common";
+import { eq } from "drizzle-orm";
+import { ok } from "neverthrow";
+import { dbResult } from "@/db/db-result";
+import {
+  type NewWorkspaceRow,
+  type PatchWorkspaceRow,
+  type WorkspaceRow,
+  workspace as workspaceTable,
+} from "@/db/schema";
+import type { TxResolver } from "@/db/transactional";
 
-const repo = AppDataSource.getRepository(Workspace);
+export function WorkspaceDAO(tx: TxResolver) {
+  function create(workspace: NewWorkspaceRow): DwResultAsync<WorkspaceRow> {
+    return dbResult(() =>
+      tx().insert(workspaceTable).values(workspace).returning().get(),
+    );
+  }
 
-export const WorkspaceDAO = {
-  save: async (workspace: Workspace) => repo.save(workspace),
-  saveAll: async (workspaces: Workspace[]) => repo.save(workspaces),
-  findById: async (id: string) => repo.findOne({ where: { id } }),
+  function update(workspace: PatchWorkspaceRow): DwResultAsync<WorkspaceRow> {
+    return dbResult(() =>
+      tx()
+        .update(workspaceTable)
+        .set(workspace)
+        .where(eq(workspaceTable.id, workspace.id))
+        .returning(),
+    ).andThen((rows) =>
+      rows.at(0) ? ok(rows[0]) : dwErr("Workspace not found."),
+    );
+  }
 
-  findByIdOrThrow: async (id: string) => {
-    const workspace = await repo.findOne({ where: { id } });
-    if (!workspace) throw new NotFoundError("Workspace", id);
-    return workspace;
-  },
+  function findById(id: string): DwResultAsync<WorkspaceRow> {
+    return dbResult(() =>
+      tx().select().from(workspaceTable).where(eq(workspaceTable.id, id)).get(),
+    ).andThen((row) => (row ? ok(row) : dwErr("Workspace not found.")));
+  }
 
-  findAll: async () => repo.find(),
-  deleteById: async (id: string) => repo.delete({ id }),
-  delete: async (workspace: Workspace) => repo.delete({ id: workspace.id }),
-};
+  function findAll(): DwResultAsync<WorkspaceRow[]> {
+    return dbResult(() => tx().select().from(workspaceTable));
+  }
+
+  function deleteById(id: string): DwResultAsync<void> {
+    return dbResult(() =>
+      tx().delete(workspaceTable).where(eq(workspaceTable.id, id)),
+    ).andThen(() => ok());
+  }
+
+  function deleteWorkspace(value: WorkspaceRow): DwResultAsync<void> {
+    return deleteById(value.id);
+  }
+
+  return {
+    create,
+    update,
+    delete: deleteWorkspace,
+    deleteById,
+    findAll,
+    findById,
+  };
+}
+
+export type WorkspaceDAOInstance = ReturnType<typeof WorkspaceDAO>;

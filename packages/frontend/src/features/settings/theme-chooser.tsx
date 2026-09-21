@@ -1,5 +1,7 @@
+import { Folder } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { Button, Label, Switch } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { ColorPicker } from "@/components/ui/color-picker";
 import {
   Select,
@@ -8,34 +10,39 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { Folder } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useAppStore } from "../store/hooks";
+import useSystemTheme from "../themes/hooks/use-system-theme";
 import { useThemes } from "../themes/hooks/use-themes";
 import { initializeThemes } from "../themes/init";
 import { useAppearanceSettings } from "./hooks/use-settings";
 import { useSettingsActions } from "./store/settings-actions";
-import { useAppStore } from "../store/hooks";
+import SettingsCard from "./settings-card";
 
 export function ThemeDropdown(props: {
   className?: string;
+  mode: "dark" | "light";
   value: string;
   onValueChange: (value: string) => void;
 }) {
   const themes = useThemes();
-  const entries = Object.values(themes);
+  const entries = Object.values(themes).filter(
+    (theme) => theme.mode === props.mode,
+  );
   return (
     <Select value={props.value} onValueChange={props.onValueChange}>
       <SelectTrigger
         className={cn(
           props.className,
-          "max-w-fit dark:bg-secondary/50 bg-secondary border-none top-highlight",
+          "max-w-fit dark:bg-secondary/50 bg-secondary",
         )}
       >
-        {themes[props.value].name}
+        {themes[props.value]?.name}
       </SelectTrigger>
       <SelectContent>
         {entries.map((e) => (
-          <SelectItem value={e.id}>{e.name}</SelectItem>
+          <SelectItem key={e.id} value={e.id}>
+            {e.name}
+          </SelectItem>
         ))}
       </SelectContent>
     </Select>
@@ -44,10 +51,20 @@ export function ThemeDropdown(props: {
 
 export function ThemeChooser() {
   const settings = useAppearanceSettings();
-  const lightTheme = settings.lightColorScheme;
-  const darkTheme = settings.darkColorScheme;
   const accentColor = settings.accentColor;
-  const useSystemAccentColor = settings.useSystemAccentColor;
+  const systemTheme = useSystemTheme();
+  const themes = useThemes();
+  const activeMode =
+    settings.themeMode === "system" ? systemTheme : settings.themeMode;
+  const configuredThemeId =
+    activeMode === "dark"
+      ? settings.darkColorScheme
+      : settings.lightColorScheme;
+  const activeThemeId =
+    themes[configuredThemeId]?.mode === activeMode
+      ? configuredThemeId
+      : (Object.values(themes).find((theme) => theme.mode === activeMode)?.id ??
+        configuredThemeId);
   const { t } = useTranslation("translation");
   const store = useAppStore();
   const importTheme = async () => {
@@ -64,79 +81,32 @@ export function ThemeChooser() {
     });
   };
 
-  const toggleSystemAccentColor = (value: boolean) => {
-    updateSettings({ appearance: { useSystemAccentColor: value } });
-  };
-
   return (
-    <>
-      <div className="flex w-160 gap-2">
-        <Button
-          className="w-fit bg-view-2"
-          variant={"outline"}
-          onClick={importTheme}
-        >
-          <Folder size={18} />
-          {t("settings.appearance.importTooltip")}
-        </Button>
-      </div>
-      <div className="flex flex-col bg-view-2 top-highlight rounded-lg p-4 w-160 gap-4 drop-shadow-sm">
-        <div className="flex justify-between items-center">
-          <span className="font-medium">
-            {t("settings.appearance.lightColorScheme")}
-          </span>
-          <div className="flex gap-2">
-            <ThemeDropdown
-              value={lightTheme}
-              onValueChange={(val) => setScheme("light", val)}
-            />
-          </div>
-        </div>
-        <hr />
-        <div className="flex justify-between items-center">
-          <span className="font-medium">
-            {t("settings.appearance.darkColorScheme")}
-          </span>
-          <div className="flex gap-2">
-            <ThemeDropdown
-              value={darkTheme}
-              onValueChange={(val) => setScheme("dark", val)}
-            />
-          </div>
-        </div>
-        <hr />
-        <div
-          className={cn(
-            "flex justify-between items-center",
-            useSystemAccentColor && "opacity-60",
-          )}
-        >
-          <span className="font-medium">
-            {t("settings.appearance.accentColorText")}
-          </span>
-          <ColorPicker
-            disabled={useSystemAccentColor}
-            value={accentColor}
-            onChange={updateAccentColor}
+    <SettingsCard>
+      <div className="flex items-center justify-between gap-4">
+        <span className="font-medium">
+          {t("settings.appearance.colorThemeText")}
+        </span>
+        <div className="flex items-center gap-2">
+          <ThemeDropdown
+            className="max-w-full"
+            mode={activeMode}
+            value={activeThemeId}
+            onValueChange={(value) => setScheme(activeMode, value)}
           />
-        </div>
-        <hr />
-        <div className="flex justify-between items-center">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="switch-use-system-accent-color">
-              {t("settings.appearance.useSystemAccentColor")}{" "}
-            </Label>
-            <p className="text-sm opacity-80">
-              {t("settings.appearance.useSystemAccentColorDescription")}
-            </p>
-          </div>
-          <Switch
-            checked={useSystemAccentColor}
-            onCheckedChange={toggleSystemAccentColor}
-            id="switch-use-system-accent-color"
-          />
+          <Button className="w-fit" variant={"outline"} onClick={importTheme}>
+            <Folder size={18} />
+            {t("settings.appearance.importTooltip")}
+          </Button>
         </div>
       </div>
-    </>
+      <div className="h-px bg-border/60" />
+      <div className="flex items-center justify-between">
+        <span className="font-medium">
+          {t("settings.appearance.accentColorText")}
+        </span>
+        <ColorPicker value={accentColor} onChange={updateAccentColor} />
+      </div>
+    </SettingsCard>
   );
 }

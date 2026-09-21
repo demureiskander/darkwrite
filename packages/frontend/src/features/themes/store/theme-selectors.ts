@@ -1,9 +1,11 @@
-import { Theme } from "@darkwrite/common";
-import { RootState, Selector } from "@/features/store/types";
+import type { Theme } from "@darkwrite/common";
 import { createSelector } from "@reduxjs/toolkit";
+import type { RootState, Selector } from "@/features/store/types";
 
-export const selectAllThemes = (state: RootState) =>
-  Object.values(state.theme.themes);
+export const selectAllThemes = createSelector(
+  [(state: RootState) => state.theme.themes],
+  (themes) => Object.values(themes),
+);
 
 export const selectLightThemes = createSelector([selectAllThemes], (themes) =>
   themes.filter((t) => t.mode === "light"),

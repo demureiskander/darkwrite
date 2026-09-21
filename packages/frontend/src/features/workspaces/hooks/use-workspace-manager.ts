@@ -1,13 +1,13 @@
-import { appSessionSlice } from "@/features/session/session-slice";
-import { useAppDispatch } from "@/features/store/hooks";
 import { useNavigate } from "react-router-dom";
+import { switchWorkspace } from "@/features/session/session.thunk";
+import { useAppDispatch } from "@/features/store/hooks";
 
 export const useWorkspaceManager = () => {
   const nav = useNavigate();
   const dispatch = useAppDispatch();
-  const switchWorkspace = (id: string, resetRoute = true) => {
+  const _switchWorkspace = (id: string, resetRoute = true) => {
     if (resetRoute) nav("/");
-    dispatch(appSessionSlice.actions.switchWorkspace(id));
+    dispatch(switchWorkspace(id));
   };
-  return { switchWorkspace };
+  return { switchWorkspace: _switchWorkspace };
 };

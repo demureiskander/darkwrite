@@ -1,15 +1,17 @@
 import FontSettings from "./font-settings";
+import { CanvasWidthSettings } from "./canvas-width-settings";
+import { ShortcutSettings } from "./shortcut-settings";
 import { ThemeChooser } from "./theme-chooser";
 import ThemeModeToggle from "./theme-mode-toggle";
-import { WindowFrameSettings } from "./window-frame";
 
 export default function AppearanceSettings() {
   return (
-    <div className="w-full flex flex-col items-center pt-3 gap-4">
+    <div className="flex w-full flex-col items-center gap-4 px-1 pt-3">
       <ThemeModeToggle />
       <ThemeChooser />
       <FontSettings />
-      <WindowFrameSettings />
+      <CanvasWidthSettings />
+      <ShortcutSettings />
     </div>
   );
 }

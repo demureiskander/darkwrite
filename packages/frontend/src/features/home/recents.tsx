@@ -1,9 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
 import { getNoteIcon } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
 import { navigateToNote } from "../navigation/navigator";
-import useRecents from "./use-recents";
 import { NoteContextMenuContainer } from "../note/note-context-menu";
+import useRecents from "./use-recents";
 
 export default function RecentNotes() {
   const { recents } = useRecents();
@@ -16,13 +16,15 @@ export default function RecentNotes() {
       {recents.map((note) => (
         <NoteContextMenuContainer key={note.id} noteId={note.id}>
           <Button
-            className="justify-start gap-2 rounded-lg"
+            className="justify-start gap-2 rounded-lg active:pushdown-99%"
             key={note.id}
             onClick={() => navigateToNote(note.id)}
             variant={"ghost"}
           >
             <span>{getNoteIcon(note.icon)}</span>
-            <span>{note.title}</span>
+            <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-start">
+              {note.title || t("defaults.pageTitle")}
+            </span>
           </Button>
         </NoteContextMenuContainer>
       ))}

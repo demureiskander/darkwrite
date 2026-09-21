@@ -1,18 +1,32 @@
-import { RootState } from "@/features/store/types";
+import {
+  byUpdateTime,
+  isDescendant,
+  type Note,
+  NoteKind,
+  Rank,
+  stableSortByOrderKeyFn,
+} from "@darkwrite/common";
+import { createSelector, weakMapMemoize } from "@reduxjs/toolkit";
+import Fuse from "fuse.js";
+import type { DragEvent } from "react";
+import { extractNoteDragData } from "@/features/dnd/datatransfer";
+import { selectCurrentWorkspaceId } from "@/features/session/session-selectors";
+import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
-import { createSelector } from "@reduxjs/toolkit";
-import { Rank } from "@darkwrite/common";
-import { byUpdateTime } from "@darkwrite/common";
-import { MoveNoteSearchArgs, SearchArgs } from "./types";
-import { isDescendant } from "@darkwrite/common";
+import type { MoveNoteSearchArgs, SearchArgs } from "./types";
 
 const selectNotesState = (store: RootState) => store["notes-slice"];
+const adapterSelectors = notesAdapter.getSelectors(selectNotesState);
 
 export const {
   selectAll: selectAllNotes,
-  selectById: selectNoteById,
   selectEntities: selectAllNotesAsMap,
-} = notesAdapter.getSelectors(selectNotesState);
+} = adapterSelectors;
+
+export const selectNoteById: (
+  state: RootState,
+  id: string,
+) => Note | undefined = adapterSelectors.selectById;
 
 export const selectNotesByParentId = createSelector(
   [
@@ -29,21 +43,57 @@ export const selectNotesByParentId = createSelector(
           note.parentId === parentId &&
           !note.isTrashed,
       )
-      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
-      .map((n) => n.id);
+      .toSorted(stableSortByOrderKeyFn());
   },
+);
+
+export const selectNoteIdsByParentId = createSelector(
+  [selectNotesByParentId],
+  (notes) => notes.map((n) => n.id),
+  { memoize: weakMapMemoize },
+);
+
+export const selectNotesForSearch = createSelector(
+  [selectCurrentWorkspaceId, selectAllNotes],
+  (workspaceId, notes) =>
+    notes.filter(
+      (n) =>
+        n.workspaceId === workspaceId &&
+        n.kind === NoteKind.Document &&
+        !n.isTrashed,
+    ),
+);
+
+export const selectFuseInstance = createSelector(
+  [selectNotesForSearch],
+  (notes) => new Fuse(notes, { threshold: 0.4, keys: ["title"] }),
+);
+
+/** This selector returns any and all notes associated with given workspace. */
+export const selectAllNoteIdsByWorkspaceIdUnfiltered = createSelector(
+  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
+  (allNotes, workspaceId) =>
+    allNotes.filter((n) => n.workspaceId === workspaceId).map((n) => n.id),
 );
 
 export const selectRecentNotes = createSelector(
   [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
   (allNotes, workspaceId) => {
     return allNotes
-      .filter((n) => n.workspaceId === workspaceId && !n.isTrashed)
+      .filter(
+        (n) =>
+          n.workspaceId === workspaceId &&
+          n.kind === NoteKind.Document &&
+          !n.isTrashed,
+      )
       .toSorted(byUpdateTime("desc"))
       .slice(0, 5);
   },
 );
 
+/**
+ * Get favorite IDs in a workspace in stable sorted order.
+ */
 export const selectFavoriteIds = createSelector(
   [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
   (allNotes, workspaceId) => {
@@ -51,11 +101,14 @@ export const selectFavoriteIds = createSelector(
       .filter(
         (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
       )
-      .toSorted((a, b) => Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint))
+      .toSorted(stableSortByOrderKeyFn("favoriteOrderHint"))
       .map((n) => n.id);
   },
 );
 
+/**
+ * Get favorites in a workspace in stable sorted order.
+ */
 export const selectFavorites = createSelector(
   [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
   (allNotes, workspaceId) => {
@@ -63,9 +116,7 @@ export const selectFavorites = createSelector(
       .filter(
         (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
       )
-      .toSorted((a, b) =>
-        Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint),
-      );
+      .toSorted(stableSortByOrderKeyFn("favoriteOrderHint"));
   },
 );
 
@@ -76,7 +127,7 @@ export const selectParentIdTree = createSelector(
     const seen = new Set<string>();
     let currentNote = notesMap[noteId];
 
-    while (currentNote && currentNote.parentId) {
+    while (currentNote?.parentId) {
       if (seen.has(currentNote.id)) break; // prevent circular reference
       tree.push(currentNote.parentId);
       seen.add(currentNote.id);
@@ -96,11 +147,25 @@ export const selectByWorkspaceAndSearchTerm = createSelector(
       .filter(
         (n) =>
           n.workspaceId === workspaceId &&
-          n.title.toLowerCase().includes(query.toLowerCase()) &&
+          n.kind === NoteKind.Document &&
+          (n.title ?? "").toLowerCase().includes(query.toLowerCase()) &&
           !n.isTrashed,
       )
       .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
       .map((n) => n.id);
+  },
+);
+
+export const searchCurrentWorkspace = createSelector(
+  [
+    selectFuseInstance,
+    (state: RootState) =>
+      selectRecentNotes(state, selectCurrentWorkspaceId(state)),
+    (_state: RootState, query: string) => query,
+  ],
+  (fuse, recents, query) => {
+    if (query.trim() === "") return recents.map((r) => r.id);
+    return fuse.search(query).map((r) => r.item.id);
   },
 );
 
@@ -125,11 +190,47 @@ export const selectNotesToMoveInto = createSelector(
       .filter(
         (n) =>
           n.workspaceId === workspaceId &&
+          n.kind === NoteKind.Folder &&
           n.id !== targetNoteId &&
           !isDescendant(n.id, targetNoteId, notes) &&
           n.title.toLowerCase().includes(query.toLowerCase()) &&
           !n.isTrashed,
       )
       .map((n) => n.id);
+  },
+);
+
+export const selectNoteIdsInTrash = createSelector(
+  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
+  (allNotes, workspaceId) =>
+    allNotes
+      .filter((n) => n.workspaceId === workspaceId && n.isTrashed)
+      .map((n) => n.id),
+);
+
+export function getMovingNote(e: DragEvent<HTMLElement>, state: RootState) {
+  const sourceId = extractNoteDragData(e)?.noteId;
+  if (!sourceId) return;
+  const movingNote = selectNoteById(state, sourceId);
+  return movingNote ?? null;
+}
+
+export type NotePropertySelectorArg = { noteId: string; name: string };
+
+export const selectNotePropertyNames = createSelector(
+  [selectNoteById],
+  (note) => note?.propertyOrder ?? [],
+);
+
+/** Selects a note's property by its name.
+ * @returns `NoteProperty` or `null` */
+export const selectNoteProperty = createSelector(
+  [
+    (state: RootState, arg: NotePropertySelectorArg) =>
+      selectNoteById(state, arg.noteId)?.properties[arg.name] ?? null,
+  ],
+  (p) => p,
+  {
+    memoize: weakMapMemoize,
   },
 );

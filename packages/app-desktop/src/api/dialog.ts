@@ -1,4 +1,9 @@
-import { dialog, OpenDialogOptions } from "electron";
+import {
+  dialog,
+  type OpenDialogOptions,
+  type SaveDialogOptions,
+} from "electron";
+import { err, ok, type Result, ResultAsync } from "neverthrow";
 
 /** @deprecated useless abstraction */
 export type SaveFileDialogOptions = {
@@ -23,12 +28,38 @@ export async function saveFile(opts: SaveFileDialogOptions) {
   return { canceled, path: filePath } as SaveFileDialogReturnType;
 }
 
-/**
- * Shows a native open file dialog
- * @deprecated useless abstraction
- * @param opts dialog options
- */
-export async function openFile(opts: OpenDialogOptions) {
-  const result = await dialog.showOpenDialog(opts);
-  return result;
+export type DialogCancelError = { type: "_internal-dialog-cancelled" };
+
+const isDialogCancelErr = (val: unknown) =>
+  typeof val === "object"
+    ? (val as DialogCancelError | null)?.type === "_internal-dialog-cancelled"
+    : false;
+
+export function showOpenDialog(options: OpenDialogOptions) {
+  return ResultAsync.fromSafePromise(dialog.showOpenDialog(options)).andThen(
+    (result) =>
+      result.canceled
+        ? err({
+            type: "_internal-dialog-cancelled",
+          } satisfies DialogCancelError)
+        : ok(result.filePaths),
+  );
+}
+
+export function showSaveDialog(options: SaveDialogOptions) {
+  return ResultAsync.fromSafePromise(dialog.showSaveDialog(options)).andThen(
+    (result) =>
+      result.canceled
+        ? err({
+            type: "_internal-dialog-cancelled",
+          } satisfies DialogCancelError)
+        : ok(result.filePath),
+  );
+}
+
+export function whenDialogCancelled<T>(value: T) {
+  return <E>(error: E): Result<T, Exclude<E, DialogCancelError>> =>
+    isDialogCancelErr(error)
+      ? ok(value)
+      : err(error as Exclude<E, DialogCancelError>);
 }

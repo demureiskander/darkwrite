@@ -1,35 +1,42 @@
-import { IWorkspaceAPI } from "@darkwrite/common";
 import {
-  UpdateWorkspaceDTO,
+  type CreateWorkspaceDTO,
+  CreateWorkspaceDTOSchema,
+  type IWorkspaceAPI,
+  okVoid,
+  type UpdateWorkspaceDTO,
   UpdateWorkspaceDTOSchema,
+  validateSchema,
 } from "@darkwrite/common";
-import { WorkspaceService } from "./workspace.service";
-import { IPCHandler } from "../types/ipc-handler";
+import { type HandlerImplements, handler } from "../types/ipc-handler";
+import type { IWorkspaceService } from "./workspace.service";
+import { workspaceToDto } from "./workspace-mapper";
 
-const service = new WorkspaceService();
+export function WorkspaceAPI(
+  workspaceService: IWorkspaceService,
+): HandlerImplements<IWorkspaceAPI> {
+  const create = handler((dto: CreateWorkspaceDTO) =>
+    validateSchema(CreateWorkspaceDTOSchema)(dto)
+      .asyncAndThen((dto) => workspaceService.createWorkspace(dto))
+      .map(workspaceToDto)
+      .map((workspace) => ({ workspace })),
+  );
 
-export const ElectronWorkspaceAPI: IWorkspaceAPI = {
-  async create(dto) {
-    const workspace = await service.createWorkspace(dto);
-    return { workspace: workspace.mapToDTO() };
-  },
-  async delete() {
-    //TODO: implement
-  },
-  async getAll() {
-    const workspaces = (await service.getWorkspaces()).map((w) => w.mapToDTO());
-    return { workspaces };
-  },
-  async update(id: string, dto: UpdateWorkspaceDTO) {
-    const sanitizedDto = UpdateWorkspaceDTOSchema.parse(dto);
-    const workspace = await service.update(id, sanitizedDto);
-    return { workspace: workspace.mapToDTO() };
-  },
-};
+  const deleteWorkspace = handler((id: string) =>
+    workspaceService.deleteWorkspace(id).andThen(okVoid),
+  );
 
-export const WorkspacesApiBridge = {
-  create: new IPCHandler(false, ElectronWorkspaceAPI.create),
-  update: new IPCHandler(false, ElectronWorkspaceAPI.update),
-  getAll: new IPCHandler(false, ElectronWorkspaceAPI.getAll),
-  delete: new IPCHandler(false, ElectronWorkspaceAPI.delete),
-};
+  const getAll = handler(() =>
+    workspaceService
+      .getWorkspaces()
+      .map((w) => ({ workspaces: w.map(workspaceToDto) })),
+  );
+
+  const update = handler((id: string, dto: UpdateWorkspaceDTO) =>
+    validateSchema(UpdateWorkspaceDTOSchema)(dto)
+      .asyncAndThen((dto) => workspaceService.update(id, dto))
+      .map(workspaceToDto)
+      .map((workspace) => ({ workspace })),
+  );
+
+  return { create, delete: deleteWorkspace, getAll, update };
+}

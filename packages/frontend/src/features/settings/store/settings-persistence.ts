@@ -1,9 +1,9 @@
+import type { DarkwriteUserSettings } from "@darkwrite/common";
 import { createListenerMiddleware } from "@reduxjs/toolkit";
-import { settingsSlice } from "./settings-slice";
-import { RootState } from "@/features/store/types";
-import { DarkwriteAPIClient } from "@/api/api-client";
 import _ from "lodash";
-import { DarkwriteUserSettings } from "@darkwrite/common";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import type { RootState } from "@/features/store/types";
+import { settingsSlice } from "./settings-slice";
 
 export const settingsPersistenceMiddleware = createListenerMiddleware();
 const DEBOUNCE_DELAY_MS = 300;

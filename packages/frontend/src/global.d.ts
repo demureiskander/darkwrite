@@ -1,10 +1,11 @@
 /// <reference types="vite/client" />
 /// <reference types="vitest/globals" />
-/// <reference types="./electron/preload/types.d.ts"/>
 
-import { type WebUtils } from "electron";
-import type { DarkwriteElectronAPI as NewAPI } from "./electron/ipc/api";
-import { type InferPreloadAPI } from "./electron/types/ipc-handler";
+import type {
+  DarkwriteIPCBridge,
+  ElectronWebUtils,
+  WindowEvents,
+} from "@darkwrite/common";
 
 /**
  * Type definition for WindowControlsOverlay API
@@ -16,39 +17,33 @@ interface WindowControlsOverlay extends EventTarget {
   ongeometrychange: ((this: WindowControlsOverlay, e: Event) => unknown) | null;
 }
 
-type APIType = InferPreloadAPI<typeof NewAPI>;
-
 declare global {
-  type Result<T, E> =
-    | { value: T; error?: undefined }
-    | { value?: undefined; error: E };
-
   interface Window {
     /**
      * Interface with the Electron main process.
      * @platform electron
      */
-    api: APIType;
+    api: DarkwriteIPCBridge;
     /**
      * Utility to get full paths of File objects in Electron windows.
      * @platform electron
      */
-    webUtils: WebUtils;
-    initPreload: PreloadInitFunction;
+    webUtils: ElectronWebUtils;
+    /** Initialize the IPC bridge. This is asynchronous and must be awaited before any API methods are called. */
+    initPreload: () => Promise<void>;
     /**
      * This field will exist and be set to `true` if the application
      * is running inside an Electron container. This should not exist
      * at all in normal browsers;
+     *
+     * @deprecated we will remain a desktop app for the foreseeable future
      */
     isElectron: true | undefined;
     /**
      * Listen to events from the Electron main process.
      * @platform electron
      */
-    events: {
-      onEnterFullScreen: (callback: () => void) => void;
-      onExitFullScreen: (callback: () => void) => void;
-    };
+    events: WindowEvents;
   }
 
   interface Navigator {
@@ -58,6 +53,4 @@ declare global {
   type Result<T, E> =
     | { value: T; error?: undefined }
     | { value?: undefined; error: E };
-
-  //type DarkwriteElectronAPI = dw;
 }

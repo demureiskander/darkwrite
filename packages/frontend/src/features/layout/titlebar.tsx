@@ -1,26 +1,34 @@
+import { IconLayoutSidebar } from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
 import { HeaderbarButton } from "@/components/headerbar-button";
-import { cn } from "@/lib/utils";
-import { PanelRightClose } from "lucide-react";
-import { useRef } from "react";
-import { HistoryNavigation } from "./navigation";
-import PageTitle from "./page-title";
-import Toolbar from "./toolbar";
-import TrafficLightsPlaceholder from "./traffic-lights-placeholder";
-import { useWindowControlsOverlay } from "@/features/layout/hooks/use-window-controls-overlay";
+import { TextTooltip } from "@/components/ui/tooltip";
 import { useLocalStore } from "@/context/local-state";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
+import { cn } from "@/lib/utils";
+import { useLayoutStore } from "./layout-store";
+import { LocationPath } from "./location-path";
+import { HistoryNavigation } from "./navigation";
+import Toolbar from "./toolbar";
+import TrafficLightsPlaceholder from "./traffic-lights-placeholder";
 
 export function Titlebar() {
-  const headerRef = useRef<HTMLDivElement>(null);
   const isSidebarCollapsed = useLocalStore((s) => s.isSidebarCollapsed);
+  const sidebarWidth = useLocalStore((s) => s.sidebarWidth);
+  const wco = useLayoutStore((s) => s.wco);
+  const { t } = useTranslation();
   const expandCallback = () => {
     useLocalStore.setState({ isSidebarCollapsed: false });
   };
-  useWindowControlsOverlay(headerRef);
   const noteId = useNoteFromURL();
+  const overlayStyle = wco.visible
+    ? {
+        width: isSidebarCollapsed ? wco.right : wco.right - (sidebarWidth + 1),
+        paddingLeft: isSidebarCollapsed ? wco.insetLeft + 8 : undefined,
+      }
+    : undefined;
   return (
     <div
-      ref={headerRef}
+      style={overlayStyle}
       className={cn(
         "titlebar h-12 bg-background shrink-0 flex [&>div]:shrink-0 p-2 justify-start gap-2 items-center",
         isSidebarCollapsed && "bg-view-1",
@@ -30,18 +38,20 @@ export function Titlebar() {
       )}
     >
       <TrafficLightsPlaceholder />
-      <HeaderbarButton
-        data-testid="button-expand-sidebar"
-        className={cn(!isSidebarCollapsed && "hidden")}
-        onClick={expandCallback}
-        title="Show sidebar"
-      >
-        <PanelRightClose width={20} height={20}></PanelRightClose>
-      </HeaderbarButton>
+      <TextTooltip text={t("sidebar.button.showSidebar")}>
+        <HeaderbarButton
+          data-testid="button-expand-sidebar"
+          className={cn(!isSidebarCollapsed && "hidden")}
+          onClick={expandCallback}
+          aria-label={t("sidebar.button.showSidebar")}
+        >
+          <IconLayoutSidebar size={18} />
+        </HeaderbarButton>
+      </TextTooltip>
       <HistoryNavigation />
-      <PageTitle />
+      <LocationPath documentId={noteId} />
       <div className="grow"></div>
-      <Toolbar />
+      {noteId && <Toolbar noteId={noteId} />}
     </div>
   );
 }

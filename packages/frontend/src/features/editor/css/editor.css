@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .ProseMirror {
-  @apply px-4 pt-0 pb-0 min-h-96 text-foreground;
+  @apply px-4 pt-0 pb-4 min-h-96 text-foreground;
   .react-renderer {
     background: transparent !important;
   }
@@ -37,14 +37,14 @@
     animation-name: slide-up;
     animation-duration: 0.2s;
     animation-iteration-count: 1;
-    opacity: 1;
+    animation-fill-mode: forwards;
   }
   &[data-animation="cmd-slide-down"][data-state="visible"] {
     opacity: 0;
     animation-name: cmd-slide-down;
     animation-duration: 0.2s;
     animation-iteration-count: 1;
-    opacity: 1;
+    animation-fill-mode: forwards;
   }
 
   &[data-animation="cmd-slide-down"][data-state="visible"][data-placement="top-start"] {
@@ -52,7 +52,7 @@
     animation-name: cmd-slide-up;
     animation-duration: 0.2s;
     animation-iteration-count: 1;
-    opacity: 1;
+    animation-fill-mode: forwards;
   }
 }
 
@@ -134,6 +134,13 @@ hr.ProseMirror-selectednode {
   }
 }
 
+.node-dwimage {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+}
+
 .dwimage-selection-overlay {
   position: relative;
 }
@@ -147,4 +154,14 @@ hr.ProseMirror-selectednode {
   bottom: 0px;
   pointer-events: none;
   @apply bg-primary/20;
+}
+
+.bubble-menu-wrapper {
+  /* no transition — newly appeared or hidden */
+}
+
+.bubble-menu-wrapper.bubble-settled {
+  transition-property: left, top;
+  transition-duration: 0.075s;
+  transition-timing-function: ease-in-out;
 }

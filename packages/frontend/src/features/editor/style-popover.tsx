@@ -1,5 +1,9 @@
-import { FontStyle, NoteCustomization } from "@darkwrite/common";
+import { FontStyle, type NoteCustomization } from "@darkwrite/common";
+import { IconBrush } from "@tabler/icons-react";
+import { Brush, RotateCcw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import FontSelect from "@/components/font-select";
+import { HeaderbarButton } from "@/components/headerbar-button";
 import { Switch } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { ColorPicker } from "@/components/ui/color-picker";
@@ -8,24 +12,34 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
-import { RotateCcw } from "lucide-react";
-import { ReactNode } from "react";
-import { useTranslation } from "react-i18next";
-import useStylePopover from "./use-style-popover";
 import { useAppSelector } from "../store/hooks";
 import { selectEditorCustomizations } from "./store/editor-selectors";
+import useStylePopover from "./use-style-popover";
 
-export default function StylePopover({ children }: { children: ReactNode }) {
-  const id = useNoteFromURL();
+export default function StylePopover({ id }: { id: string }) {
   const customizations = useAppSelector((s) =>
     selectEditorCustomizations(s, id ?? ""),
   );
+  const { t } = useTranslation();
   if (!id || !customizations) return;
   return (
     <Popover>
-      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <Tooltip>
+        <PopoverTrigger asChild>
+          <TooltipTrigger>
+            <HeaderbarButton>
+              <IconBrush size={20} />
+            </HeaderbarButton>
+          </TooltipTrigger>
+        </PopoverTrigger>
+        <TooltipContent>{t("editor.customizations.tooltip")}</TooltipContent>
+      </Tooltip>
       <PopoverContent className="w-fit h-fit p-2 mr-2 bg-view-2/80 top-highlight">
         <StyleUI customizations={customizations} noteId={id} />
       </PopoverContent>
@@ -45,7 +59,7 @@ export function StyleUI(props: {
   const { setFont, setColor, setWide } = useStylePopover();
   return (
     <div className="flex flex-col gap-2">
-      <div className="grid gap-1 grid-cols-[1fr_1fr_1fr_1fr] grid-rows-1  [&>button]:h-fit [&>button]:flex [&>button]:flex-col [&>button]:gap-1 [&>button]:rounded-xl [&>button]:w-20">
+      <div className="grid grid-cols-3 grid-rows-1 gap-1 [&>button]:h-fit [&>button]:flex [&>button]:w-20 [&>button]:flex-col [&>button]:gap-1 [&>button]:rounded-xl">
         <Button
           onClick={() => setFont(FontStyle.SANS)}
           variant={"ghost"}
@@ -63,22 +77,6 @@ export function StyleUI(props: {
           <span>{t("sansText")}</span>
         </Button>
         <Button
-          onClick={() => setFont(FontStyle.SERIF)}
-          variant={"ghost"}
-          className={cn(
-            font === FontStyle.SERIF &&
-              "text-primary-text hover:text-primary-text",
-          )}
-        >
-          <span
-            style={{ fontFamily: "var(--darkwrite-serif) !important" }}
-            className="text-3xl"
-          >
-            Aa
-          </span>
-          <span>{t("serifText")}</span>
-        </Button>
-        <Button
           onClick={() => setFont(FontStyle.MONO)}
           variant={"ghost"}
           className={cn(
@@ -86,12 +84,7 @@ export function StyleUI(props: {
               "text-primary-text hover:text-primary-text",
           )}
         >
-          <span
-            style={{ fontFamily: "var(--darkwrite-mono) !important" }}
-            className="darkwrite-mono! text-3xl"
-          >
-            Aa
-          </span>
+          <span className="darkwrite-mono text-3xl">Aa</span>
           <span>{t("monoText")}</span>
         </Button>
         <Button

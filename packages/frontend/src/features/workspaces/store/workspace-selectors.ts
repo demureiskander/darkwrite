@@ -1,10 +1,10 @@
-import { WorkspaceDTO } from "@darkwrite/common";
-import { RootState, Selector } from "@/features/store/types";
+import type { WorkspaceDTO } from "@darkwrite/common";
 import { createSelector } from "@reduxjs/toolkit";
+import type { RootState, Selector } from "@/features/store/types";
 
 export const selectAllWorkspaces = createSelector(
-  [(store: RootState) => Object.values(store.workspace.workspaces)],
-  (workspaces) => workspaces,
+  [(store: RootState) => store.workspace.workspaces],
+  (workspaces) => Object.values(workspaces),
 );
 
 export const selectWorkspaceById: Selector<string, WorkspaceDTO | undefined> = (
@@ -24,4 +24,9 @@ export const selectCurrentWorkspace = createSelector(
 export const selectLocalWorkspaces = createSelector(
   [selectAllWorkspaces],
   (workspaces) => workspaces.filter((w) => w.config.syncMode === "offline"),
+);
+
+export const selectWorkspaceCount = createSelector(
+  [selectAllWorkspaces],
+  (workspaces) => workspaces.length,
 );

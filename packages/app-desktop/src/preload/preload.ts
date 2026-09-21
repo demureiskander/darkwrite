@@ -1,7 +1,13 @@
-import { deepAssign, recursiveKeys } from "@darkwrite/common";
+import {
+  deepAssign,
+  type FileLinkMetadata,
+  type NativeContextMenuData,
+  recursiveKeys,
+  type SerializedResult,
+  type WindowEvents,
+} from "@darkwrite/common";
 import { contextBridge, ipcRenderer, webUtils } from "electron";
-// import { DarkwriteElectronAPI } from "../ipc/api";
-// import { DarkwriteAPI, IPCHandler } from "../ipc/handler";
+import { AppMenuEvent, WindowEvent } from "@/types/window-events";
 
 /**
  * Wraps around ipcRenderer.invoke() to type APIs
@@ -10,8 +16,11 @@ import { contextBridge, ipcRenderer, webUtils } from "electron";
  * @param args Every other parameter which will be passed into ipcRenderer.invoke()
  * @returns
  */
-const invoke = <T = void>(channel: string, ...args: unknown[]): Promise<T> =>
-  <Promise<T>>ipcRenderer.invoke(channel, ...args);
+const invoke = <T = void, E = unknown>(
+  channel: string,
+  ...args: unknown[]
+): Promise<SerializedResult<T, E>> =>
+  <Promise<SerializedResult<T, E>>>ipcRenderer.invoke(channel, ...args);
 
 let initialized = false;
 
@@ -25,14 +34,13 @@ export const initalizeAPI = async () => {
   const apiObject = await ipcRenderer.invoke(
     "$darkwrite.build-preload-api-object",
   );
-  // et the list of IPC channels, which are derived from the object's keys
+  // get the list of IPC channels, which are derived from the object's keys
   const handlerKeys = recursiveKeys(apiObject, (val) => val === true);
   const obj = {};
   for (const keyPath of handlerKeys) {
     const channel = "api".concat(".").concat(keyPath.join("."));
-    const handlerFunc = async (...args: unknown[]) => {
-      const result = await invoke<unknown>(channel, ...args);
-      return result;
+    const handlerFunc = (...args: unknown[]) => {
+      return invoke<unknown>(channel, ...args);
     };
     // replace each `true` with a wrapper to ipcRenderer.invoke
     deepAssign(obj, keyPath, handlerFunc);
@@ -46,9 +54,19 @@ contextBridge.exposeInMainWorld("webUtils", webUtils);
 contextBridge.exposeInMainWorld("initPreload", initalizeAPI);
 contextBridge.exposeInMainWorld("isElectron", true);
 
-contextBridge.exposeInMainWorld("events", {
+const events: WindowEvents = {
   onEnterFullScreen: (callback: () => void) =>
-    ipcRenderer.on("enter-full-screen", () => callback()),
+    ipcRenderer.on(WindowEvent.ENTER_FULLSCREEN, () => callback()),
   onExitFullScreen: (callback: () => void) =>
-    ipcRenderer.on("exit-full-screen", () => callback()),
-});
+    ipcRenderer.on(WindowEvent.EXIT_FULLSCREEN, () => callback()),
+  onContextMenu: (callback: (data: NativeContextMenuData) => void) =>
+    ipcRenderer.on(WindowEvent.CONTEXT_MENU, (_, data) => callback(data)),
+  onFileLinkCreated: (callback: (link: FileLinkMetadata) => void) =>
+    ipcRenderer.on(WindowEvent.FILE_LINK_CREATED, (_, link) => callback(link)),
+  menu: {
+    onCreateNote: (callback: () => void) =>
+      ipcRenderer.on(AppMenuEvent.CREATE_NEW_NOTE, () => callback()),
+  },
+};
+
+contextBridge.exposeInMainWorld("events", events);

@@ -1,5 +1,7 @@
+import { getEmbedUrl } from "@darkwrite/common";
 import { Plugin } from "@tiptap/pm/state";
-import { ImageExtensionConfig } from "./image-config";
+import { Block } from "../../types";
+import type { ImageExtensionConfig } from "./image-config";
 import { createImageNode } from "./image-upload-transaction";
 
 const ImagePlugin = (config: ImageExtensionConfig) =>
@@ -15,8 +17,8 @@ const ImagePlugin = (config: ImageExtensionConfig) =>
           if (!file) return;
           config.saveArrayBuffer(file, filetype).then((id) => {
             const tr = view.state.tr;
-            const node = view.state.schema.nodes.dwimage.create({
-              src: `embed://${id}`,
+            const node = view.state.schema.nodes[Block.Image].create({
+              src: getEmbedUrl(id),
               embedId: id,
             });
             tr.replaceSelectionWith(node);

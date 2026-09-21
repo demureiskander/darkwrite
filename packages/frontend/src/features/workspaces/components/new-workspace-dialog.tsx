@@ -1,6 +1,10 @@
+import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
+import { type ReactNode, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import {
   Button,
-  ControlledDialogProps,
+  type ControlledDialogProps,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -8,31 +12,34 @@ import {
   Input,
   Label,
 } from "@/components/ui";
-import { ReactNode, useState } from "react";
-import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
+import { useAppDispatch } from "@/features/store/hooks";
 import { useWorkspaceManager } from "@/features/workspaces/hooks/use-workspace-manager";
-import { useCreateWorkspaceMutation } from "../store/workspace-api";
-import { toast } from "sonner";
-import { t } from "i18next";
+import { createWorkspace } from "../store/workspace.thunk";
 
 export default function NewWorkspaceDialog(
   props: ControlledDialogProps & { children: ReactNode },
 ) {
   const [name, setName] = useState("");
-  const [create, { isLoading }] = useCreateWorkspaceMutation();
+  const { t } = useTranslation();
   const manager = useWorkspaceManager();
+  const dispatch = useAppDispatch();
+  const [isLoading, setLoading] = useState(false);
+
   const handleCreate = async () => {
-    const workspace = await create({
-      name,
-      config: getDefaultWorkspaceConfiguration(),
-    });
-    if (!workspace.data) {
+    setLoading(true);
+    const workspace = await dispatch(
+      createWorkspace({
+        name,
+        config: getDefaultWorkspaceConfiguration(),
+      }),
+    );
+    if (workspace.isErr()) {
       toast.error(
-        t("sidebar.workspace.newWorkspaceError") + ": " + workspace.error,
+        `${t("sidebar.workspace.newWorkspaceError")}: ${workspace.error}`,
       );
       return;
     }
-    manager.switchWorkspace(workspace.data.id);
+    manager.switchWorkspace(workspace.value.workspace.id);
     setName("");
     props.onOpenChange(false);
   };
@@ -40,26 +47,26 @@ export default function NewWorkspaceDialog(
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
       <DialogContent className="flex flex-col max-w-96">
-        <DialogTitle>Create new workspace</DialogTitle>
+        <DialogTitle>{t("sidebar.workspace.newWorkspace")}</DialogTitle>
         <Label htmlFor="input-new-workspace-name" className="opacity-80">
-          Name
+          {t("rename.placeholder")}
         </Label>
         <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
           id="input-new-workspace-name"
-          placeholder="Workspace name"
+          placeholder={t("settings.workspace.editWorkspaceDialog.workspaceName")}
         />
         <div className="grid grid-cols-[1fr_1fr] gap-2">
           <Button
-            onClick={handleCreate}
+            onClick={() => handleCreate().finally(() => setLoading(false))}
             className="transition-opacity duration-75"
             disabled={name.trim().length < 1 || isLoading}
           >
-            Create workspace
+            {t("sidebar.workspace.newWorkspace")}
           </Button>
           <Button onClick={() => props.onOpenChange(false)} variant={"ghost"}>
-            Cancel
+            {t("common.cancel")}
           </Button>
         </div>
       </DialogContent>

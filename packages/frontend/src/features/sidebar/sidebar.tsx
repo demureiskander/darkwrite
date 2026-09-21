@@ -1,69 +1,98 @@
+import {
+  IconLayoutSidebar,
+  IconSearch,
+  IconSettings,
+} from "@tabler/icons-react";
+import type React from "react";
+import { useTranslation } from "react-i18next";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { Button } from "@/components/ui/button";
-import NoteListRoot from "@/features/note/note-list-root";
+import { TextTooltip } from "@/components/ui/tooltip";
 import { useSidebar } from "@/features/layout/hooks/use-sidebar";
+import { useLayoutStore } from "@/features/layout/layout-store";
+import { FolderNavigation } from "@/features/folders/folder-navigation";
+import { FolderDropZone } from "@/features/folders/folder-dnd";
+import { PinnedNavigation } from "@/features/folders/pinned-navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
-import React from "react";
+import { TrashWidget } from "../note/components/trash";
 import { showSearch } from "../search/search-state";
+import SettingsDialog from "../settings/settings-dialog";
 import AppMenu from "./app-menu";
+import { CreatePageButton } from "./create-page-button";
 import { SidebarNavigation } from "./navigation";
 import { WorkspaceSwitcher } from "./workspace-switcher";
-import { CreatePageButton } from "./create-page-button";
-import FavoritesContainer from "./favorites-container";
-import { TrashWidget } from "../note/components/trash";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {};
 
 export function Sidebar(props: SidebarProps) {
   const { width, setSidebarCollapsed, isSidebarCollapsed } = useSidebar();
+  // the system may draw its window buttons over our header on the left
+  const insetLeft = useLayoutStore((s) =>
+    s.wco.visible ? s.wco.insetLeft : 0,
+  );
+  const { t } = useTranslation();
   return (
     <div
       data-testid="container-sidebar"
       className={cn(
-        "bg-background h-full flex flex-col",
+        "bg-background h-full shrink-0 flex flex-col",
         isSidebarCollapsed && "hidden",
         props.className,
       )}
       style={{ width: `${width}px` }}
     >
-      <div className="titlebar w-full h-12 bg-background shrink-0 flex [&>button]:shrink-0 p-2 items-center gap-1">
-        <AppMenu />
+      <div
+        className="titlebar w-full h-12 bg-background shrink-0 flex [&>button]:shrink-0 p-2 items-center gap-1"
+        style={{ paddingLeft: Math.max(insetLeft, 8) }}
+      >
+        {width >= 180 && <AppMenu />}
         <div className="grow titlebar spacer"></div>
-        <Button
-          data-testid="button-edit-widgets"
-          variant={"ghost"}
-          className="shrink-0 hidden size-8"
-          title="Edit sidebar"
-          disabled
-        >
-          <LayoutDashboard width={18} height={18} />
-        </Button>
-        <HeaderbarButton
-          data-testid="button-search"
-          title="Search"
-          onClick={() => showSearch()}
-        >
-          <Search width={18} height={18} />
-        </HeaderbarButton>
-        <HeaderbarButton
-          data-testid="button-collapse-sidebar"
-          onClick={() => setSidebarCollapsed(true)}
-          title="Hide sidebar"
-        >
-          <PanelRightOpen width={18} height={18} />
-        </HeaderbarButton>
+        {width >= 180 && (
+          <TextTooltip text={t("sidebar.button.search")}>
+            <HeaderbarButton
+              data-testid="button-search"
+              aria-label={t("sidebar.button.search")}
+              onClick={() => showSearch()}
+            >
+              <IconSearch width={18} height={18} />
+            </HeaderbarButton>
+          </TextTooltip>
+        )}
+        <TextTooltip text={t("sidebar.button.hideSidebar")}>
+          <HeaderbarButton
+            data-testid="button-collapse-sidebar"
+            onClick={() => setSidebarCollapsed(true)}
+            aria-label={t("sidebar.button.hideSidebar")}
+          >
+            <IconLayoutSidebar width={18} height={18} />
+          </HeaderbarButton>
+        </TextTooltip>
       </div>
-      <div className="h-full w-full grow pl-large pr-small py-0 overflow-y-auto scroll-view gutter-stable">
-        <div className="flex gap-2 flex-col mb-16 max-w-full">
-          <WorkspaceSwitcher />
-          <CreatePageButton />
+      <div
+        style={{ boxShadow: "0px 2px 12px var(--background)" }}
+        className="flex flex-col z-1 px-2 pb-2 bg-background"
+      >
+        <CreatePageButton />
+        <FolderDropZone destinationId={null}>
           <SidebarNavigation />
-          <FavoritesContainer />
-          <NoteListRoot />
-          <div className="flex flex-col gap-0.5"></div>
-          <TrashWidget />
-        </div>
+        </FolderDropZone>
+      </div>
+      <PinnedNavigation />
+      <FolderNavigation />
+      <div
+        style={{ boxShadow: "0px -2px 12px var(--background)" }}
+        className="p-2 pb-2 gap-1 grid grid-cols-[1fr_auto] z-1 bg-background"
+      >
+        <TrashWidget />
+        <WorkspaceSwitcher />
+        <SettingsDialog>
+          <Button
+            variant="ghost"
+            className="w-8 h-8 text-muted-foreground hover:bg-secondary/40 opacity-75 hover:opacity-100"
+          >
+            <IconSettings size={18} />
+          </Button>
+        </SettingsDialog>
       </div>
     </div>
   );

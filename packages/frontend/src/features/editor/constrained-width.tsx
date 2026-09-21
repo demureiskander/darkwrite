@@ -1,26 +1,37 @@
+import type React from "react";
+import { useEffect, useRef } from "react";
 import { useEditorStore } from "@/context/editor-store";
-import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { cn } from "@/lib/utils";
-import React, { useEffect } from "react";
 
 export default function ConstrainedWidth(
-  props: { fill?: boolean } & React.ComponentProps<"div">,
+  props: {
+    noConstrain?: boolean;
+  } & React.ComponentProps<"div">,
 ) {
-  const { className, fill, ...rest } = props;
-  const width = useCenteredLayout(fill ? 0 : 960);
+  const { className, noConstrain, ...rest } = props;
+  const elementRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    useEditorStore.setState({ width });
-  }, [width]);
+    const element = elementRef.current;
+    if (!element) return;
+    const observer = new ResizeObserver(() => {
+      useEditorStore.setState({ width: element.getBoundingClientRect().width });
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
   return (
     <div
       {...rest}
+      ref={elementRef}
       className={cn("", className)}
       style={
-        {
-          width: `${width}px`,
-          maxWidth: `${width - 200}px`,
-          "--editor-max-width": `${width - 200}px`,
-        } as React.CSSProperties
+        noConstrain
+          ? undefined
+          : ({
+              width: "100%",
+              maxWidth: "100%",
+              "--editor-max-width": "100%",
+            } as React.CSSProperties)
       }
     >
       {props.children}

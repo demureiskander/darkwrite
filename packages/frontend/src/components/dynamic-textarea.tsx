@@ -1,12 +1,13 @@
+import { type TextareaHTMLAttributes, useLayoutEffect, useRef } from "react";
 import { useEditorStore } from "@/context/editor-store";
 import { useLocalStore } from "@/context/local-state";
 import { cn } from "@/lib/utils";
-import { TextareaHTMLAttributes, useLayoutEffect, useRef } from "react";
 
-export interface DynamicTextareaProps extends Omit<
-  TextareaHTMLAttributes<HTMLTextAreaElement>,
-  "onChange" | "onPaste"
-> {
+export interface DynamicTextareaProps
+  extends Omit<
+    TextareaHTMLAttributes<HTMLTextAreaElement>,
+    "onChange" | "onPaste"
+  > {
   /** The callback to run when value changes. Height will get adjusted **after** this method is called. */
   onValueChange?: (value: string) => void;
   /** Placeholder of the textarea */
@@ -29,13 +30,15 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
   const { preventNewline, className, autoFocus, ...attributes } = props;
   useLayoutEffect(() => {
     adjustHeight();
-    if (autoFocus && ref.current) {
-      ref.current.focus();
-      ref.current.setSelectionRange(
-        ref.current.value.length,
-        ref.current.value.length,
-      );
-    }
+    requestAnimationFrame(() => {
+      if (autoFocus && ref.current) {
+        ref.current.focus();
+        ref.current.setSelectionRange(
+          ref.current.value.length,
+          ref.current.value.length,
+        );
+      }
+    });
     const resize = () => {
       adjustHeight();
     };

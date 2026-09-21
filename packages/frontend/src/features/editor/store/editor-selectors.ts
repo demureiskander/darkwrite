@@ -1,4 +1,5 @@
-import { RootState } from "@/features/store/types";
+import type { NoteContent } from "@darkwrite/common";
+import type { RootState } from "@/features/store/types";
 
 export const selectEditorCustomizations = (state: RootState, noteId: string) =>
   state.editor.docs[noteId]?.customizations;
@@ -23,3 +24,22 @@ export const selectCanUndo = (state: RootState, noteId: string) =>
 
 export const selectCanRedo = (state: RootState, noteId: string) =>
   state.editor.canRedo[noteId] ?? false;
+
+export const selectFormattingState = (state: RootState, noteId: string) =>
+  state.editor.formattingState[noteId] ?? null;
+
+export const selectCenterViewState = (state: RootState) =>
+  state.editor.centerView;
+
+export const selectEditorEditable = (state: RootState) => state.editor.editable;
+
+export const selectContentLoaded = (state: RootState, noteId: string) =>
+  !!state.editor.docs[noteId];
+
+export const selectFullNoteContent: (
+  state: RootState,
+  noteId: string,
+) => NoteContent | undefined = (state, noteId) => state.editor.docs[noteId];
+
+export const selectPropertyVisibility = (state: RootState) =>
+  state.editor.showProperties;

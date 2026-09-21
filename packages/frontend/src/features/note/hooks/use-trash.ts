@@ -1,11 +1,9 @@
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { useGetTrashedQuery } from "../store/trash-api";
-import { skipToken } from "@reduxjs/toolkit/query";
-import { useAppSelector } from "@/features/store/hooks";
-import { createSelector } from "@reduxjs/toolkit";
-import { selectAllNotes } from "../store/note-selectors";
-import { RootState } from "@/features/store/types";
 import { byUpdateTime } from "@darkwrite/common";
+import { createSelector } from "@reduxjs/toolkit";
+import { useAppSelector } from "@/features/store/hooks";
+import type { RootState } from "@/features/store/types";
+import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
+import { selectAllNotes } from "../store/note-selectors";
 
 export type SelectTrashedProps = {
   workspaceId: string;
@@ -34,9 +32,6 @@ export const selectNotesForTrashView = createSelector(
 
 export function useTrash(query?: string) {
   const workspaceId = useCurrentWorkspaceId();
-  const { isLoading, isFetching } = useGetTrashedQuery(
-    workspaceId ?? skipToken,
-  );
   const noteIds = useAppSelector((state) =>
     selectNotesForTrashView(state, {
       workspaceId: workspaceId ?? "",
@@ -46,7 +41,5 @@ export function useTrash(query?: string) {
 
   return {
     noteIds,
-    isLoading,
-    isFetching,
   };
 }

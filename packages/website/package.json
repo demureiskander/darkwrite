@@ -4,28 +4,39 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && tsx ./postbuild.mts",
     "preview": "astro preview",
     "astro": "astro",
     "test": "exit 0",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint": "exit 0",
     "format": "prettier --check --write .",
-    "typecheck": "tsc --noEmit --project tsconfig.json"
+    "typecheck": "astro sync && tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
-    "@fontsource/karla": "^5.2.8",
+    "@astrojs/react": "^6.0.4",
+    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/starlight": "^0.41.7",
+    "@astrojs/starlight-tailwind": "^5.0.0",
+    "@fontsource/inter": "^5.2.8",
     "@lucide/astro": "^0.546.0",
-    "astro": "^5.14.4",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "astro": "7.2.4",
     "clsx": "^2.1.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "simple-icons-astro": "^15.17.0",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.14",
+    "astro-broken-links-checker": "^1.1.0",
+    "prettier": "^3.8.3",
+    "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "catalog:"
   },
   "trustedDependencies": [
     "@tailwindcss/oxide"
   ],
-  "packageManager": "pnpm@10.12.1+sha512.f0dda8580f0ee9481c5c79a1d927b9164f2c478e90992ad268bbb2465a736984391d6333d2c327913578b2804af33474ca554ba29c04a8b13060a717675ae3ac"
+  "packageManager": "pnpm@12.3.4"
 }

@@ -1,22 +1,20 @@
-import { ImageExtensionConfig } from "@/features/editor/extensions/image/image-config";
-import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { CSSProperties, use, useCallback, useMemo } from "react";
 import { FONT_VARS, FontStyle } from "@darkwrite/common";
-import { useAppSelector } from "@/features/store/hooks";
-import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { Editor, JSONContent } from "@tiptap/core";
+import type { Editor, JSONContent } from "@tiptap/core";
+import { type CSSProperties, use, useCallback, useMemo } from "react";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import EditorUtil from "@/features/editor/editor-util";
+import type { ImageExtensionConfig } from "@/features/editor/extensions/image/image-config";
 import { useEditorActions } from "@/features/editor/store/editor-actions";
 import { EditorContext } from "@/features/editor/store/editor-context";
-import EditorUtil from "@/features/editor/editor-util";
+import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
 import { useEditorSettings } from "@/features/settings/hooks/use-settings";
+import { useAppSelector } from "@/features/store/hooks";
+import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 
 export function useEditorView(noteId: string, rootView: boolean = false) {
   const customizations = useAppSelector((s) =>
     selectEditorCustomizations(s, noteId),
   );
-  const editorWidth = useCenteredLayout(customizations?.widePage ? 0 : 984);
   const style: CSSProperties = useMemo(() => {
     const draft: CSSProperties = {};
 
@@ -60,16 +58,7 @@ export function useEditorView(noteId: string, rootView: boolean = false) {
     return draft;
   }, [customizations, rootView]);
 
-  //  useEffect(() => {
-  //    return () => {
-  //      if (rootView) {
-  //        document.documentElement.style.removeProperty("--dw-editor-background");
-  //        document.documentElement.style.removeProperty("--dw-editor-foreground");
-  //      }
-  //    };
-  //  }, [rootView]);
-
-  return { style, editorWidth };
+  return { style };
 }
 
 export function useEditorOptions() {
@@ -92,7 +81,9 @@ export function useEditorOptions() {
             fileType: filetype,
             workspaceId,
           })
-        ).embed?.id ?? "",
+        )
+          .map((r) => r.embed.id)
+          .unwrapOr(""),
       uploadFile: async (file) =>
         (
           await DarkwriteAPIClient.embed.create({
@@ -100,7 +91,9 @@ export function useEditorOptions() {
             fileType: file.type,
             workspaceId,
           })
-        ).embed?.id ?? "",
+        )
+          .map((r) => r.embed.id)
+          .unwrapOr(""),
     }),
     [workspaceId],
   );

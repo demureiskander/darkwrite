@@ -1,6 +1,5 @@
-import { WorkspaceDTO } from "@darkwrite/common";
-import { DeepPartial } from "@darkwrite/common";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { DeepPartial, WorkspaceDTO } from "@darkwrite/common";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import _ from "lodash";
 
 export type WorkspaceSlice = {
@@ -38,6 +37,10 @@ export const workspaceSlice = createSlice({
     addWorkspace(state, action: PayloadAction<WorkspaceDTO>) {
       const workspace = action.payload;
       state.workspaces[workspace.id] = workspace;
+    },
+    removeWorkspace(state, action: PayloadAction<string>) {
+      const workspaceId = action.payload;
+      delete state.workspaces[workspaceId];
     },
   },
 });

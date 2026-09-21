@@ -1,12 +1,12 @@
 import { DEFAULT_NOTE_ICON } from "@darkwrite/common";
+import { Frown, Smile } from "lucide-react";
+import { use } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import { selectNoteIcon } from "@/features/note/store/note-selectors";
 import { useTitleUpdater } from "@/features/note/store/update-note";
 import { useAppSelector } from "@/features/store/hooks";
-import { Frown, Smile } from "lucide-react";
-import { use } from "react";
-import { useTranslation } from "react-i18next";
 
 export function AddRemoveIconButton() {
   const { noteId } = use(EditorContext);
@@ -17,19 +17,19 @@ export function AddRemoveIconButton() {
   return icon ? (
     <Button
       onClick={() => updateIcon(noteId, null)}
-      className="w-fit"
+      className="w-fit h-fit px-2 py-1.5 hover:opacity-100 opacity-75 "
       variant={"ghost"}
     >
-      <Frown size={18} />
+      <Frown size={16} />
       {t("editor.cover.removeIcon")}
     </Button>
   ) : (
     <Button
       onClick={() => updateIcon(noteId, DEFAULT_NOTE_ICON)}
-      className="w-fit"
+      className="w-fit h-fit px-2 py-1.5 hover:opacity-100 opacity-75"
       variant={"ghost"}
     >
-      <Smile size={18} />
+      <Smile size={16} />
       {t("editor.cover.addIcon")}
     </Button>
   );

@@ -1,5 +1,5 @@
+import type { EmbedDTO } from "@darkwrite/common";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { EmbedDTO } from "@darkwrite/common";
 
 export function uploadImage(
   getCurrentWorkspaceId: () => string | null,
@@ -15,14 +15,13 @@ export function uploadImage(
     const handleChange = async () => {
       if (!input.files?.length) return;
       const file = input.files[0];
-      const { embed } = await DarkwriteAPIClient.embed.create({
+      const result = await DarkwriteAPIClient.embed.create({
         file,
         fileType: file.type,
         workspaceId,
       });
-      if (!embed) {
-        reject();
-      } else resolve(embed);
+      if (result.isErr()) reject();
+      else resolve(result.value.embed);
     };
 
     input.onchange = handleChange;

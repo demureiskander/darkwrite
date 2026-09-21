@@ -1,14 +1,15 @@
 import _ from "lodash";
-import { EditorContent } from "../editor/types";
-import { EmbeddedStyleBuilder } from "./exported-note-style";
-import { generateHTML, hydrateImages } from "../editor/html-export";
 import { fromUnicode } from "@/lib/utils";
+import type { EditorContent } from "../editor/types";
+import { EmbeddedStyleBuilder } from "./exported-note-style";
+import { generateHTML, hydrateImages } from "./serializers";
 
 export class HtmlDocumentBuilder {
   private content: EditorContent;
   private _title: string = "";
   private _icon: string = "";
   private _font: string = "";
+  private _monospaceFont?: string = "";
 
   constructor(content: EditorContent) {
     this.content = structuredClone(content);
@@ -29,13 +30,20 @@ export class HtmlDocumentBuilder {
     return this;
   }
 
+  monospaceFont(value: string | undefined) {
+    this._monospaceFont = value;
+    return this;
+  }
+
   async embedImages() {
-    this.content = await hydrateImages(this.content);
+    this.content = (await hydrateImages(this.content)) ?? this.content;
     return this;
   }
 
   build() {
-    const css = new EmbeddedStyleBuilder().font(this._font).build();
+    const css = new EmbeddedStyleBuilder()
+      .font(this._font, this._monospaceFont)
+      .build();
     const html = `<!DOCTYPE html>
       <html>
         <head>

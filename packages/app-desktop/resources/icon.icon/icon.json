@@ -20,8 +20,8 @@
       "layers" : [
         {
           "glass" : false,
-          "image-name" : "darkwrite_block.svg",
-          "name" : "darkwrite_block",
+          "image-name" : "darkwrite_logo.png",
+          "name" : "darkwrite_logo",
           "position" : {
             "scale" : 1.65,
             "translation-in-points" : [

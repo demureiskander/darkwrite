@@ -8,7 +8,7 @@
     output: "release/${version}",
     buildResources: "resources",
   },
-  files: ["dist-electron", "dist"],
+  files: ["dist-electron", "dist", "drizzle"],
   extraResources: [
     {
       from: "resources/icon512.png",
@@ -52,6 +52,7 @@
     target: ["AppImage", "deb"],
     category: "Productivity",
     artifactName: "${productName}.${ext}",
-    icon: "resources/512x512.png",
+    icon: "resources/icons/",
+    executableName: "darkwrite"
   },
 }

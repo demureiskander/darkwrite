@@ -1,22 +1,35 @@
-import useNoteImport from "@/features/note/hooks/use-note-import";
+import type { DwResultAsync } from "@darkwrite/common";
+import { use } from "react";
+import { useNoteExport } from "@/features/export/note-exporter";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
-import { useNoteActions } from "@/features/note/store/note-actions";
+import useNoteImport from "@/features/note/hooks/use-note-import";
+import {
+  restoreFailToast,
+  restoreSuccessToast,
+  trashFailToast,
+  trashSuccessToast,
+} from "@/features/note/note.toast";
+import {
+  moveToTrash,
+  restoreFromTrash,
+} from "@/features/note/store/note.thunk";
+import { MoveNoteDialogPortal } from "@/features/note/store/notes-ui-actions";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { emitEditorEvent } from "../event/editor-bus";
 import { EditorEventType } from "../event/types";
-import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { EditorContext } from "../store/editor-context";
 import {
   selectCanRedo,
   selectCanUndo,
   selectCharacterCount,
   selectWordCount,
 } from "../store/editor-selectors";
-import { MoveNoteDialogPortal } from "@/features/note/store/notes-ui-actions";
-import { useNoteExport } from "@/features/export/note-exporter";
 
 export interface EditorMenuActions {
-  exportHTML: () => Promise<void>;
-  exportJSON: () => Promise<void>;
-  exportPDF: () => Promise<void>;
+  exportHTML: () => DwResultAsync<string | undefined>;
+  exportJSON: () => DwResultAsync<string | undefined>;
+  exportPDF: () => DwResultAsync<string | undefined>;
+  exportMarkdown: () => DwResultAsync<string | undefined>;
   importNotes: () => void;
   undo: () => void;
   redo: () => void;
@@ -35,19 +48,20 @@ export interface UseEditorMenuResult {
 
 export default function useEditorMenu(noteId: string): UseEditorMenuResult {
   const dispatch = useAppDispatch();
+  const { instanceId } = use(EditorContext);
   const { note } = useNoteById(noteId);
-  const importer = useNoteImport(noteId);
+  const importer = useNoteImport(noteId, instanceId);
   const NoteExporter = useNoteExport();
   const wordCount = useAppSelector((s) => selectWordCount(s, noteId));
   const characterCount = useAppSelector((s) => selectCharacterCount(s, noteId));
   const canUndo = useAppSelector((s) => selectCanUndo(s, noteId));
   const canRedo = useAppSelector((s) => selectCanRedo(s, noteId));
-  const { moveToTrash, restoreFromTrash } = useNoteActions();
 
   const actions: EditorMenuActions = {
     exportHTML: () => NoteExporter.exportHTML(noteId),
     exportJSON: () => NoteExporter.exportJSON(noteId),
     exportPDF: () => NoteExporter.exportPDF(noteId),
+    exportMarkdown: () => NoteExporter.exportMarkdown(noteId),
     importNotes: importer.importNotes,
     move: () => MoveNoteDialogPortal(dispatch).showMoveNoteDialog(noteId),
     undo: () =>
@@ -55,16 +69,24 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
         noteId,
         type: EditorEventType.HISTORY,
         payload: "undo",
+        targetInstanceId: instanceId,
       }),
     redo: () =>
       emitEditorEvent({
         noteId,
         type: EditorEventType.HISTORY,
         payload: "redo",
+        targetInstanceId: instanceId,
       }),
     toggleTrash: () => {
-      if (note?.isTrashed) restoreFromTrash(noteId);
-      else moveToTrash(noteId);
+      if (note?.isTrashed)
+        dispatch(restoreFromTrash(noteId))
+          .andTee(restoreSuccessToast)
+          .orTee(restoreFailToast);
+      else
+        dispatch(moveToTrash(noteId))
+          .andTee(trashSuccessToast)
+          .orTee(trashFailToast);
     },
   };
 

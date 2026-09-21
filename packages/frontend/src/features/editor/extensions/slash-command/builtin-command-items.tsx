@@ -1,6 +1,7 @@
-import { SlashCommandItem } from "../../types";
+import type { i18n } from "i18next";
 import {
   CheckSquare,
+  MessageSquareText,
   Code,
   Heading1,
   Heading2,
@@ -10,16 +11,17 @@ import {
   Link,
   List,
   ListOrdered,
+  Paperclip,
   SquareMinus,
   Table,
   Text,
   TextQuote,
 } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { ImageExtensionConfig } from "../image/image-config";
-import { createImageNode } from "../image/image-upload-transaction";
-import { i18n } from "i18next";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { Block, type SlashCommandItem } from "../../types";
+import type { ImageExtensionConfig } from "../image/image-config";
+import { createImageNode } from "../image/image-upload-transaction";
 
 export const useSlashCommand = (
   imageUploadConfig: ImageExtensionConfig,
@@ -175,6 +177,15 @@ export const useSlashCommand = (
             .run(),
       },
       {
+        id: "builtin.callout",
+        title: t("callout"),
+        description: t("calloutDescription"),
+        keywords: [t("callout"), "callout", "note", "info", "highlight"],
+        icon: <MessageSquareText size={18} />,
+        command: ({ editor, range }) =>
+          editor.chain().focus().deleteRange(range).wrapIn(Block.Callout).run(),
+      },
+      {
         id: "builtin.codeblock",
         title: t("code"),
         description: t("codeDescription"),
@@ -211,7 +222,7 @@ export const useSlashCommand = (
             .chain()
             .focus()
             .deleteRange(range)
-            .insertContent({ type: "linkToPage", attrs: { id: "" } })
+            .insertContent({ type: Block.LinkToPage, attrs: { id: "" } })
             .run();
         },
       },
@@ -247,6 +258,24 @@ export const useSlashCommand = (
             .focus()
             .deleteRange(range)
             .insertTable({ rows: 3, cols: 3, withHeaderRow: false })
+            .run();
+        },
+      },
+      {
+        id: "builtin.filelink",
+        title: t("fileLink"),
+        description: t("fileLinkDescription"),
+        keywords: [t("fileLink"), "file", "link", "local", "attachment"],
+        icon: <Paperclip size={18} />,
+        command({ editor, range }) {
+          editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .insertContent({
+              type: Block.LinkToLocalFile,
+              attrs: { linkId: null },
+            })
             .run();
         },
       },

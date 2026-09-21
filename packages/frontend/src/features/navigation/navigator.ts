@@ -1,5 +1,6 @@
 import { EventBus } from "@darkwrite/common";
 import { matchPath } from "react-router-dom";
+import { useLocalStore } from "@/context/local-state";
 
 export enum NavigationEventType {
   NOTE = "note",
@@ -21,6 +22,7 @@ export type NavigationEvents = {
 export const NavigationEventBus = new EventBus<NavigationEvents>();
 
 export function navigateToNote(noteId: string) {
+  if (getCurrentNoteIdFromPath() === noteId) return;
   NavigationEventBus.emit("onRouteChanged", `/page/${noteId}`);
   NavigationEventBus.emit("note", { type: NavigationEventType.NOTE, noteId });
 }
@@ -42,6 +44,33 @@ export function navigateHome() {
   NavigationEventBus.emit("onRouteChanged", `/`);
   notifyNoteChange(null);
 }
+
+export const folderRoute = (folderId: string | null) =>
+  `/?folder=${encodeURIComponent(folderId ?? "root")}`;
+
+export function navigateToFolder(folderId: string | null) {
+  const route = folderRoute(folderId);
+  if (
+    window.location.hash === `#${route}` &&
+    useLocalStore.getState().activeFolderId === folderId
+  ) {
+    return;
+  }
+  useLocalStore.getState().setActiveFolderId(folderId);
+  NavigationEventBus.emit("onRouteChanged", route);
+  notifyNoteChange(null);
+}
+
+/**
+ * Navigates back home if the current route is passed note ID. Useful when deleting notes
+ * @param noteId
+ */
+export function navigateOutOfNote(noteId: string) {
+  if (getCurrentNoteIdFromPath() === noteId) navigateHome();
+}
+
+export const navigateOutOfNotes = (noteIds: string[]) =>
+  noteIds.includes(getCurrentNoteIdFromPath() ?? "") && navigateHome();
 
 export function goBack() {
   window.history.back();

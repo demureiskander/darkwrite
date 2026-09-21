@@ -1,68 +1,82 @@
-import { useCurrentEditor } from "@tiptap/react";
 import {
-  Bold,
-  Code,
-  Italic,
-  Quote,
-  Strikethrough,
-  Underline,
-} from "lucide-react";
+  IconBold,
+  IconCode,
+  IconItalic,
+  IconQuote,
+  IconStrikethrough,
+  IconUnderline,
+} from "@tabler/icons-react";
+import { useCurrentEditor } from "@tiptap/react";
+import { use } from "react";
+import { useTranslation } from "react-i18next";
+import { DarkwriteEditorContext } from "../../context";
+import { useFormattingState } from "../../hooks/use-formatting-state";
 import { BubbleButton } from "./bubble-button";
 
 export function FormattingButtons() {
   const { editor } = useCurrentEditor();
+  const { noteId } = use(DarkwriteEditorContext);
+  const { isBold, isItalic, isCode, isStrikethrough, isUnderline, isQuote } =
+    useFormattingState(noteId);
+  const { t } = useTranslation();
   if (!editor) return null;
   return (
     <div className="flex h-9">
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("bold") ?? false}
+        isActive={isBold}
         name="bold"
-        icon={Bold}
+        title={t("editor.bubble.bold")}
+        icon={IconBold}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleBold().run();
         }}
       />
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("italic") ?? false}
+        isActive={isItalic}
         name="italic"
-        icon={Italic}
+        title={t("editor.bubble.italic")}
+        icon={IconItalic}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleItalic().run();
         }}
       />
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("underline") ?? false}
+        isActive={isUnderline}
         name="underline"
-        icon={Underline}
+        title={t("editor.bubble.underline")}
+        icon={IconUnderline}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleUnderline().run();
         }}
       />
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("strike") ?? false}
+        isActive={isStrikethrough}
         name="strike"
-        icon={Strikethrough}
+        title={t("editor.bubble.strike")}
+        icon={IconStrikethrough}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleStrike().run();
         }}
       />
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("code") ?? false}
+        isActive={isCode}
         name="code"
-        icon={Code}
+        title={t("editor.bubble.code")}
+        icon={IconCode}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleCode().run();
         }}
       />
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("blockquote") ?? false}
+        isActive={isQuote}
         name="blockquote"
-        icon={Quote}
+        title={t("editor.bubble.blockquote")}
+        icon={IconQuote}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleBlockquote().run();

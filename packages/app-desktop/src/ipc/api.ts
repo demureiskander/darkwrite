@@ -1,86 +1,22 @@
-import { deepAssign, find, recursiveKeys } from "@darkwrite/common";
-import { showAppMenu } from "@/menu";
 import {
-  DarkwriteAPI,
-  InferPreloadAPI,
-  IPCHandler,
-  IPCMainListenerUnion,
-  IPCMainListenerWithoutEvent,
-} from "@/types";
+  deepAssign,
+  find,
+  recursiveKeys,
+  serializeResult,
+} from "@darkwrite/common";
 import { ipcMain } from "electron";
 import log from "electron-log";
-import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";
-import { DesktopIntegration } from "../lib/desktop-integration";
 import {
-  hasOnboarded,
-  isAlphaMigrationPerformed,
-  isNewUser,
-  markOnboardingCompleted,
-} from "../lib/onboarding-state";
-import { Updater } from "../lib/update";
-import { migrateAlphaToV1 } from "../migrator/alpha-to-v1";
-import { NoteApiBridge } from "../note/note.handler";
-import { ElectronEmbedAPI } from "./embed.handler";
-import { ElectronSettingsAPI } from "./settings.handler";
-import { ElectronThemeAPI } from "./theme.handler";
-import { WorkspacesApiBridge } from "../workspace/workspace.handler";
+  IPCHandler,
+  type IPCMainListenerUnion,
+  type IPCMainListenerWithoutEvent,
+} from "@/types";
 
-export const DarkwriteElectronAPI = {
-  note: NoteApiBridge,
-  embed: {
-    createFromLocalFile: new IPCHandler(
-      false,
-      ElectronEmbedAPI.createFromLocalFile,
-    ),
-    createFromArrayBuffer: new IPCHandler(
-      false,
-      ElectronEmbedAPI.createFromArrayBuffer,
-    ),
-    getById: new IPCHandler(false, ElectronEmbedAPI.getById),
-    getEncoded: new IPCHandler(false, ElectronEmbedAPI.getEncoded),
-    download: new IPCHandler(false, ElectronEmbedAPI.download),
-  },
-  workspace: WorkspacesApiBridge,
-  settings: {
-    getUserSettings: new IPCHandler(false, ElectronSettingsAPI.getUserSettings),
-    saveUserSettings: new IPCHandler(
-      false,
-      ElectronSettingsAPI.saveUserSettings,
-    ),
-  },
-  theme: {
-    getThemes: new IPCHandler(false, ElectronThemeAPI.getThemes),
-    importTheme: new IPCHandler(false, ElectronThemeAPI.importTheme),
-  },
-  onboarding: {
-    isCompleted: new IPCHandler(false, hasOnboarded),
-    isAlphaMigrationPerformed: new IPCHandler(false, isAlphaMigrationPerformed),
-    markFinished: new IPCHandler(false, markOnboardingCompleted),
-    migrateToV1: new IPCHandler(false, migrateAlphaToV1),
-    isNewUser: new IPCHandler(false, isNewUser),
-  },
-  showAppMenu: new IPCHandler(false, showAppMenu),
-  desktop: {
-    getFontList: new IPCHandler(false, DesktopIntegration.getAvailableFonts),
-    getSystemAccentColor: new IPCHandler(
-      false,
-      DesktopIntegration.getSystemAccentColor,
-    ),
-    getClientInfo: new IPCHandler(false, DesktopIntegration.getClientInfo),
-  },
-  checkUpdate: new IPCHandler(false, Updater.checkUpdate),
-  backup: {
-    initCache: new IPCHandler(false, HTMLExporterAPI.initializeExporterCache),
-    pushFile: new IPCHandler(false, HTMLExporterAPI.pushToExporterCache),
-    finishExport: new IPCHandler(false, HTMLExporterAPI.finishExport),
-    chooseArchive: new IPCHandler(false, BackupAPI.openArchive),
-    performBackup: new IPCHandler(false, BackupAPI.backup),
-    restoreBackup: new IPCHandler(false, BackupAPI.restore),
-  },
-} satisfies DarkwriteAPI;
-export type DarkwritePreloadAPI = InferPreloadAPI<typeof DarkwriteElectronAPI>;
+export type NestedApiBridge = {
+  [key: string]: IPCHandler<boolean> | NestedApiBridge;
+};
 
-const register = (
+const registerHandler = (
   channel: string,
   withEvent: boolean,
   listener: IPCMainListenerUnion,
@@ -88,10 +24,14 @@ const register = (
 ) => {
   try {
     if (withEvent) {
-      _ipcMain.handle(channel, listener);
+      _ipcMain.handle(channel, async (event, ...args) => {
+        return serializeResult(await listener(event, ...args));
+      });
     } else {
-      _ipcMain.handle(channel, (_event, ...args) => {
-        return (<IPCMainListenerWithoutEvent>listener)(...args);
+      _ipcMain.handle(channel, async (_event, ...args) => {
+        return serializeResult(
+          await (listener as IPCMainListenerWithoutEvent)(...args),
+        );
       });
     }
   } catch {
@@ -99,37 +39,29 @@ const register = (
   }
 };
 
-const registerAPI = (
-  channelPrefix: string,
-  api: DarkwriteAPI = DarkwriteElectronAPI,
-) => {
-  const handlerKeys = recursiveKeys(api, (val) => val instanceof IPCHandler);
-  for (const keyPath of handlerKeys) {
+const registerBridge = (channelPrefix: string, api: NestedApiBridge) => {
+  recursiveKeys(api, (val) => val instanceof IPCHandler).forEach((keyPath) => {
     const handler = find(api, keyPath) as IPCHandler<boolean>;
     const channel = channelPrefix.concat(".").concat(keyPath.join("."));
-    register(channel, handler.withEvent, handler.listener);
-  }
+    registerHandler(channel, handler.withEvent, handler.listener);
+  });
 };
 
-export const buildPreloadObject = (
-  api: DarkwriteAPI = DarkwriteElectronAPI,
-) => {
-  const handlerKeys = recursiveKeys(api, (val) => val instanceof IPCHandler);
+export const buildPreloadObject = (api: NestedApiBridge) => {
   const obj = {};
-  // strip everything with true to replace in the prelaod script later
-  for (const keyPath of handlerKeys) {
-    deepAssign(obj, keyPath, true);
-  }
+  recursiveKeys(api, (val) => val instanceof IPCHandler).forEach((keyPath) =>
+    deepAssign(obj, keyPath, true),
+  );
   return obj;
 };
 
 let initialized = false;
 
-export const InitializeElectronAPI = () => {
+export function setupAPI(bridge: NestedApiBridge) {
   if (initialized) return;
-  ipcMain.handle("$darkwrite.build-preload-api-object", async () => {
-    return buildPreloadObject();
-  });
-  registerAPI("api");
+  ipcMain.handle("$darkwrite.build-preload-api-object", () =>
+    buildPreloadObject(bridge),
+  );
+  registerBridge("api", bridge);
   initialized = true;
-};
+}

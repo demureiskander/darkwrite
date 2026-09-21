@@ -1,70 +1,43 @@
-@import "tailwindcss";
-@tailwind utilities;
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
 :root {
   --background: hsl(0 0% 3%);
+  --view-1: oklch(18.2% 0 0);
   --card: hsl(228 14% 7%);
   --secondary: hsl(230 12% 10%);
-  --primary: hsl(214 64% 44%);
+  --primary: hsl(215 35% 30%);
   --border: hsl(0 0% 26%);
-  --highlight: hsl(214 71.3% 56.3%);
-  --highlight-transparent: hsl(214 71.3% 56.3% / 0.2);
+  --highlight: hsl(215 28% 50%);
+  --highlight-transparent: hsl(215 28% 50% / 0.5);
+  --muted-foreground: oklch(92.2% 0 0 / 0.7);
+  --foreground: oklch(92.3% 0 0);
+  --widget: oklch(28% 0 0);
 }
 
 @theme inline {
-  --color-background: hsl(0 0% 3%);
-  --color-card: hsl(228 14% 7%);
-  --color-secondary: hsl(230 12% 10%);
-  --color-primary: hsl(214 64% 44%);
-  --color-primary-text: hsl(214 56% 69%);
-  --color-border: hsl(0 0% 26%);
+  --color-background: var(--background);
+  --color-view-1: var(--view-1);
+  --color-card: var(--card);
+  --color-secondary: var(--secondary);
+  --color-primary: var(--primary);
+  --color-primary-text: var(--highlight);
+  --color-border: var(--border);
   --color-highlight: var(--highlight);
   --color-highlight-transparent: var(--highlight-transparent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-reflection: hsl(0 0% 100% / 0.15);
+  --color-reflection-hover: hsl(0 0% 100% / 0.25);
+  --color-foreground: var(--foreground);
+  --color-widget: var(--widget);
 }
 
-* {
-  @apply border-border;
+html {
+  scroll-behavior: smooth;
 }
 
-body {
-  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-xl md:text-2xl;
-  box-sizing: border-box;
-  font-family: "Karla", "Inter", sans-serif;
-  color: white;
-}
-
-a:not(.text-white) {
-  @apply text-primary-text hover:underline;
-}
-
-code {
-  @apply bg-white/5 p-3 rounded-lg;
-}
-
-header {
-  background: hsl(216 26% 4% / 0);
-  transition-property: background;
-  transition-duration: 100ms;
-}
-
-.scrolled header {
-  background: hsl(216 26% 4% / 0.8);
-}
-
-header a:not(.logo):not(.download-btn) {
-  @apply text-white hidden sm:flex text-xl px-3 py-2 cursor-pointer hover:bg-white/5 hover:no-underline rounded-lg shrink-0;
-}
-
-.docs-sidebar a {
-  @apply px-3 py-2 rounded-lg hover:bg-white/5 text-white;
-}
-
-.chip {
-  background-color: #101115;
-  filter: drop-shadow(0px 2px 12px rgba(0 0 0 / 0.25));
-  @apply rounded-full lg:px-5 lg:py-3 px-4 py-2 border border-border  text-sm lg:text-2xl flex items-center justify-center transition-colors hover:border-highlight;
-}
-
-.chip[data-state="active"] {
-  @apply bg-primary border-highlight;
+@utility top-highlight-* {
+  box-shadow: 0 -0.5px 0 0 --value(--color-*);
+  box-shadow: 0 -0.5px 0 0 --value([color]);
 }

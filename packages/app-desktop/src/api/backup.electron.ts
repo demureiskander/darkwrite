@@ -1,12 +1,21 @@
+import os from "node:os";
+import { join } from "node:path";
+import {
+  buildDwError,
+  type DwResultAsync,
+  type IBackupAPI,
+} from "@darkwrite/common";
 import { app, dialog } from "electron";
 import log from "electron-log";
 import extract from "extract-zip";
 import fse from "fs-extra";
-import { join } from "node:path";
-import os from "os";
+import { okAsync, ResultAsync } from "neverthrow";
 import { zip } from "zip-a-folder";
-import { AppDataSource as DB } from "../db";
+import { type HandlerImplements, handler } from "@/types";
+import { db as DB } from "../db";
+import { t } from "../i18n";
 import { rmIfExists } from "../lib/fs";
+import { logError } from "../lib/log";
 import {
   BACKUP_CACHE_DIR,
   DATA_DIR,
@@ -14,9 +23,7 @@ import {
   EXPORTER_CACHE_DIR,
   RESTORE_CACHE_DIR,
 } from "../lib/paths";
-import { openFile, saveFile } from "./dialog";
-import { logError } from "../lib/log";
-import { InvalidBackupError } from "@darkwrite/common";
+import { saveFile } from "./dialog";
 
 /**
  * APIs to perform a complete workspace export.
@@ -35,14 +42,10 @@ export const HTMLExporterAPI = {
     }
   },
   async pushToExporterCache(filename: string, content: string) {
-    try {
-      if (!(await fse.pathExists(EXPORTER_CACHE_DIR))) {
-        throw new Error("Export cache was not initialized.");
-      }
-      await fse.writeFile(join(EXPORTER_CACHE_DIR, filename), content);
-    } catch (error) {
-      logError(error);
+    if (!(await fse.pathExists(EXPORTER_CACHE_DIR))) {
+      throw new Error("Export cache was not initialized.");
     }
+    await fse.writeFile(join(EXPORTER_CACHE_DIR, filename), content);
   },
   async finishExport() {
     try {
@@ -50,8 +53,8 @@ export const HTMLExporterAPI = {
         throw new Error("Export cache was not initialized.");
       }
       const { canceled, path } = await saveFile({
-        buttonLabel: "Export",
-        title: "Save your notes",
+        buttonLabel: t("settings.workspace.exportAllButton"),
+        title: t("backup.saveNotes"),
         defaultPath: "Workspace.zip",
       });
       if (canceled || !path) return;
@@ -74,8 +77,8 @@ export const BackupAPI = {
       await fse.copy(DATA_DIR, BACKUP_CACHE_DIR);
 
       const saveResult = await saveFile({
-        buttonLabel: "Export",
-        title: "Backup your data",
+        buttonLabel: t("settings.workspace.backupButton"),
+        title: t("backup.saveBackup"),
         defaultPath: `darkwrite-backup-${new Date().toDateString()}.zip`,
       });
       if (saveResult.canceled || !saveResult.path) return;
@@ -87,16 +90,16 @@ export const BackupAPI = {
   },
   async restore(archivePath: string) {
     let didRename = false;
-    await DB.destroy();
+    DB.$client.close();
     try {
       await rmIfExists(RESTORE_CACHE_DIR);
       await extract(archivePath, { dir: RESTORE_CACHE_DIR });
 
       const isValidBackup =
-        ((await fse.exists(join(RESTORE_CACHE_DIR, "darkwrite.db"))) ||
-          (await fse.exists(join(RESTORE_CACHE_DIR, "darkwrite.db")))) &&
+        (await fse.exists(join(RESTORE_CACHE_DIR, "darkwrite.db"))) &&
         (await fse.exists(join(RESTORE_CACHE_DIR, "settings.json")));
-      if (!isValidBackup) throw new InvalidBackupError();
+      if (!isValidBackup)
+        throw new Error(t("backup.invalidArchive"));
 
       // before we do anything else, we will rename the old directory so we can rollback if something goes wrong.
       try {
@@ -114,8 +117,8 @@ export const BackupAPI = {
       dialog.showMessageBoxSync({
         message:
           os.type() === "Linux"
-            ? "We restored your backup. Darkwrite needs to relaunch for the changes to take effect."
-            : "We restored your backup, we will relaunch Darkwrite for the changes to take effect.",
+            ? t("backup.restoredNeedsRestart")
+            : t("backup.restoredWillRestart"),
       });
       app.relaunch();
       app.exit();
@@ -127,22 +130,55 @@ export const BackupAPI = {
           overwrite: true,
         });
       }
-      await DB.initialize();
+      DB.$client.reconnect();
       dialog.showMessageBoxSync({
         type: "error",
         message:
-          "Something went wrong while restoring your backup. Your current data won't be affected.\n" +
+          `${t("backup.restoreFailed")}\n` +
           (error instanceof Error ? error.message : ""),
       });
     }
   },
-  async openArchive() {
-    const result = await openFile({
-      title: "Choose a backup",
-      filters: [{ extensions: ["zip"], name: "Zip archive" }],
-      properties: ["openFile", "dontAddToRecent"],
-    });
-    if (result.canceled) return null;
-    else return result.filePaths[0];
-  },
+};
+
+function beginHtmlExport() {
+  return ResultAsync.fromSafePromise(HTMLExporterAPI.initializeExporterCache());
+}
+
+function addHtml(filename: string, content: string): DwResultAsync<void> {
+  return ResultAsync.fromPromise(
+    HTMLExporterAPI.pushToExporterCache(filename, content),
+    () => buildDwError("Not ready to export HTML files."),
+  );
+}
+
+function finishHtmlExport() {
+  return ResultAsync.fromSafePromise(HTMLExporterAPI.finishExport());
+}
+
+function createBackup() {
+  return ResultAsync.fromSafePromise(BackupAPI.backup());
+}
+
+function restoreBackup(archivePath: string) {
+  return ResultAsync.fromSafePromise(BackupAPI.restore(archivePath));
+}
+
+function chooseBackupArchive() {
+  const result = dialog.showOpenDialogSync({
+    title: t("backup.chooseArchive"),
+    filters: [{ extensions: ["zip"], name: t("backup.zipArchive") }],
+    properties: ["openFile", "dontAddToRecent"],
+  });
+  if (!result) return okAsync(null);
+  else return okAsync(result[0]);
+}
+
+export const BackupApiBridge: HandlerImplements<IBackupAPI> = {
+  initCache: handler(beginHtmlExport),
+  pushFile: handler(addHtml),
+  finishExport: handler(finishHtmlExport),
+  chooseArchive: handler(chooseBackupArchive),
+  performBackup: handler(createBackup),
+  restoreBackup: handler(restoreBackup),
 };

@@ -1,7 +1,7 @@
-import { Editor, posToDOMRect, ReactRenderer } from "@tiptap/react";
-import { SuggestionOptions, SuggestionProps } from "@tiptap/suggestion";
+import { computePosition, flip, shift } from "@floating-ui/dom";
+import { type Editor, posToDOMRect, ReactRenderer } from "@tiptap/react";
+import type { SuggestionOptions, SuggestionProps } from "@tiptap/suggestion";
 import { SlashCommandView } from "./slash-command-view";
-import { computePosition, shift, flip } from "@floating-ui/dom";
 
 const updatePosition = (editor: Editor, element: HTMLElement) => {
   const virtualElement = {
@@ -12,7 +12,6 @@ const updatePosition = (editor: Editor, element: HTMLElement) => {
         editor.state.selection.to,
       ),
   };
-  //debugger;
   computePosition(virtualElement, element, {
     placement: "bottom-start",
     strategy: "absolute",
@@ -22,7 +21,6 @@ const updatePosition = (editor: Editor, element: HTMLElement) => {
     element.style.position = strategy;
     element.style.top = `${y}px`;
     element.style.left = `${x}px`;
-    //debugger;
   });
 };
 
@@ -40,6 +38,7 @@ export const SlashCommandRenderer = {
         if (!props.clientRect) return;
 
         component.element.style.position = "absolute";
+        component.element.style.zIndex = "1000";
         document.body.appendChild(component.element);
         updatePosition(props.editor, component.element);
       },
@@ -56,7 +55,7 @@ export const SlashCommandRenderer = {
         }
 
         if (component.ref) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // biome-ignore lint/suspicious/noExplicitAny: forward keydown to unknown dom node
           return (component.ref as any).onKeyDown(props);
         } // It refused to get that keydown, so we are sending a function inside the ref instead. Gonna fix when it breaks
         return false;

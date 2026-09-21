@@ -1,10 +1,27 @@
-import { NoteContent } from "@darkwrite/common";
-import { NoteCustomization } from "@darkwrite/common";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { JSONContent } from "@tiptap/core";
+import type { NoteContent, NoteCustomization } from "@darkwrite/common";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { JSONContent } from "@tiptap/core";
 import _ from "lodash";
+import type { TextDirection } from "../types";
 
 export const EDITOR_SLICE_NAME = "editor";
+
+export interface FormattingState {
+  isBold: boolean;
+  isItalic: boolean;
+  isUnderline: boolean;
+  isStrikethrough: boolean;
+  isCode: boolean;
+  isQuote: boolean;
+  isLink: boolean;
+  textDirection?: TextDirection;
+  currentLinkUrl?: string;
+}
+
+export interface CenterViewState {
+  noteId?: string;
+  open: boolean;
+}
 
 export interface EditorState {
   docs: Record<string, NoteContent | undefined>;
@@ -12,14 +29,22 @@ export interface EditorState {
   characterCount: Record<string, number>;
   canUndo: Record<string, boolean>;
   canRedo: Record<string, boolean>;
+  formattingState: Record<string, FormattingState>;
+  centerView: CenterViewState;
+  editable: boolean;
+  showProperties: boolean;
 }
 
-const initialState: EditorState = {
+export const initialEditorState: EditorState = {
   docs: {},
   characterCount: {},
   wordCount: {},
   canRedo: {},
   canUndo: {},
+  formattingState: {},
+  centerView: { open: false },
+  editable: true,
+  showProperties: true,
 };
 
 export const editorSlice = createSlice({
@@ -94,6 +119,45 @@ export const editorSlice = createSlice({
       const { noteId, canRedo } = action.payload;
       state.canRedo[noteId] = canRedo;
     },
+
+    setFormattingState: (
+      state,
+      action: PayloadAction<{
+        noteId: string;
+        formattingState: FormattingState;
+      }>,
+    ) => {
+      const { noteId, formattingState } = action.payload;
+      state.formattingState[noteId] = formattingState;
+    },
+
+    showCenterView: (state, action: PayloadAction<string>) => {
+      state.centerView = {
+        noteId: action.payload,
+        open: true,
+      };
+    },
+
+    closeCenterView: (state) => {
+      state.centerView = {
+        noteId: undefined,
+        open: false,
+      };
+    },
+
+    /**
+     * Toggles the editor between edit and reader (read-only) mode. Global and
+     * session-only; all editor instances share this flag.
+     */
+    setEditable: (state, action: PayloadAction<boolean>) => {
+      state.editable = action.payload;
+    },
+
+    setPropertyVisibility: (state, action: PayloadAction<boolean>) => {
+      state.showProperties = action.payload;
+    },
   },
-  initialState,
+  initialState: initialEditorState,
 });
+
+export const editorActions = editorSlice.actions;

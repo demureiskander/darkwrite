@@ -1,19 +1,23 @@
+import en from "@darkwrite/i18n/locales/en/translation.json";
+import ru from "@darkwrite/i18n/locales/ru/translation.json";
+import tr from "@darkwrite/i18n/locales/tr/translation.json";
+import zhCN from "@darkwrite/i18n/locales/zh_CN/translation.json";
 import i18n from "i18next";
-import Backend from "i18next-resources-to-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
 i18n
-  .use(
-    Backend(
-      (lang: string, namespace: string) =>
-        import(`./locales/${lang}/${namespace}.json`),
-    ),
-  )
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     fallbackLng: "en",
+    supportedLngs: ["en", "ru", "tr", "zh-CN"],
+    resources: {
+      en: { translation: en },
+      ru: { translation: ru },
+      tr: { translation: tr },
+      "zh-CN": { translation: zhCN },
+    },
     detection: {
       caches: ["localStorage"],
     },

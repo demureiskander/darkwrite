@@ -1,22 +1,33 @@
-import { cn } from "@/lib/utils";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Highlight from "@tiptap/extension-highlight";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { Link } from "@tiptap/extension-link";
-import { Placeholder } from "@tiptap/extension-placeholder";
 import { TaskItem } from "@tiptap/extension-task-item";
 import { TaskList } from "@tiptap/extension-task-list";
+import { TextStyleKit } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
+import { CharacterCount } from "@tiptap/extensions";
+import { Markdown } from "@tiptap/markdown";
+import { ReactMarkViewRenderer } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import AutoJoiner from "tiptap-extension-auto-joiner";
-import GlobalDragHandle from "tiptap-extension-global-drag-handle";
-import { LinkToPage } from "./link-to-page";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { cn } from "@/lib/utils";
+import { LinkView } from "../components/link-view";
+import { FileLinkExtension } from "../file-link/file-link-extension";
 import lowlight from "../lowlight";
+import { Block } from "../types";
 import { KeymapFixer } from "./keymap-patcher";
-import { TextStyleKit } from "@tiptap/extension-text-style";
-import Color from "@tiptap/extension-color";
-import Highlight from "@tiptap/extension-highlight";
-import { CharacterCount } from "@tiptap/extensions";
+import { LinkToPage } from "./link-to-page";
 import TableExtensions from "./table/table-extension";
+import { Callout } from "./callout";
+import { MarkdownInputRules } from "./markdown-input-rules";
+import { EditorTabGuard } from "./editor-tab-guard";
+
+export const DefaultMarkdownOptions = {
+  indentation: { style: "space" as const, size: 2 },
+};
+
+const markdown = Markdown.configure(DefaultMarkdownOptions);
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -57,6 +68,8 @@ export const starterKit = StarterKit.configure({
     class: "rounded-md",
   },
   gapcursor: false,
+  link: false,
+  underline: false,
 });
 
 export const taskList = TaskList.configure({
@@ -72,24 +85,24 @@ export const taskItem = TaskItem.configure({
   nested: true,
 });
 
-export const placeholder = Placeholder.configure({
-  includeChildren: true,
-  placeholder: "Press '/' for commands",
-  showOnlyCurrent: true,
-});
-
-const horizontalRule = HorizontalRule.configure({
+export const horizontalRule = HorizontalRule.configure({
   HTMLAttributes: {
     class: cn("mt-4 mb-6 border-t border-muted-foreground"),
   },
 });
 
-const link = Link.configure({
+const link = Link.extend({
+  inclusive: false,
+  addMarkView() {
+    return ReactMarkViewRenderer(LinkView);
+  },
+}).configure({
   HTMLAttributes: {
     class: cn(
       "text-muted-foreground underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",
     ),
   },
+  protocols: ["http", "https", "mailto", "tel", "darkwrite"],
 });
 
 const underline = Underline.configure();
@@ -99,7 +112,7 @@ export const codeBlock = (indentSize: number) =>
     addKeyboardShortcuts() {
       return {
         Tab: () => {
-          if (this.editor.isActive("codeBlock")) {
+          if (this.editor.isActive(Block.CodeBlock)) {
             return this.editor.commands.insertContent(
               new Array<string>(indentSize).fill(" ").join(""),
             );
@@ -127,25 +140,27 @@ export const codeBlock = (indentSize: number) =>
   });
 
 const textStyle = TextStyleKit.configure({ color: { types: ["textStyle"] } });
-const color = Color.configure();
 const hightlight = Highlight.configure({ multicolor: true });
 const characterCount = CharacterCount.configure({});
+const fileLink = FileLinkExtension.configure();
 
 export const DefaultEditorExtensions = [
   starterKit,
   taskItem,
   taskList,
   AutoJoiner,
-  GlobalDragHandle,
-  placeholder,
   horizontalRule,
   link,
   LinkToPage,
   underline,
   KeymapFixer,
   textStyle,
-  color,
   hightlight,
   characterCount,
+  fileLink,
+  Callout,
+  MarkdownInputRules,
+  EditorTabGuard,
   ...TableExtensions,
+  markdown,
 ];

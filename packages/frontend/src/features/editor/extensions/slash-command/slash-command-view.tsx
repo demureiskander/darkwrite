@@ -1,5 +1,16 @@
-import { SlashCommandItem as ISlashCommandItem } from "../../types";
-import { cn } from "@/lib/utils";
+import type { Editor, Range } from "@tiptap/core";
+import { useCurrentEditor } from "@tiptap/react";
+import type {
+  SuggestionKeyDownProps,
+  SuggestionProps,
+} from "@tiptap/suggestion";
+import {
+  type ForwardedRef,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import {
   Command,
   CommandEmpty,
@@ -7,16 +18,8 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui";
-import { Editor, Range } from "@tiptap/core";
-import { useCurrentEditor } from "@tiptap/react";
-import { SuggestionKeyDownProps, SuggestionProps } from "@tiptap/suggestion";
-import {
-  ForwardedRef,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { cn } from "@/lib/utils";
+import type { SlashCommandItem as ISlashCommandItem } from "../../types";
 
 export type SlashCommandViewProps = Omit<SuggestionProps, "items"> & {
   items: ISlashCommandItem[];
@@ -68,6 +71,19 @@ export const SlashCommandView = forwardRef(function (
 
   const onKeyDown = (p: SuggestionKeyDownProps) => {
     const { event } = p;
+    if (event.key === " " || event.key === "Tab") {
+      const selected =
+        listRef.current?.querySelector<HTMLElement>(
+          '[cmdk-item][aria-selected="true"]',
+        ) ??
+        listRef.current?.querySelector<HTMLElement>(
+          '[cmdk-item]:not([aria-disabled="true"])',
+        );
+      if (!selected) return true;
+      event.preventDefault();
+      selected.click();
+      return true;
+    }
     if (
       event.key === "ArrowDown" ||
       event.key === "ArrowUp" ||
@@ -81,6 +97,8 @@ export const SlashCommandView = forwardRef(function (
 
   // this is disgusting
   // october 9th 2025: i have no idea what this does
+  // may 27th 2026: i dont know why this is still here
+  // biome-ignore lint/style/noNonNullAssertion: see above
   useImperativeHandle(ref, () => ({ ...containerRef.current!, onKeyDown }));
 
   return (
@@ -97,7 +115,7 @@ export const SlashCommandView = forwardRef(function (
           setValue(val);
         }}
         filter={(val, search, keywords) => {
-          const extended = val + " " + keywords?.join(" ");
+          const extended = `${val} ${keywords?.join(" ")}`;
           if (extended.toLocaleLowerCase().includes(search)) return 1;
           return 0;
         }}

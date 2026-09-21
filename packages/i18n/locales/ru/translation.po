@@ -1,0 +1,1235 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2)\n"
+
+msgid "sidebar.button.newPage"
+msgstr "Новая заметка"
+
+msgid "sidebar.button.create"
+msgstr "Создать"
+
+msgid "common.cancel"
+msgstr "Отмена"
+
+msgid "rename.folderTitle"
+msgstr "Переименовать папку"
+
+msgid "rename.documentTitle"
+msgstr "Переименовать документ"
+
+msgid "rename.placeholder"
+msgstr "Название"
+
+msgid "rename.save"
+msgstr "Сохранить"
+
+msgid "folders.title"
+msgstr "Папки"
+
+msgid "folders.newFolder"
+msgstr "Новая папка"
+
+msgid "folders.createTitle"
+msgstr "Создать папку"
+
+msgid "folders.namePlaceholder"
+msgstr "Название папки"
+
+msgid "folders.create"
+msgstr "Создать"
+
+msgid "folders.gridView"
+msgstr "Сетка"
+
+msgid "folders.listView"
+msgstr "Список"
+
+msgid "folders.untitled"
+msgstr "Папка без названия"
+
+msgid "folders.emptySidebar"
+msgstr "Здесь нет папок"
+
+msgid "folders.empty"
+msgstr "Эта папка пуста"
+
+msgid "folders.root"
+msgstr "Главная"
+
+msgid "folders.itemCount"
+msgstr "Объектов: {{count}}"
+
+msgid "folders.itemType"
+msgstr "Папка"
+
+msgid "quickSwitch.documents"
+msgstr "Документы"
+
+msgid "quickSwitch.documentType"
+msgstr "Документ"
+
+msgid "quickPreview.loading"
+msgstr "Загрузка просмотра…"
+
+msgid "quickPreview.loadError"
+msgstr "Не удалось загрузить предпросмотр."
+
+msgid "quickPreview.emptyDocument"
+msgstr "Этот документ пуст."
+
+msgid "quickPreview.emptyFolder"
+msgstr "Эта папка пуста."
+
+msgid "quickPreview.closeHint"
+msgstr "Нажмите пробел ещё раз, чтобы закрыть"
+
+msgid "folders.rename"
+msgstr "Переименовать"
+
+msgid "folders.renameTitle"
+msgstr "Переименовать папку"
+
+msgid "folders.save"
+msgstr "Сохранить"
+
+msgid "folders.color.title"
+msgstr "Цвет папки"
+
+msgid "folders.color.default"
+msgstr "Цвет по умолчанию"
+
+msgid "folders.color.custom"
+msgstr "Свой цвет"
+
+msgid "folders.color.customTitle"
+msgstr "Свой цвет папки"
+
+msgid "folders.color.hex"
+msgstr "HEX"
+
+msgid "folders.color.red"
+msgstr "Красный"
+
+msgid "folders.color.green"
+msgstr "Зелёный"
+
+msgid "folders.color.blue"
+msgstr "Синий"
+
+msgid "folders.color.apply"
+msgstr "Применить"
+
+msgid "folders.sort.manual"
+msgstr "Вручную"
+
+msgid "folders.sort.nameAsc"
+msgstr "Название: А–Я"
+
+msgid "folders.sort.nameDesc"
+msgstr "Название: Я–А"
+
+msgid "folders.sort.newest"
+msgstr "Сначала новые"
+
+msgid "folders.sort.oldest"
+msgstr "Сначала старые"
+
+msgid "sidebar.button.home"
+msgstr "Главная"
+
+msgid "sidebar.button.settings"
+msgstr "Настройки"
+
+msgid "sidebar.button.trash"
+msgstr "Корзина"
+
+msgid "sidebar.button.hideSidebar"
+msgstr "Скрыть боковую панель"
+
+msgid "sidebar.button.showSidebar"
+msgstr "Показать боковую панель"
+
+msgid "sidebar.button.editSidebar"
+msgstr "Изменить боковую панель"
+
+msgid "sidebar.button.search"
+msgstr "Поиск"
+
+msgid "sidebar.button.menu"
+msgstr "Меню"
+
+msgid "sidebar.workspace.offline"
+msgstr "На вашем устройстве"
+
+msgid "sidebar.workspace.cloud"
+msgstr "В облаке"
+
+msgid "sidebar.workspace.newWorkspace"
+msgstr "Создать рабочее пространство"
+
+msgid "sidebar.workspace.newWorkspaceError"
+msgstr "Не удалось создать рабочее пространство"
+
+msgid "sidebar.workspace.offlineHeading"
+msgstr "Рабочие пространства на устройстве"
+
+msgid "sidebar.workspace.cloudHeading"
+msgstr "Рабочие пространства в облаке"
+
+msgid "sidebar.workspace.currentWorkspace"
+msgstr "Текущее рабочее пространство"
+
+msgid "sidebar.title.favorites"
+msgstr "Закреплённое"
+
+msgid "pinned.title"
+msgstr "Закреплённое"
+
+msgid "sidebar.title.allNotes"
+msgstr "Все заметки"
+
+msgid "sidebar.favorites.emptyHint"
+msgstr "Здесь пока ничего нет. Нажмите на звёздочку ⭐, чтобы закрепить заметку, или перетащите её сюда."
+
+msgid "sidebar.trash.title"
+msgstr "Корзина"
+
+msgid "sidebar.trash.restore"
+msgstr "Восстановить"
+
+msgid "sidebar.trash.delete"
+msgstr "Удалить навсегда"
+
+msgid "sidebar.trash.search"
+msgstr "Поиск в корзине"
+
+msgid "sidebar.trash.empty"
+msgstr "Очистить корзину"
+
+msgid "sidebar.trash.emptyState"
+msgstr "Корзина пуста"
+
+msgid "sidebar.trash.noMatches"
+msgstr "Ничего не найдено"
+
+msgid "sidebar.trash.selectItem"
+msgstr "Выбрать {{name}}"
+
+msgid "sidebar.trash.done"
+msgstr "Готово"
+
+msgid "sidebar.trash.selectedCount"
+msgstr "Выбрано: {{count}}"
+
+msgid "sidebar.trash.restoreSelected"
+msgstr "Восстановить"
+
+msgid "sidebar.trash.deleteSelected"
+msgstr "Удалить"
+
+msgid "sidebar.trash.deleteSelectedTitle"
+msgstr "Удалить навсегда {{count}} объектов?"
+
+msgid "sidebar.trash.deleteSelectedDescription"
+msgstr "Содержимое выбранных папок тоже будет удалено. Это действие нельзя отменить."
+
+msgid "sidebar.trash.bulkRestoreSuccess"
+msgstr "Выбранные объекты восстановлены."
+
+msgid "sidebar.trash.bulkRestoreFailed"
+msgstr "Не удалось восстановить выбранные объекты."
+
+msgid "sidebar.trash.bulkDeleteSuccess"
+msgstr "Выбранные объекты удалены навсегда."
+
+msgid "sidebar.trash.bulkDeleteFailed"
+msgstr "Не удалось удалить {{count}} объектов. Остальные сохранены."
+
+msgid "sidebar.notes.contextmenu.addFavorite"
+msgstr "Закрепить"
+
+msgid "sidebar.notes.contextmenu.removeFavorite"
+msgstr "Открепить"
+
+msgid "sidebar.notes.contextmenu.newSubpage"
+msgstr "Новая вложенная страница"
+
+msgid "sidebar.notes.contextmenu.rename"
+msgstr "Переименовать"
+
+msgid "sidebar.notes.contextmenu.moveTo"
+msgstr "Переместить в"
+
+msgid "sidebar.notes.contextmenu.duplicate"
+msgstr "Дублировать"
+
+msgid "sidebar.notes.contextmenu.export"
+msgstr "Экспортировать"
+
+msgid "sidebar.notes.contextmenu.trash"
+msgstr "Переместить в корзину"
+
+msgid "sidebar.notes.contextmenu.lastModified"
+msgstr "Последнее изменение:"
+
+msgid "sidebar.notes.contextmenu.openInCenter"
+msgstr "Открыть в рабочей области"
+
+msgid "sidebar.notes.noPages"
+msgstr "Нет страниц."
+
+msgid "defaults.pageTitle"
+msgstr "Без названия"
+
+msgid "home.welcome"
+msgstr "С возвращением"
+
+msgid "home.recents"
+msgstr "Недавние заметки"
+
+msgid "home.noPages"
+msgstr "У вас пока нет страниц."
+
+msgid "home.recentsEmpty"
+msgstr "Здесь пока пусто. Создайте первую заметку!"
+
+msgid "home.createPage"
+msgstr "Создать страницу"
+
+msgid "settings.workspace.title"
+msgstr "Рабочее пространство"
+
+msgid "settings.workspace.dataManagement"
+msgstr "Управление данными"
+
+msgid "settings.workspace.exportAllText"
+msgstr "Экспорт всех заметок в HTML"
+
+msgid "settings.workspace.exportAllButton"
+msgstr "Экспортировать"
+
+msgid "settings.workspace.backupAndRestoreText"
+msgstr "Резервное копирование и восстановление"
+
+msgid "settings.workspace.backupButton"
+msgstr "Создать копию"
+
+msgid "settings.workspace.importButton"
+msgstr "Импортировать данные"
+
+msgid "settings.workspace.exporting"
+msgstr "Экспорт…"
+
+msgid "settings.workspace.restoreDialog.title"
+msgstr "Импортировать данные"
+
+msgid "settings.workspace.restoreDialog.description"
+msgstr "Выберите ранее экспортированный архив данных Darkwrite для импорта."
+
+msgid "settings.workspace.restoreDialog.warningText"
+msgstr "Импорт заменит текущие данные содержимым архива. Они НЕ будут объединены."
+
+msgid "settings.workspace.restoreDialog.chooseFile"
+msgstr "Выбрать файл"
+
+msgid "settings.workspace.restoreDialog.cancel"
+msgstr "Отмена"
+
+msgid "settings.workspace.restoreDialog.restore"
+msgstr "Импортировать"
+
+msgid "settings.workspace.languageText"
+msgstr "Язык"
+
+msgid "settings.workspace.startupBehaviourText"
+msgstr "При запуске"
+
+msgid "settings.workspace.startupBehaviour.openHome"
+msgstr "Всегда открывать главную страницу"
+
+msgid "settings.workspace.startupBehaviour.openLastPage"
+msgstr "Продолжать с места остановки"
+
+msgid "settings.workspace.startupBehaviour.openSpecificPage"
+msgstr "Открывать определённую страницу"
+
+msgid "settings.workspace.deleteWorkspace"
+msgstr "Удалить рабочее пространство"
+
+msgid "settings.workspace.deleteWorkspaceDialog.title"
+msgstr "Удалить рабочее пространство"
+
+msgid "settings.workspace.deleteWorkspaceDialog.description"
+msgstr "Это действие нельзя отменить. Все заметки в этом рабочем пространстве будут удалены навсегда."
+
+msgid "settings.workspace.deleteWorkspaceDialog.confirmLabel"
+msgstr "Введите «{{name}}» для подтверждения:"
+
+msgid "settings.workspace.deleteWorkspaceDialog.cancel"
+msgstr "Отмена"
+
+msgid "settings.workspace.deleteWorkspaceDialog.delete"
+msgstr "Удалить рабочее пространство"
+
+msgid "settings.workspace.deleteWorkspaceDialog.successMessage"
+msgstr "Рабочее пространство удалено."
+
+msgid "settings.workspace.deleteWorkspaceDialog.errorMessage"
+msgstr "Не удалось удалить рабочее пространство."
+
+msgid "settings.workspace.editWorkspace"
+msgstr "Изменить рабочее пространство"
+
+msgid "settings.workspace.editWorkspaceDialog.title"
+msgstr "Изменить рабочее пространство"
+
+msgid "settings.workspace.editWorkspaceDialog.changeIcon"
+msgstr "Изменить значок"
+
+msgid "settings.workspace.editWorkspaceDialog.removeIcon"
+msgstr "Убрать значок"
+
+msgid "settings.workspace.editWorkspaceDialog.workspaceName"
+msgstr "Название рабочего пространства"
+
+msgid "settings.workspace.editWorkspaceDialog.save"
+msgstr "Сохранить"
+
+msgid "settings.workspace.editWorkspaceDialog.cancel"
+msgstr "Отмена"
+
+msgid "settings.workspace.alwaysShowWordCount"
+msgstr "Всегда показывать число слов"
+
+msgid "settings.workspace.codeBlockIndentSize"
+msgstr "Размер отступа в блоках кода"
+
+msgid "settings.workspace.codeBlockIndentSizeDescription"
+msgstr "Число пробелов при нажатии клавиши Tab ⇥."
+
+msgid "settings.workspace.showRtlControls"
+msgstr "Показывать управление направлением текста в редакторе"
+
+msgid "settings.workspace.openFilesOnDoubleClick"
+msgstr "Открывать связанные файлы двойным щелчком"
+
+msgid "settings.workspace.openItemsOnDoubleClick"
+msgstr "Открывать папки и документы двойным щелчком"
+
+msgid "settings.workspace.openItemsOnDoubleClickDescription"
+msgstr "Если выключить, обычный щелчок будет открывать объект вместо выделения. Быстрый просмотр и массовые действия после обычного щелчка станут недоступны; сначала выделите объект через Cmd/Shift или рамкой."
+
+msgid "settings.appearance.title"
+msgstr "Оформление"
+
+msgid "settings.appearance.canvasWidth"
+msgstr "Ширина рабочей области"
+
+msgid "settings.appearance.canvasWidthDescription"
+msgstr "Общая ширина для папок и документов. Удерживайте Cmd+Option (Ctrl+Alt в Windows/Linux) и перетаскивайте боковые ручки. Режим «Широкая страница» имеет приоритет."
+
+msgid "settings.appearance.canvasResizeLeft"
+msgstr "Изменить ширину рабочей области слева"
+
+msgid "settings.appearance.canvasResizeRight"
+msgstr "Изменить ширину рабочей области справа"
+
+msgid "settings.appearance.colorThemeText"
+msgstr "Цветовая тема"
+
+msgid "settings.appearance.importTooltip"
+msgstr "Импортировать тему"
+
+msgid "settings.appearance.accentColorText"
+msgstr "Акцентный цвет"
+
+msgid "settings.appearance.useSystemWindowFrame"
+msgstr "Использовать системную рамку окна (нужен перезапуск)"
+
+msgid "settings.appearance.useSystemAccentColor"
+msgstr "Использовать системный акцентный цвет (только Windows или macOS)"
+
+msgid "settings.appearance.useSystemAccentColorDescription"
+msgstr "Эта настройка может работать неправильно при автоматическом выборе цвета в Windows."
+
+msgid "settings.appearance.lightMode"
+msgstr "Светлая"
+
+msgid "settings.appearance.systemMode"
+msgstr "Как в системе"
+
+msgid "settings.appearance.darkMode"
+msgstr "Тёмная"
+
+msgid "settings.appearance.lightColorScheme"
+msgstr "Светлая цветовая тема"
+
+msgid "settings.appearance.darkColorScheme"
+msgstr "Тёмная цветовая тема"
+
+msgid "settings.appearance.compactSidebar"
+msgstr "Компактная боковая панель"
+
+msgid "settings.appearance.compactSidebarDescription"
+msgstr "На боковой панели поместится немного больше заметок"
+
+msgid "settings.fonts.title"
+msgstr "Шрифты"
+
+msgid "settings.fonts.description"
+msgstr "Выберите установленные шрифты для интерфейса и текста, а также моноширинный шрифт для кода."
+
+msgid "settings.fonts.uiText"
+msgstr "Шрифт приложения"
+
+msgid "settings.fonts.sansText"
+msgstr "Шрифт текста"
+
+msgid "settings.fonts.serifText"
+msgstr "Шрифт с засечками:"
+
+msgid "settings.fonts.monoText"
+msgstr "Шрифт кода"
+
+msgid "settings.fonts.applyButton"
+msgstr "Применить"
+
+msgid "settings.fonts.systemDefault"
+msgstr "Системный"
+
+msgid "settings.fonts.systemDefaultUi"
+msgstr "Системный шрифт приложения"
+
+msgid "settings.fonts.systemDefaultSans"
+msgstr "Системный шрифт текста"
+
+msgid "settings.fonts.systemDefaultCode"
+msgstr "Системный шрифт кода"
+
+msgid "settings.experimental.title"
+msgstr "Экспериментальные функции"
+
+msgid "settings.experimental.enableCustomTitlebarOnMac"
+msgstr "Особый заголовок окна в macOS (нужен перезапуск)"
+
+msgid "settings.about.title"
+msgstr "О приложении"
+
+msgid "settings.about.sourceCode"
+msgstr "Исходный код"
+
+msgid "settings.about.forkDescription"
+msgstr "Независимо развиваемый форк Darkwrite."
+
+msgid "settings.about.developmentBuild"
+msgstr "Сборка для разработки"
+
+msgid "settings.about.supportProject"
+msgstr "Поддержать проект"
+
+msgid "settings.about.upstreamProject"
+msgstr "Исходный проект Darkwrite"
+
+msgid "settings.about.upstreamWebsite"
+msgstr "Сайт исходного проекта"
+
+msgid "settings.about.reportBugs"
+msgstr "Сообщить об ошибке"
+
+msgid "settings.about.checkUpdates"
+msgstr "Проверить обновления"
+
+msgid "settings.about.checkUpdatesPending"
+msgstr "Проверка обновлений…"
+
+msgid "settings.about.website"
+msgstr "Сайт"
+
+msgid "settings.about.privacy"
+msgstr "Конфиденциальность"
+
+msgid "settings.about.license"
+msgstr "Лицензия (AGPL v3)"
+
+msgid "settings.privacy.autoUpdateCheckLabel"
+msgstr "Проверять обновления при запуске"
+
+msgid "editor.menu.checkSpelling"
+msgstr "Проверять орфографию"
+
+msgid "editor.menu.readerMode"
+msgstr "Режим чтения"
+
+msgid "editor.readerMode.enable"
+msgstr "Включить режим чтения"
+
+msgid "editor.readerMode.disable"
+msgstr "Выключить режим чтения"
+
+msgid "editor.menu.export"
+msgstr "Экспортировать"
+
+msgid "editor.menu.import"
+msgstr "Импортировать"
+
+msgid "editor.menu.duplicate"
+msgstr "Дублировать"
+
+msgid "editor.menu.wordCount"
+msgstr "Слов: {{count}}"
+
+msgid "editor.menu.undo"
+msgstr "Отменить"
+
+msgid "editor.menu.redo"
+msgstr "Повторить"
+
+msgid "editor.menu.imageWarning"
+msgstr "Изображения пока нельзя включить."
+
+msgid "editor.menu.jsonExport"
+msgstr "Документ Darkwrite (JSON)"
+
+msgid "editor.menu.htmlExport"
+msgstr "HTML (без оформления)"
+
+msgid "editor.menu.tooltip"
+msgstr "Другие действия"
+
+msgid "editor.database.newView.titleLabel"
+msgstr "Название представления"
+
+msgid "editor.database.newView.cancel"
+msgstr "Отмена"
+
+msgid "editor.database.newView.create"
+msgstr "Создать"
+
+msgid "editor.database.newView.dataSource"
+msgstr "Источник данных"
+
+msgid "editor.database.picker.placeholder"
+msgstr "Выберите базу данных"
+
+msgid "editor.slashCommand.text"
+msgstr "Текст"
+
+msgid "editor.slashCommand.textDescription"
+msgstr "Обычный текст."
+
+msgid "editor.slashCommand.toDoList"
+msgstr "Список задач"
+
+msgid "editor.slashCommand.toDoListDescription"
+msgstr "Отмечайте выполненные задачи."
+
+msgid "editor.slashCommand.heading1"
+msgstr "Заголовок 1"
+
+msgid "editor.slashCommand.heading1Description"
+msgstr "Крупный заголовок раздела."
+
+msgid "editor.slashCommand.heading2"
+msgstr "Заголовок 2"
+
+msgid "editor.slashCommand.heading2Description"
+msgstr "Заголовок подраздела."
+
+msgid "editor.slashCommand.heading3"
+msgstr "Заголовок 3"
+
+msgid "editor.slashCommand.heading3Description"
+msgstr "Заголовок подраздела."
+
+msgid "editor.slashCommand.heading4"
+msgstr "Заголовок 4"
+
+msgid "editor.slashCommand.heading4Description"
+msgstr "Заголовок подраздела."
+
+msgid "editor.slashCommand.bulletList"
+msgstr "Маркированный список"
+
+msgid "editor.slashCommand.bulletListDescription"
+msgstr "Список без нумерации."
+
+msgid "editor.slashCommand.numberedList"
+msgstr "Нумерованный список"
+
+msgid "editor.slashCommand.numberedListDescription"
+msgstr "Упорядоченный список."
+
+msgid "editor.slashCommand.quote"
+msgstr "Цитата"
+
+msgid "editor.slashCommand.quoteDescription"
+msgstr "Добавьте цитату."
+
+msgid "editor.slashCommand.callout"
+msgstr "Акцентный блок"
+
+msgid "editor.slashCommand.calloutDescription"
+msgstr "Выделите важную мысль в стилизованном блоке."
+
+msgid "editor.slashCommand.code"
+msgstr "Код"
+
+msgid "editor.slashCommand.codeDescription"
+msgstr "Добавьте фрагмент кода в заметку."
+
+msgid "editor.slashCommand.divider"
+msgstr "Разделитель"
+
+msgid "editor.slashCommand.dividerDescription"
+msgstr "Разделите заметку горизонтальной линией."
+
+msgid "editor.slashCommand.linkToPage"
+msgstr "Ссылка на страницу"
+
+msgid "editor.slashCommand.linkToPageDescription"
+msgstr "Ссылка на другую заметку."
+
+msgid "editor.slashCommand.image"
+msgstr "Изображение"
+
+msgid "editor.slashCommand.imageDescription"
+msgstr "Вставьте изображение."
+
+msgid "editor.slashCommand.table"
+msgstr "Таблица"
+
+msgid "editor.slashCommand.tableDescription"
+msgstr "Добавьте таблицу."
+
+msgid "editor.slashCommand.fileLink"
+msgstr "Ссылка на файл"
+
+msgid "editor.slashCommand.fileLinkDescription"
+msgstr "Быстрый доступ к локальному файлу."
+
+msgid "editor.bubble.h1"
+msgstr "Заголовок 1"
+
+msgid "editor.bubble.h2"
+msgstr "Заголовок 2"
+
+msgid "editor.bubble.h3"
+msgstr "Заголовок 3"
+
+msgid "editor.bubble.h4"
+msgstr "Заголовок 4"
+
+msgid "editor.bubble.clearHeading"
+msgstr "Убрать заголовок"
+
+msgid "editor.bubble.removeLink"
+msgstr "Удалить ссылку"
+
+msgid "editor.bubble.saveLink"
+msgstr "Сохранить ссылку"
+
+msgid "editor.bubble.linkPlaceholder"
+msgstr "Вставьте URL или введите запрос"
+
+msgid "editor.bubble.bulletList"
+msgstr "Маркированный список"
+
+msgid "editor.bubble.numberedList"
+msgstr "Нумерованный список"
+
+msgid "editor.bubble.toDoList"
+msgstr "Список задач"
+
+msgid "editor.bubble.bold"
+msgstr "Полужирный"
+
+msgid "editor.bubble.italic"
+msgstr "Курсив"
+
+msgid "editor.bubble.underline"
+msgstr "Подчёркнутый"
+
+msgid "editor.bubble.strike"
+msgstr "Зачёркнутый"
+
+msgid "editor.bubble.code"
+msgstr "Встроенный код"
+
+msgid "editor.bubble.blockquote"
+msgstr "Цитата"
+
+msgid "editor.bubble.textDirection.label"
+msgstr "Направление текста"
+
+msgid "editor.bubble.textDirection.ltr"
+msgstr "Слева направо"
+
+msgid "editor.bubble.textDirection.rtl"
+msgstr "Справа налево"
+
+msgid "editor.bubble.textDirection.auto"
+msgstr "Автоматически"
+
+msgid "editor.table.addColBefore"
+msgstr "Добавить столбец слева"
+
+msgid "editor.table.addColAfter"
+msgstr "Добавить столбец справа"
+
+msgid "editor.table.deleteCol"
+msgstr "Удалить столбец"
+
+msgid "editor.table.addRowBefore"
+msgstr "Добавить строку выше"
+
+msgid "editor.table.addRowAfter"
+msgstr "Добавить строку ниже"
+
+msgid "editor.table.deleteRow"
+msgstr "Удалить строку"
+
+msgid "editor.table.headerRow"
+msgstr "Переключить строку заголовка"
+
+msgid "editor.table.headerCol"
+msgstr "Переключить столбец заголовка"
+
+msgid "editor.table.delete"
+msgstr "Удалить таблицу"
+
+msgid "editor.customizations.sansText"
+msgstr "Без засечек"
+
+msgid "editor.customizations.serifText"
+msgstr "С засечками"
+
+msgid "editor.customizations.monoText"
+msgstr "Моноширинный"
+
+msgid "editor.customizations.customText"
+msgstr "Свой"
+
+msgid "editor.customizations.backgroundColorText"
+msgstr "Цвет фона"
+
+msgid "editor.customizations.foregroundColorText"
+msgstr "Цвет текста по умолчанию"
+
+msgid "editor.customizations.customFontNamePlaceholer"
+msgstr "Название шрифта"
+
+msgid "editor.customizations.widePage"
+msgstr "На всю ширину"
+
+msgid "editor.customizations.tooltip"
+msgstr "Оформление страницы"
+
+msgid "editor.blocks.linkToPage.placeholder"
+msgstr "Выберите заметку"
+
+msgid "editor.blocks.linkToPage.turnIntoInlineLink"
+msgstr "Преобразовать в ссылку в тексте"
+
+msgid "editor.blocks.fileLink.placeholder"
+msgstr "Выберите файл для быстрого доступа"
+
+msgid "editor.blocks.fileLink.open"
+msgstr "Открыть"
+
+msgid "editor.blocks.fileLink.copyPath"
+msgstr "Скопировать полный путь"
+
+msgid "editor.blocks.fileLink.revealInFolder"
+msgstr "Показать в папке"
+
+msgid "editor.blocks.fileLink.changeFile"
+msgstr "Изменить файл"
+
+msgid "editor.cover.changeCover"
+msgstr "Изменить обложку"
+
+msgid "editor.cover.removeCover"
+msgstr "Убрать обложку"
+
+msgid "editor.cover.addIcon"
+msgstr "Добавить значок"
+
+msgid "editor.cover.removeIcon"
+msgstr "Убрать значок"
+
+msgid "editor.cover.addCover"
+msgstr "Добавить обложку"
+
+msgid "editor.cover.trashWarning"
+msgstr "Эта страница находится в корзине."
+
+msgid "editor.placeholder"
+msgstr "Нажмите «/» для команд"
+
+msgid "search.placeholder"
+msgstr "Поиск папок и документов"
+
+msgid "search.chooserPlaceholder"
+msgstr "Выберите заметку"
+
+msgid "search.noResult"
+msgstr "Ничего не найдено"
+
+msgid "toast.update.description"
+msgstr "Доступно обновление: {{version}}"
+
+msgid "toast.update.releasePageButton"
+msgstr "Показать выпуск"
+
+msgid "toast.update.upToDate"
+msgstr "Установлена последняя версия Darkwrite."
+
+msgid "toast.movePage.success"
+msgstr "Объект перемещён."
+
+msgid "toast.movePage.error"
+msgstr "Не удалось переместить объект."
+
+msgid "toast.clearTrash.success"
+msgstr "Корзина очищена."
+
+msgid "toast.clearTrash.error"
+msgstr "Не удалось очистить корзину."
+
+msgid "toast.restorePage.success"
+msgstr "Страница восстановлена из корзины."
+
+msgid "toast.restorePage.error"
+msgstr "Не удалось восстановить страницу."
+
+msgid "toast.deletePage.success"
+msgstr "Страница удалена."
+
+msgid "toast.deletePage.error"
+msgstr "Не удалось удалить страницу."
+
+msgid "toast.trashPage.success"
+msgstr "Страница перемещена в корзину."
+
+msgid "toast.trashPage.error"
+msgstr "Не удалось переместить страницу в корзину."
+
+msgid "toast.exportPage.success"
+msgstr "Страница экспортирована."
+
+msgid "toast.exportPage.error"
+msgstr "Не удалось экспортировать страницу."
+
+msgid "titlebar.noPagesAbove"
+msgstr "Выше нет страниц."
+
+msgid "titlebar.locationPath"
+msgstr "Путь"
+
+msgid "onboarding.chooseLanguage"
+msgstr "Для начала выберите язык."
+
+msgid "onboarding.welcome"
+msgstr "Добро пожаловать в Darkwrite"
+
+msgid "onboarding.welcomeDesc"
+msgstr "Создадим ваше первое рабочее пространство"
+
+msgid "onboarding.nameWorkspaceHint"
+msgstr "Назовите рабочее пространство"
+
+msgid "onboarding.themeTitle"
+msgstr "Настройте приложение под себя"
+
+msgid "onboarding.themeDesc"
+msgstr "Выберите тему оформления. Её всегда можно изменить в настройках."
+
+msgid "onboarding.finishedHeading"
+msgstr "Всё готово."
+
+msgid "onboarding.finishedDesc"
+msgstr "Ваше личное рабочее пространство готово. Приятной работы!"
+
+msgid "onboarding.letsBegin"
+msgstr "Начать"
+
+msgid "onboarding.checkForUpdates"
+msgstr "Проверять обновления при запуске"
+
+msgid "ui.font.typeFontName"
+msgstr "Введите название шрифта"
+
+msgid "ui.font.search"
+msgstr "Поиск шрифтов"
+
+msgid "ui.font.placeholder"
+msgstr "Выберите шрифт"
+
+msgid "ui.moveToDialog.title"
+msgstr "Переместить <0></0> в:"
+
+msgid "ui.clearTrashDialog.title"
+msgstr "Очистить корзину"
+
+msgid "ui.clearTrashDialog.description"
+msgstr "Удалить навсегда все заметки из корзины? Это действие нельзя отменить."
+
+msgid "ui.clearTrashDialog.cancel"
+msgstr "Отмена"
+
+msgid "ui.clearTrashDialog.clear"
+msgstr "Очистить корзину"
+
+msgid "ui.contextmenu.copy"
+msgstr "Копировать"
+
+msgid "ui.contextmenu.cut"
+msgstr "Вырезать"
+
+msgid "ui.contextmenu.paste"
+msgstr "Вставить"
+
+msgid "ui.contextmenu.delete"
+msgstr "Удалить"
+
+msgid "ui.contextmenu.downloadImage"
+msgstr "Скачать изображение"
+
+msgid "ui.contextmenu.resetImageSize"
+msgstr "Сбросить размер"
+
+msgid "ui.contextmenu.selectAll"
+msgstr "Выделить всё"
+
+msgid "ui.contextmenu.pasteWithoutFormatting"
+msgstr "Вставить без форматирования"
+
+msgid "ui.contextmenu.fixSpelling"
+msgstr "Исправить орфографию"
+
+msgid "ui.showInFolder"
+msgstr "Показать в файловом менеджере"
+
+msgid "ui.history.back"
+msgstr "Назад"
+
+msgid "ui.history.forward"
+msgstr "Вперёд"
+
+msgid "menu.newNote"
+msgstr "Новая заметка"
+
+msgid "menu.tools"
+msgstr "Инструменты"
+
+msgid "menu.alwaysOnTop"
+msgstr "Поверх всех окон"
+
+msgid "menu.openDataDirectory"
+msgstr "Открыть папку данных"
+
+msgid "menu.zoomIn"
+msgstr "Увеличить масштаб"
+
+msgid "menu.zoomOut"
+msgstr "Уменьшить масштаб"
+
+msgid "menu.resetZoom"
+msgstr "Сбросить масштаб"
+
+msgid "menu.history"
+msgstr "История"
+
+msgid "menu.back"
+msgstr "Назад"
+
+msgid "menu.forward"
+msgstr "Вперёд"
+
+msgid "menu.help.reportBugs"
+msgstr "Сообщить об ошибке"
+
+msgid "menu.help.website"
+msgstr "Открыть сайт Darkwrite"
+
+msgid "menu.help.documentation"
+msgstr "Документация Darkwrite"
+
+msgid "note.property.type.text"
+msgstr "Текст"
+
+msgid "note.property.type.date"
+msgstr "Дата"
+
+msgid "note.property.type.checkbox"
+msgstr "Флажок"
+
+msgid "note.property.action.addProperty"
+msgstr "Добавить свойство"
+
+msgid "note.property.action.deleteProperty"
+msgstr "Удалить свойство"
+
+msgid "note.property.placeholder"
+msgstr "Новое свойство"
+
+msgid "note.property.showProperties"
+msgstr "Свойства"
+
+msgid "ui.datepicker.hint"
+msgstr "Выберите дату"
+
+msgid "ui.datepicker.today"
+msgstr "Сегодня"
+
+msgid "ui.datepicker.tomorrow"
+msgstr "Завтра"
+
+msgid "ui.datepicker.nextWeek"
+msgstr "Через неделю"
+
+msgid "selectionTrashDialog.singleTitle"
+msgstr "Переместить «{{name}}» в корзину?"
+
+msgid "selectionTrashDialog.multipleTitle"
+msgstr "Переместить {{count}} объектов в корзину?"
+
+msgid "selectionTrashDialog.folderDescription"
+msgstr "Папка и всё её содержимое будут перемещены в корзину. Их можно будет восстановить позже."
+
+msgid "selectionTrashDialog.documentDescription"
+msgstr "Документ будет перемещён в корзину. Его можно будет восстановить позже."
+
+msgid "selectionTrashDialog.multipleDescription"
+msgstr "Выбранные объекты и содержимое выбранных папок будут перемещены в корзину. Их можно будет восстановить позже."
+
+msgid "selectionTrashDialog.confirm"
+msgstr "Переместить в корзину"
+
+msgid "selectionTrashDialog.success"
+msgstr "Выбранные объекты перемещены в корзину."
+
+msgid "selectionTrashDialog.error"
+msgstr "Не удалось переместить выбранные объекты в корзину."
+
+msgid "settings.shortcuts.title"
+msgstr "Горячие клавиши"
+
+msgid "settings.shortcuts.description"
+msgstr "Настройте команды Darkwrite, не меняя сочетания редактора и системы."
+
+msgid "settings.shortcuts.resetAll"
+msgstr "Сбросить все"
+
+msgid "settings.shortcuts.resetOne"
+msgstr "Сбросить сочетание"
+
+msgid "settings.shortcuts.pressKeys"
+msgstr "Нажмите клавиши…"
+
+msgid "settings.shortcuts.unsupported"
+msgstr "Используйте модификатор с буквой, цифрой или клавишей навигации."
+
+msgid "settings.shortcuts.conflict"
+msgstr "Это сочетание уже назначено для команды «{{command}}»."
+
+msgid "settings.shortcuts.groups.objects"
+msgstr "Объекты"
+
+msgid "settings.shortcuts.groups.navigation"
+msgstr "Навигация"
+
+msgid "settings.shortcuts.groups.view"
+msgstr "Вид"
+
+msgid "settings.shortcuts.groups.history"
+msgstr "История"
+
+msgid "settings.shortcuts.commands.newNote"
+msgstr "Новый документ"
+
+msgid "settings.shortcuts.commands.quickSwitch"
+msgstr "Быстрый переход"
+
+msgid "settings.shortcuts.commands.openSettings"
+msgstr "Открыть настройки"
+
+msgid "settings.shortcuts.commands.duplicate"
+msgstr "Дублировать документы"
+
+msgid "settings.shortcuts.commands.toggleFavorite"
+msgstr "Закрепить или открепить"
+
+msgid "settings.shortcuts.commands.moveToTrash"
+msgstr "Переместить в корзину"
+
+msgid "settings.shortcuts.commands.quickPreview"
+msgstr "Быстрый просмотр"
+
+msgid "settings.shortcuts.commands.gridView"
+msgstr "Сетка"
+
+msgid "settings.shortcuts.commands.listView"
+msgstr "Список"
+
+msgid "settings.shortcuts.commands.parentFolder"
+msgstr "Родительская папка"
+
+msgid "settings.shortcuts.commands.historyBack"
+msgstr "Назад"
+
+msgid "settings.shortcuts.commands.historyForward"
+msgstr "Вперёд"
+
+msgid "settings.shortcuts.commands.undo"
+msgstr "Отменить действие с объектом"
+
+msgid "settings.shortcuts.commands.redo"
+msgstr "Повторить действие с объектом"
+
+msgid "settings.shortcuts.commands.toggleSidebar"
+msgstr "Показать или скрыть боковую панель"
+
+msgid "settings.shortcuts.commands.zoomIn"
+msgstr "Увеличить масштаб"
+
+msgid "settings.shortcuts.commands.zoomOut"
+msgstr "Уменьшить масштаб"
+
+msgid "settings.shortcuts.commands.zoomReset"
+msgstr "Сбросить масштаб"
+
+msgid "common.close"
+msgstr "Закрыть"
+
+msgid "editor.image.loading"
+msgstr "Загрузка изображения…"
+
+msgid "backup.saveNotes"
+msgstr "Сохранить заметки"
+
+msgid "backup.saveBackup"
+msgstr "Создать резервную копию"
+
+msgid "backup.invalidArchive"
+msgstr "Этот файл не похож на резервную копию."
+
+msgid "backup.restoredNeedsRestart"
+msgstr "Резервная копия восстановлена. Чтобы изменения вступили в силу, перезапустите Darkwrite."
+
+msgid "backup.restoredWillRestart"
+msgstr "Резервная копия восстановлена. Darkwrite перезапустится, чтобы изменения вступили в силу."
+
+msgid "backup.restoreFailed"
+msgstr "Не удалось восстановить резервную копию. Текущие данные не затронуты."
+
+msgid "backup.chooseArchive"
+msgstr "Выберите резервную копию"
+
+msgid "backup.zipArchive"
+msgstr "Архив ZIP"
+
+msgid "rename.error"
+msgstr "Не удалось переименовать объект."

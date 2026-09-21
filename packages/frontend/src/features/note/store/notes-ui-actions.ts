@@ -1,5 +1,5 @@
+import type { AppDispatch } from "@/features/store/types";
 import { notesUiSlice } from "./notes-ui-slice";
-import { AppDispatch } from "@/features/store/types";
 
 export function MoveNoteDialogPortal(dispatch: AppDispatch) {
   function showMoveNoteDialog(noteId: string) {
@@ -15,4 +15,28 @@ export function MoveNoteDialogPortal(dispatch: AppDispatch) {
   }
 
   return { showMoveNoteDialog, hideMoveNoteDialog };
+}
+
+export function RenameNoteDialogPortal(dispatch: AppDispatch) {
+  function showRenameNoteDialog(noteId: string) {
+    dispatch(notesUiSlice.actions.showRenameNoteDialog({ noteId }));
+  }
+
+  function hideRenameNoteDialog() {
+    dispatch(notesUiSlice.actions.closeRenameNoteDialog());
+  }
+
+  return { showRenameNoteDialog, hideRenameNoteDialog };
+}
+
+export function ClearTrashDialogPortal(dispatch: AppDispatch) {
+  function showClearTrashDialog() {
+    dispatch(notesUiSlice.actions.showClearTrashDialog());
+  }
+
+  function hideClearTrashDialog() {
+    dispatch(notesUiSlice.actions.closeClearTrashDialog());
+  }
+
+  return { showClearTrashDialog, hideClearTrashDialog };
 }

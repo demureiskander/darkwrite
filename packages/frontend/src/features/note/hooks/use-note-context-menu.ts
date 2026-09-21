@@ -1,12 +1,17 @@
-import { useNoteActions } from "@/features/note/store/note-actions";
+import { useEditorActions } from "@/features/editor/store/editor-actions";
+import { useNoteExport } from "@/features/export/note-exporter";
 import { selectNoteById } from "@/features/note/store/note-selectors";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
-import { useNoteExport } from "@/features/export/note-exporter";
-import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
+import { trashFailToast, trashSuccessToast } from "../note.toast";
+import { createNote, duplicateNote, moveToTrash } from "../store/note.thunk";
+import {
+  MoveNoteDialogPortal,
+  RenameNoteDialogPortal,
+} from "../store/notes-ui-actions";
 
 export const useNoteContextMenu = (noteId: string) => {
   const note = useAppSelector((state) => selectNoteById(state, noteId));
-  const { createNote, duplicateNote, moveToTrash } = useNoteActions();
+  const { showCenterView } = useEditorActions();
   const exporter = useNoteExport();
   const dispatch = useAppDispatch();
 
@@ -22,29 +27,41 @@ export const useNoteContextMenu = (noteId: string) => {
     exporter.exportJSON(noteId);
   };
 
+  const exportMarkdown = () => exporter.exportMarkdown(noteId);
+
   const newSubpage = () => {
     if (!note) return;
-    createNote({
-      workspaceId: note.workspaceId,
-      navigateAfter: true,
-      parentId: note.id,
+    dispatch(createNote({ parentId: note.id, renameAfter: true }));
+  };
+
+  const rename = () => {
+    requestAnimationFrame(() => {
+      RenameNoteDialogPortal(dispatch).showRenameNoteDialog(noteId);
     });
   };
 
-  const trash = () => moveToTrash(noteId);
-  const duplicate = () => duplicateNote(noteId);
+  const trash = () =>
+    dispatch(moveToTrash(noteId))
+      .andTee(trashSuccessToast)
+      .orTee(trashFailToast);
+  const duplicate = () => dispatch(duplicateNote(noteId));
 
   const move = () => {
     MoveNoteDialogPortal(dispatch).showMoveNoteDialog(noteId);
   };
 
+  const openInCenter = () => showCenterView(noteId);
+
   return {
     newSubpage,
+    rename,
     trash,
     duplicate,
     exportHTML,
     exportJSON,
     exportPDF,
     move,
+    openInCenter,
+    exportMarkdown,
   };
 };

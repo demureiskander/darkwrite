@@ -1,7 +1,52 @@
 import _ from "lodash";
-import { PageSize } from "./pdf";
+import type { PageSize } from "./pdf";
 
 export type ThemeMode = "light" | "dark" | "system";
+
+export const APP_SHORTCUT_IDS = [
+  "newNote",
+  "quickSwitch",
+  "openSettings",
+  "duplicate",
+  "toggleFavorite",
+  "moveToTrash",
+  "quickPreview",
+  "gridView",
+  "listView",
+  "parentFolder",
+  "historyBack",
+  "historyForward",
+  "undo",
+  "redo",
+  "toggleSidebar",
+  "zoomIn",
+  "zoomOut",
+  "zoomReset",
+] as const;
+
+export type AppShortcutId = (typeof APP_SHORTCUT_IDS)[number];
+export type AppShortcutSettings = Record<AppShortcutId, string>;
+
+export const DEFAULT_APP_SHORTCUTS: AppShortcutSettings = {
+  newNote: "CmdOrCtrl+N",
+  quickSwitch: "CmdOrCtrl+K",
+  openSettings: "CmdOrCtrl+Comma",
+  duplicate: "CmdOrCtrl+D",
+  toggleFavorite: "CmdOrCtrl+P",
+  moveToTrash: "Backspace",
+  quickPreview: "Space",
+  gridView: "Alt+1",
+  listView: "Alt+2",
+  parentFolder: "CmdOrCtrl+Up",
+  historyBack: "CmdOrCtrl+BracketLeft",
+  historyForward: "CmdOrCtrl+BracketRight",
+  undo: "CmdOrCtrl+Z",
+  redo: "CmdOrCtrl+Shift+Z",
+  toggleSidebar: "Alt+B",
+  zoomIn: "CmdOrCtrl+Plus",
+  zoomOut: "CmdOrCtrl+Minus",
+  zoomReset: "CmdOrCtrl+0",
+};
 
 export const DEFAULT_THEME_SETTINGS = {
   themeMode: "dark" as ThemeMode,
@@ -11,10 +56,10 @@ export const DEFAULT_THEME_SETTINGS = {
   useSystemWindowFrame: false as boolean,
   useSystemAccentColor: false as boolean,
   fonts: {
-    sans: "Inter, Helvetica, Arial, sans-serif" as string,
-    serif: "Times New Roman, serif" as string,
-    code: "JetBrains Mono, Cascadia Code, Noto Mono, monospace" as string,
-    ui: "BlinkMacSystemFont, Helvetica Neue, Karla, Inter, Segoe UI, Noto Sans, Cantarell, system-ui" as string,
+    sans: "Manrope" as string,
+    serif: "ui-serif" as string,
+    code: "JetBrains Mono" as string,
+    ui: "Inter" as string,
   },
   experimental: {
     /** @deprecated no longer used */
@@ -29,11 +74,17 @@ export const DEFAULT_EDITOR_SETTINGS = {
   wordCountHudEnabled: false as boolean,
   disabledCommandItems: [] as string[],
   preferredPageSize: "A4" as PageSize,
+  showTextDirectionControls: false as boolean,
+  openFilesOnDoubleClick: false as boolean,
 };
 
 export const DEFAULT_CLIENT_SETTINGS = {
   autoUpdateCheck: false as boolean,
+  canvasWidthPx: 960 as number,
+  openItemsOnDoubleClick: true as boolean,
   language: "en" as string,
+  zoomFactor: 1 as number,
+  shortcuts: DEFAULT_APP_SHORTCUTS,
 };
 
 export type ThemeSettings = typeof DEFAULT_THEME_SETTINGS;
@@ -44,22 +95,16 @@ export type DarkwriteUserSettings = {
   appearance: ThemeSettings;
   editor: EditorSettings;
   client: ClientSettings;
-  version: 2;
+  version: 3;
 };
 
-export class SettingsModel {
-  public static getDefaults(): DarkwriteUserSettings {
-    return _.cloneDeep({
-      appearance: DEFAULT_THEME_SETTINGS,
-      client: DEFAULT_CLIENT_SETTINGS,
-      editor: DEFAULT_EDITOR_SETTINGS,
-      version: 2,
-    });
-  }
+export const getDefaultUserSettings = () =>
+  _.cloneDeep({
+    appearance: DEFAULT_THEME_SETTINGS,
+    client: DEFAULT_CLIENT_SETTINGS,
+    editor: DEFAULT_EDITOR_SETTINGS,
+    version: 3,
+  }) satisfies DarkwriteUserSettings;
 
-  public static mergeWith(settings: Partial<DarkwriteUserSettings>) {
-    const defaults = this.getDefaults();
-    _.merge(defaults, settings);
-    return defaults as DarkwriteUserSettings;
-  }
-}
+export const mergeUserSettings = (settings: Partial<DarkwriteUserSettings>) =>
+  _.merge(getDefaultUserSettings(), settings) as DarkwriteUserSettings;
