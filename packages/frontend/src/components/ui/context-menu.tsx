@@ -116,6 +116,7 @@ function ContextMenuItem({
   inset,
   variant = "default",
   onClick,
+  onPointerDown,
   onSelect,
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Item> & {
@@ -127,9 +128,9 @@ function ContextMenuItem({
   const handleSelect = (event: Event) => {
     if (selectionHandled.current) return;
     selectionHandled.current = true;
-    queueMicrotask(() => {
+    setTimeout(() => {
       selectionHandled.current = false;
-    });
+    }, 250);
     onSelect?.(event);
   };
 
@@ -144,7 +145,11 @@ function ContextMenuItem({
       )}
       onClick={(event) => {
         onClick?.(event);
-        if (!event.defaultPrevented) handleSelect(event.nativeEvent);
+        handleSelect(event.nativeEvent);
+      }}
+      onPointerDown={(event) => {
+        onPointerDown?.(event);
+        if (event.button === 0) handleSelect(event.nativeEvent);
       }}
       onSelect={handleSelect}
       {...props}

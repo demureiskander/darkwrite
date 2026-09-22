@@ -823,10 +823,13 @@ with the mouse.
 event. In the affected Electron mouse interaction path the native click was
 received but that selection event did not reach the action callback.
 
+**Attempts:** A native-click fallback was included in `1.3.0-beta.3`, but the
+reported mouse path still did not invoke document actions.
+
 **Applied solution:** The shared context-menu item now invokes its selection
-callback from the native click as a fallback. A microtask-scoped guard ensures
-the normal Radix selection path and the fallback cannot run the action twice;
-keyboard selection continues to use `onSelect`.
+callback on primary pointer-down, before Radix handles the later click/select
+sequence. A short guard prevents the following click and selection events from
+running the action twice; keyboard selection continues to use `onSelect`.
 
 **Verification:** Frontend type checking and production build passed on
-2026-09-23. Physical confirmation requires installing `1.3.0-beta.3`.
+2026-09-23. Physical confirmation requires installing `1.3.0-beta.4`.
