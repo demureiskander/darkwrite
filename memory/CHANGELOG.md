@@ -24,6 +24,9 @@ The upstream Darkwrite release history remains available in `../CHANGES.md`.
 
 ### Added
 
+- Publish macOS, Windows, and Linux installers automatically from GitHub when
+  a version tag is pushed. Add a Homebrew cask template and `brew install`
+  quick-start documentation for macOS.
 - Bundle Inter for the app interface, Manrope for writing, and JetBrains Mono
   for code blocks. They are the new defaults on every supported desktop
   platform and remain available alongside installed system fonts.

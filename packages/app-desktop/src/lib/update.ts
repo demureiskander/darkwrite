@@ -7,7 +7,7 @@ import { handler } from "@/types";
 
 async function checkUpdateFromGithub() {
   const response = await fetch(
-    "https://api.github.com/repos/astudentinearth/darkwrite/releases/latest",
+    "https://api.github.com/repos/demureiskander/darkwrite/releases/latest",
     {
       headers: {
         Accept: "application/vnd.github.v3+json",

@@ -1,15 +1,14 @@
 <p align="center">
     <img src="res/cover.jpg"/>
-    <img src="https://img.shields.io/github/actions/workflow/status/astudentinearth/darkwrite/test-unit.yml?label=tests&style=for-the-badge"/>
-    <img src="https://img.shields.io/github/license/astudentinearth/darkwrite?style=for-the-badge"/>
-    <img src="https://img.shields.io/github/stars/astudentinearth/darkwrite?color=yellow&style=for-the-badge"/>
-    <img src="https://img.shields.io/github/v/tag/astudentinearth/darkwrite?style=for-the-badge"/>
+    <img src="https://img.shields.io/github/actions/workflow/status/demureiskander/darkwrite/test-unit.yml?label=tests&style=for-the-badge"/>
+    <img src="https://img.shields.io/github/license/demureiskander/darkwrite?style=for-the-badge"/>
+    <img src="https://img.shields.io/github/stars/demureiskander/darkwrite?color=yellow&style=for-the-badge"/>
+    <img src="https://img.shields.io/github/v/tag/demureiskander/darkwrite?style=for-the-badge"/>
 </p>
 <strong>
 <p align="center">
-    <a href="https://twitter.com/codingwithburak">Follow on Twitter</a> -
-    <a href="https://github.com/astudentinearth/darkwrite/releases">Download Darkwrite</a> -
-    <a href="https://github.com/astudentinearth/darkwrite/issues">Report bugs</a>
+    <a href="https://github.com/demureiskander/darkwrite/releases">Download Darkwrite</a> -
+    <a href="https://github.com/demureiskander/darkwrite/issues">Report bugs</a>
 </p>
 </strong>
 
@@ -17,7 +16,19 @@
 
 ✒️ Darkwrite lets you take notes without getting in your way.
 
-**Head over to the [releases page](https://github.com/astudentinearth/darkwrite/releases) to get started.**
+**Head over to the [releases page](https://github.com/demureiskander/darkwrite/releases) to get started.**
+
+## Quick start on macOS
+
+After the first release, install Darkwrite through Homebrew:
+
+```bash
+brew tap demureiskander/tap
+brew install --cask darkwrite
+```
+
+The macOS build is currently unsigned. If Gatekeeper blocks its first launch,
+open **System Settings → Privacy & Security** and choose **Open Anyway**.
 
 ⭐ Star this repository to know when we release new updates.
 

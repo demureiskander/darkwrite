@@ -18,14 +18,18 @@ After the installation is complete, it might take a little while for it to launc
 ## Install on macOS
 Download the `.dmg` file and open it, then drag Darkwrite to your applications folder. You are good to go!
 
-macOS builds are notarized, so there's nothing else you need to do.
+### Homebrew
+
+```bash
+brew tap demureiskander/tap
+brew install --cask darkwrite
+```
 
 <Aside type="note">
-If you are installing a release older than 1.1.0-beta.1, these builds are not notarized and you'll have to manually remove the quarantine attribute with:
-```bash
-xattrs -rd com.apple.quarantine /Applications/Darkwrite.app
-```
-(if you ever decide to install such an old version today, please let us know why😭)
+The macOS build is currently unsigned and not notarized. If macOS prevents its
+first launch, open **System Settings → Privacy & Security** and select
+**Open Anyway** for Darkwrite. Do not run terminal commands that disable
+macOS security checks globally.
 
 </Aside>
 
@@ -75,7 +79,6 @@ Install the unofficial `darkwrite-bin` AUR package. Thanks to zxp19821005 for ma
 
 ### Flatpak and Snap
 Neither Flatpak nor Snap is currently not supported, and we can't say when it will be supported either. Certain Darkwrite features like linked files probably won't work without full filesystem access, and I have no experience packaging a Flatpak. Packaging software for a sandboxed environment creates its own edge cases we currently don't have the time to deal with.
-
 
 
 

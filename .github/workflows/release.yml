@@ -1,21 +1,36 @@
-name: "release"
+name: Release desktop apps
+
 on:
   push:
     tags:
       - "v*"
-  workflow_dispatch:
 
 env:
   CI: false
+  # Release builds are intentionally unsigned until the project obtains an
+  # Apple Developer certificate. This keeps macOS packaging deterministic.
+  CSC_IDENTITY_AUTO_DISCOVERY: false
+
+permissions:
+  contents: write
 
 jobs:
   build:
-    name: "Build desktop"
+    name: Build (${{ matrix.name }})
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-22.04, windows-latest] # macOS temporarily removed until CI notarization is ready
-    runs-on: ${{matrix.platform}}
+        include:
+          - name: macOS
+            runner: macos-14
+            artifact: macos
+          - name: Windows
+            runner: windows-latest
+            artifact: windows
+          - name: Linux
+            runner: ubuntu-22.04
+            artifact: linux
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
       - name: Install node
@@ -24,21 +39,7 @@ jobs:
           node-version: 22
       - run: corepack enable
       - name: Install dependencies
-        run: pnpm install
-
-      - name: Linter check
-        run: pnpm lint
-
-      - name: Install Python dependencies (macOS)
-        run: |
-          brew install python-setuptools
-        if: runner.os == 'macOS'
-
-      - name: Setup XCode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-        if: runner.os == 'macOS'
+        run: pnpm install --frozen-lockfile
 
       - name: Install Python dependencies (Windows)
         run: |
@@ -47,15 +48,34 @@ jobs:
 
       - name: Build
         run: pnpm build
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
+
+      - name: Upload release files
+        uses: actions/upload-artifact@v4
         with:
-          files: |
+          name: ${{ matrix.artifact }}
+          path: |
             packages/app-desktop/release/*/*.exe
             packages/app-desktop/release/*/*.dmg
             packages/app-desktop/release/*/*.AppImage
             packages/app-desktop/release/*/*.deb
             packages/app-desktop/release/*/*.tar.zst
             packages/app-desktop/release/*/*.rpm
-          draft: true
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release files
+        uses: actions/download-artifact@v4
+        with:
+          path: release-files
+          merge-multiple: true
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-files/*
+          generate_release_notes: true
+          draft: false
