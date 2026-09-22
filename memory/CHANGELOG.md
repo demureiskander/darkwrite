@@ -10,6 +10,12 @@ The upstream Darkwrite release history remains available in `../CHANGES.md`.
 
 ### Fixed
 
+- Restore all document context-menu actions when they are selected with a
+  mouse click, while retaining keyboard activation and preventing duplicate
+  execution.
+- Keep workspace details and its action buttons on separate responsive rows in
+  Settings, preventing the Edit workspace button from overlapping metadata at
+  wide window sizes or with localized text.
 - Make the "Check for updates on launch" preference work. When enabled,
   Darkwrite checks this fork's public GitHub releases after startup and shows
   a non-blocking notification linking to the newer release.

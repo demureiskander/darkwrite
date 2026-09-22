@@ -1,5 +1,6 @@
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
+import { useRef } from "react";
 import type * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -114,11 +115,24 @@ function ContextMenuItem({
   className,
   inset,
   variant = "default",
+  onClick,
+  onSelect,
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Item> & {
   inset?: boolean;
   variant?: "default" | "destructive";
 }) {
+  const selectionHandled = useRef(false);
+
+  const handleSelect = (event: Event) => {
+    if (selectionHandled.current) return;
+    selectionHandled.current = true;
+    queueMicrotask(() => {
+      selectionHandled.current = false;
+    });
+    onSelect?.(event);
+  };
+
   return (
     <ContextMenuPrimitive.Item
       data-slot="context-menu-item"
@@ -128,6 +142,11 @@ function ContextMenuItem({
         "context-menu-item-global data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default data-[variant=destructive]:active:bg-destructive/20 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
+      onClick={(event) => {
+        onClick?.(event);
+        if (!event.defaultPrevented) handleSelect(event.nativeEvent);
+      }}
+      onSelect={handleSelect}
       {...props}
     />
   );

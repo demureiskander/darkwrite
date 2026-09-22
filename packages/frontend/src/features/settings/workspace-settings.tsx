@@ -53,7 +53,7 @@ export default function WorkspaceSettings() {
     <div className="flex w-full flex-col items-center gap-4 px-1 pt-3">
       {currentWorkspace && (
         <SettingsCard className="gap-5">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-4">
             <div className="flex min-w-0 gap-4">
               <WorkspaceIcon
                 className="size-15 shrink-0 rounded-xl text-2xl"
@@ -73,7 +73,7 @@ export default function WorkspaceSettings() {
                 </span>
               </div>
             </div>
-            <div className="flex shrink-0 flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
               <EditWorkspaceDialog
                 open={editDialogOpen}
                 onOpenChange={setEditDialogOpen}

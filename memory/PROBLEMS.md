@@ -792,3 +792,41 @@ request as non-fatal so it cannot interrupt application startup.
 
 **Verification:** Frontend type checking and production build passed on
 2026-09-22. Physical confirmation requires installing the next release.
+
+## PRB-034 — Workspace action buttons overlap workspace metadata
+
+**Status:** Fixed; verification pending.
+
+**Symptom:** In Settings, widening the window could place the workspace action
+buttons over the workspace sync-mode label.
+
+**Root cause:** The workspace header switched to a horizontal flex layout at a
+viewport breakpoint rather than at the width available to its settings card.
+The fixed-width actions could then compress the metadata block too far.
+
+**Applied solution:** Keep the workspace identity and its actions in separate
+responsive rows. The action row can wrap independently, so long names and
+localized labels cannot overlap the metadata.
+
+**Verification:** Frontend type checking and production build passed on
+2026-09-23. Physical confirmation requires installing `1.3.0-beta.3`.
+
+## PRB-035 — Document context-menu actions ignore mouse selection
+
+**Status:** Fixed; verification pending.
+
+**Symptom:** Every action in a document card's context menu, including Rename,
+Move to Trash, and export actions, could appear to do nothing when selected
+with the mouse.
+
+**Root cause:** The menu relied exclusively on Radix's custom `onSelect`
+event. In the affected Electron mouse interaction path the native click was
+received but that selection event did not reach the action callback.
+
+**Applied solution:** The shared context-menu item now invokes its selection
+callback from the native click as a fallback. A microtask-scoped guard ensures
+the normal Radix selection path and the fallback cannot run the action twice;
+keyboard selection continues to use `onSelect`.
+
+**Verification:** Frontend type checking and production build passed on
+2026-09-23. Physical confirmation requires installing `1.3.0-beta.3`.
