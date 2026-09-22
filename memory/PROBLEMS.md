@@ -758,3 +758,19 @@ electron-builder requires `actool` 26 or later.
 process exit code when the platform packager fails.
 
 **Verification:** Pending the rerun of `v1.3.0-beta.1` on GitHub Actions.
+
+## PRB-032 — Release artifacts were not attached to GitHub Release
+
+**Status:** Fix queued for verification.
+
+**Symptom:** The cross-platform jobs completed successfully, but the published
+GitHub Release contained no installer assets.
+
+**Root cause:** Downloaded GitHub Actions artifacts retain their nested
+directory structure. The release action matched only `release-files/*`, which
+does not include the installers inside those directories.
+
+**Applied solution:** Match `release-files/**/*` so every downloaded installer
+is attached to the release.
+
+**Verification:** Pending the rerun of `v1.3.0-beta.1` on GitHub Actions.

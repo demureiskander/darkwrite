@@ -86,6 +86,6 @@ jobs:
         with:
           tag_name: ${{ inputs.tag || github.ref_name }}
           name: ${{ inputs.tag || github.ref_name }}
-          files: release-files/*
+          files: release-files/**/*
           generate_release_notes: true
           draft: false
