@@ -741,3 +741,20 @@ instead of blocking startup.
 
 **Verification:** Desktop type checking and production build pass. The running
 development application still needs visual confirmation.
+
+## PRB-031 — macOS release build did not fail at the failing step
+
+**Status:** Fix queued for verification.
+
+**Symptom:** The first GitHub release attempt reported a missing artifact
+instead of the macOS packaging failure that caused it.
+
+**Root cause:** `tools/darkwrite-builder.js` logged the child
+`electron-builder` failure but did not propagate its non-zero exit code.
+Additionally, the pinned `macos-14` runner had Xcode 15.4 while the current
+electron-builder requires `actool` 26 or later.
+
+**Applied solution:** Use `macos-latest` for release builds and set the parent
+process exit code when the platform packager fails.
+
+**Verification:** Pending the rerun of `v1.3.0-beta.1` on GitHub Actions.

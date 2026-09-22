@@ -28,7 +28,7 @@ jobs:
       matrix:
         include:
           - name: macOS
-            runner: macos-14
+            runner: macos-latest
             artifact: macos
           - name: Windows
             runner: windows-latest

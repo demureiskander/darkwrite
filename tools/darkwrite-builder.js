@@ -106,10 +106,12 @@ async function main() {
       console.log(
         `\u001b[32;1m ✔ Built Darkwrite ${version} for ${os.type()} \u001b[30;22mtook ${(endTimestamp - startTimestamp) / 1000}s\u001b[0m`,
       );
-    } else
+    } else {
       console.log(
         `\u001b[31;1m✘ Build failed with exit code ${code}: \u001b[0m`,
       );
+      process.exitCode = code ?? 1;
+    }
   });
 
   process.on("SIGINT", () => {
