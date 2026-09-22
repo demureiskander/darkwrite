@@ -813,7 +813,7 @@ localized labels cannot overlap the metadata.
 
 ## PRB-035 — Document context-menu actions ignore mouse selection
 
-**Status:** Fixed; verification pending.
+**Status:** Resolved and interactively confirmed on 2026-09-23.
 
 **Symptom:** Every action in a document card's context menu, including Rename,
 Move to Trash, and export actions, could appear to do nothing when selected
@@ -831,5 +831,6 @@ callback on primary pointer-down, before Radix handles the later click/select
 sequence. A short guard prevents the following click and selection events from
 running the action twice; keyboard selection continues to use `onSelect`.
 
-**Verification:** Frontend type checking and production build passed on
-2026-09-23. Physical confirmation requires installing `1.3.0-beta.4`.
+**Verification:** Frontend type checking, production build, and 88 focused
+document-operation tests passed. Confirmed interactively by the user in
+`1.3.0-beta.4`: the document context-menu actions now respond to mouse input.
