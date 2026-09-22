@@ -37,6 +37,10 @@ data portability, and user control.
   covers this broader report.
 - When the fork begins publishing releases, configure an independent update
   channel while retaining upstream attribution and license information.
+- When `client.autoUpdateCheck` is enabled, check the fork's public GitHub
+  release feed after the application root is rendered. A failed network check
+  must never interrupt startup; a newer version shows a non-blocking link to
+  its release page rather than downloading or installing it automatically.
 
 ## Settings organization
 

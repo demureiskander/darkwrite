@@ -10,6 +10,9 @@ The upstream Darkwrite release history remains available in `../CHANGES.md`.
 
 ### Fixed
 
+- Make the "Check for updates on launch" preference work. When enabled,
+  Darkwrite checks this fork's public GitHub releases after startup and shows
+  a non-blocking notification linking to the newer release.
 - Keep the application available if macOS font discovery fails during startup.
   Installed font families are now queried from a small isolated Node process,
   while the font controls safely fall back to their system defaults on error.

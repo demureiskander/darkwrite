@@ -774,3 +774,21 @@ does not include the installers inside those directories.
 is attached to the release.
 
 **Verification:** Pending the rerun of `v1.3.0-beta.1` on GitHub Actions.
+
+## PRB-033 — Launch update preference did not start a check
+
+**Status:** Fixed; verification pending.
+
+**Symptom:** The onboarding and Settings toggle for checking updates at launch
+was visible and persisted, but opening Darkwrite never requested the release
+feed or showed an available-update notification.
+
+**Root cause:** The reusable `checkForUpdate` thunk existed but was never
+dispatched during the application's initialization sequence.
+
+**Applied solution:** After the application root is rendered, dispatch the
+check only when `client.autoUpdateCheck` is enabled. Treat a failed network
+request as non-fatal so it cannot interrupt application startup.
+
+**Verification:** Frontend type checking and production build passed on
+2026-09-22. Physical confirmation requires installing the next release.

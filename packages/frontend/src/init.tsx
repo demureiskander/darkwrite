@@ -2,7 +2,10 @@ import type { DarkwriteUserSettings } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "./api/api-client";
 import { setupAppMenuEvents } from "./features/app-menu/app-menu-bus";
-import { loadClientInfo } from "./features/client/store/client-thunk";
+import {
+  checkForUpdate,
+  loadClientInfo,
+} from "./features/client/store/client-thunk";
 import { setupContextMenuEvents } from "./features/context-menu/menu-event-bus";
 import { setupLayoutEvents } from "./features/layout/layout-store";
 import { loadFileLinks } from "./features/link/store/file-link.thunk";
@@ -57,7 +60,17 @@ export const loadInitialFileLinks = (store: AppStore) =>
   store.dispatch(loadFileLinks()).map(() => store);
 
 export const loadInitialClientInfo = (store: AppStore) =>
-  store.dispatch(loadClientInfo()).map(() => store);
+  store
+    .dispatch(loadClientInfo())
+    .andTee(() => {
+      if (!store.getState().settings.client.autoUpdateCheck) {
+        return okAsync(undefined);
+      }
+      return store.dispatch(checkForUpdate({ notify: true })).orElse(() =>
+        okAsync(undefined),
+      );
+    })
+    .map(() => store);
 
 export function initializeUserPrefs(store: AppStore) {
   return DarkwriteAPIClient.settings
