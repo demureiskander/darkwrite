@@ -834,3 +834,57 @@ running the action twice; keyboard selection continues to use `onSelect`.
 **Verification:** Frontend type checking, production build, and 88 focused
 document-operation tests passed. Confirmed interactively by the user in
 `1.3.0-beta.4`: the document context-menu actions now respond to mouse input.
+
+## PRB-036 — Long breadcrumb path overlaps title-bar controls
+
+**Status:** Fixed; verification pending.
+
+**Symptom:** A long folder title in the title-bar path could render over the
+current document title and the editor action buttons.
+
+**Root cause:** The title bar applied `shrink-0` to every direct child,
+including the path. Its own truncation rules therefore never received a
+smaller available width.
+
+**Applied solution:** Allow the path container to shrink, while explicitly
+keeping the editor toolbar at its natural width. Existing breadcrumb title
+truncation then constrains long paths before they can cover neighbouring UI.
+
+**Verification:** Frontend type checking and production build passed on
+2026-09-30. Physical confirmation pending.
+
+## PRB-037 — Page appearance font choices overlap in Russian
+
+**Status:** Fixed; verification pending.
+
+**Symptom:** In the Page appearance popover, localized font-choice labels such
+as "Без засечек" and "Моноширинный" overlapped neighbouring choices.
+
+**Root cause:** The popover sized itself to three fixed 80 px columns, which
+was not sufficient for translated labels.
+
+**Applied solution:** Give the popover a responsive readable width, allow its
+three choice buttons to share that width, and permit labels to wrap cleanly
+within their own cards.
+
+**Verification:** Frontend type checking and production build passed on
+2026-09-30. Physical confirmation pending.
+
+## PRB-038 — Folder-note migration failed in SQLite tests
+
+**Status:** Resolved on 2026-09-30.
+
+**Symptom:** The new SQLite migration for the folder-note flag made desktop
+database suites fail before test execution with a libsql `SQLITE_UNKNOWN_0`
+error.
+
+**Root cause:** The migration contained a trailing Drizzle statement-breakpoint
+marker after its only SQL statement. This migration runner attempted to execute
+the resulting empty statement.
+
+**Applied solution:** Keep the single `ALTER TABLE` statement without a trailing
+breakpoint marker. Statement breaks remain required between multiple SQL
+statements, but are unnecessary for a one-statement migration.
+
+**Verification:** Desktop type checking and the note DAO/service test suites
+passed after the migration ran successfully.

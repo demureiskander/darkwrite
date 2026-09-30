@@ -22,6 +22,7 @@ export const selectNotesForTrashView = createSelector(
       .filter(
         (n) =>
           n.workspaceId === workspaceId &&
+          !n.isFolderNote &&
           n.isTrashed &&
           (query ? n.title.toLowerCase().includes(q) : true),
       )

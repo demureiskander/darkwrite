@@ -95,6 +95,9 @@ export interface Note {
   /** Custom color used for folder icons. Documents keep this value `null`. */
   folderColor: string | null;
 
+  /** A document that belongs to a folder but is opened only from its header. */
+  isFolderNote: boolean;
+
   /** The parent note of this note. `null` means the note is at in top layer of the tree. */
   parentId: ParentId;
 
@@ -159,6 +162,7 @@ export const Note = {
         kind: NoteKind.Document,
         icon: null,
         folderColor: null,
+        isFolderNote: false,
         favoriteOrderHint: "",
         isFavorite: false,
         isTrashed: false,

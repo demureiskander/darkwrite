@@ -64,6 +64,9 @@ msgstr "主页"
 msgid "folders.itemCount"
 msgstr "{{count}} 个项目"
 
+msgid "folders.folderNote"
+msgstr "文件夹笔记"
+
 msgid "folders.itemType"
 msgstr "文件夹"
 

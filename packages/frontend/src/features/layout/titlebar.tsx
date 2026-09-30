@@ -30,7 +30,7 @@ export function Titlebar() {
     <div
       style={overlayStyle}
       className={cn(
-        "titlebar h-12 bg-background shrink-0 flex [&>div]:shrink-0 p-2 justify-start gap-2 items-center",
+        "titlebar h-12 bg-background shrink-0 flex p-2 justify-start gap-2 items-center",
         isSidebarCollapsed && "bg-view-1",
         isSidebarCollapsed &&
           noteId &&
@@ -49,7 +49,7 @@ export function Titlebar() {
         </HeaderbarButton>
       </TextTooltip>
       <HistoryNavigation />
-      <LocationPath documentId={noteId} />
+      <LocationPath documentId={noteId} className="shrink" />
       <div className="grow"></div>
       {noteId && <Toolbar noteId={noteId} />}
     </div>

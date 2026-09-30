@@ -37,6 +37,7 @@ const makeNote = (over: Partial<Note> & { id: string }): Note => ({
   properties: {},
   propertyOrder: [],
   ...over,
+  isFolderNote: over.isFolderNote ?? false,
 });
 
 type Setup = {

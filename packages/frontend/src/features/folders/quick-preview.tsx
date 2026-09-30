@@ -123,7 +123,8 @@ function FolderPreview({ noteId }: { noteId: string }) {
   const { t } = useTranslation();
   const notes = useAppSelector(selectAllNotes);
   const children = notes.filter(
-    (note) => note.parentId === noteId && !note.isTrashed,
+    (note) =>
+      note.parentId === noteId && !note.isFolderNote && !note.isTrashed,
   );
 
   if (children.length === 0)

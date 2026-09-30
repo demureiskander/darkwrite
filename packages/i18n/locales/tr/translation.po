@@ -64,6 +64,9 @@ msgstr "Ana sayfa"
 msgid "folders.itemCount"
 msgstr "{{count}} öğe"
 
+msgid "folders.folderNote"
+msgstr "Klasör notu"
+
 msgid "folders.itemType"
 msgstr "Klasör"
 

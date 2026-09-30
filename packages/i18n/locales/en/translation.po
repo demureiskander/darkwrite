@@ -64,6 +64,9 @@ msgstr "Home"
 msgid "folders.itemCount"
 msgstr "{{count}} items"
 
+msgid "folders.folderNote"
+msgstr "Folder note"
+
 msgid "folders.itemType"
 msgstr "Folder"
 

@@ -64,6 +64,13 @@
       "when": 1789315200000,
       "tag": "0008_add_folder_color",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1790701200000,
+      "tag": "0009_add_folder_note",
+      "breakpoints": true
     }
   ]
 }

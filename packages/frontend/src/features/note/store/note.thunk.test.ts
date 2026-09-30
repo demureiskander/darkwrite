@@ -31,6 +31,7 @@ import {
   moveManyToTrash,
   moveNote,
   moveToTrash,
+  openFolderNote,
   permanentlyDeleteNote,
   reorderFavorite,
   reorderNote,
@@ -77,6 +78,7 @@ const makeNote = (over: Partial<Note> = {}): Note => ({
   kind: NoteKind.Document,
   icon: null,
   folderColor: null,
+  isFolderNote: false,
   parentId: null,
   workspaceId: WORKSPACE_ID,
   orderHint: Rank.default().get(),
@@ -142,6 +144,8 @@ describe("createNote", () => {
     localStorage.clear();
     createMock.mockReset();
     createMock.mockReturnValue(okAsync(undefined));
+    patchMock.mockReset();
+    patchMock.mockReturnValue(okAsync(undefined));
     store = createAppStore();
   });
 
@@ -247,6 +251,75 @@ describe("createNote", () => {
       open: false,
       noteId: null,
     });
+  });
+});
+
+describe("openFolderNote", () => {
+  let store: AppStore;
+
+  beforeEach(() => {
+    localStorage.clear();
+    createMock.mockReset();
+    createMock.mockReturnValue(okAsync(undefined));
+    patchMock.mockReset();
+    patchMock.mockReturnValue(okAsync(undefined));
+    store = createAppStore();
+    store.dispatch(appSessionSlice.actions.switchWorkspace(WORKSPACE_ID));
+  });
+
+  it("creates and opens one hidden note for a folder", async () => {
+    const folder = makeNote({ id: "folder", kind: NoteKind.Folder });
+    store.dispatch(notesSlice.actions.upsertNotes([folder]));
+    const seen = vi.fn();
+    const unsubscribe = NavigationEventBus.subscribe("note", ({ data }) =>
+      seen(data.noteId),
+    );
+
+    const result = await store.dispatch(openFolderNote(folder.id));
+
+    expect(result.isOk()).toBe(true);
+    const created = createMock.mock.calls[0][0];
+    expect(created).toMatchObject({
+      parentId: folder.id,
+      isFolderNote: true,
+    });
+    expect(
+      selectNotesByParentId(store.getState(), WORKSPACE_ID, folder.id),
+    ).toEqual([]);
+    expect(seen).toHaveBeenCalledWith(created.id);
+    unsubscribe();
+  });
+
+  it("opens the existing note instead of creating a second one", async () => {
+    const folder = makeNote({ id: "folder", kind: NoteKind.Folder });
+    const folderNote = makeNote({
+      id: "folder-note",
+      parentId: folder.id,
+      isFolderNote: true,
+    });
+    store.dispatch(notesSlice.actions.upsertNotes([folder, folderNote]));
+
+    await store.dispatch(openFolderNote(folder.id));
+
+    expect(createMock).not.toHaveBeenCalled();
+  });
+
+  it("restores a trashed folder note instead of creating a replacement", async () => {
+    const folder = makeNote({ id: "folder", kind: NoteKind.Folder });
+    const folderNote = makeNote({
+      id: "folder-note",
+      parentId: folder.id,
+      isFolderNote: true,
+      isTrashed: true,
+    });
+    store.dispatch(notesSlice.actions.upsertNotes([folder, folderNote]));
+
+    await store.dispatch(openFolderNote(folder.id));
+
+    expect(createMock).not.toHaveBeenCalled();
+    expect(selectNoteById(store.getState(), folderNote.id)?.isTrashed).toBe(
+      false,
+    );
   });
 });
 
@@ -1369,6 +1442,30 @@ describe("trash + favorite status thunks", () => {
       expect(selectNoteById(store.getState(), "r")?.favoriteOrderHint).toBe(
         "a2",
       );
+    });
+
+    it("restores a folder note together with its folder", async () => {
+      const folder = makeNote({
+        id: "folder",
+        kind: NoteKind.Folder,
+        isTrashed: true,
+      });
+      const folderNote = makeNote({
+        id: "folder-note",
+        parentId: folder.id,
+        isFolderNote: true,
+        isTrashed: true,
+      });
+      seed(folder, folderNote);
+
+      await store.dispatch(restoreFromTrash(folder.id));
+
+      expect(selectNoteById(store.getState(), folder.id)?.isTrashed).toBe(
+        false,
+      );
+      expect(
+        selectNoteById(store.getState(), folderNote.id)?.isTrashed,
+      ).toBe(false);
     });
   });
 

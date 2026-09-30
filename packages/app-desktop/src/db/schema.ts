@@ -31,6 +31,7 @@ export const note = sqliteTable("note", {
   title: text().notNull(),
   icon: text(),
   folderColor: text(),
+  isFolderNote: bool().default(false).notNull(),
   createdAt: timestamp().notNull(),
   modifiedAt: timestamp().notNull(),
   trashedAt: timestamp(),

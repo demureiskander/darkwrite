@@ -41,6 +41,7 @@ export const selectNotesByParentId = createSelector(
         (note) =>
           note.workspaceId === workspaceId &&
           note.parentId === parentId &&
+          !note.isFolderNote &&
           !note.isTrashed,
       )
       .toSorted(stableSortByOrderKeyFn());
@@ -60,6 +61,7 @@ export const selectNotesForSearch = createSelector(
       (n) =>
         n.workspaceId === workspaceId &&
         n.kind === NoteKind.Document &&
+        !n.isFolderNote &&
         !n.isTrashed,
     ),
 );
@@ -84,6 +86,7 @@ export const selectRecentNotes = createSelector(
         (n) =>
           n.workspaceId === workspaceId &&
           n.kind === NoteKind.Document &&
+          !n.isFolderNote &&
           !n.isTrashed,
       )
       .toSorted(byUpdateTime("desc"))
@@ -99,7 +102,11 @@ export const selectFavoriteIds = createSelector(
   (allNotes, workspaceId) => {
     return allNotes
       .filter(
-        (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
+        (n) =>
+          n.workspaceId === workspaceId &&
+          !n.isFolderNote &&
+          n.isFavorite &&
+          !n.isTrashed,
       )
       .toSorted(stableSortByOrderKeyFn("favoriteOrderHint"))
       .map((n) => n.id);
@@ -114,7 +121,11 @@ export const selectFavorites = createSelector(
   (allNotes, workspaceId) => {
     return allNotes
       .filter(
-        (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
+        (n) =>
+          n.workspaceId === workspaceId &&
+          !n.isFolderNote &&
+          n.isFavorite &&
+          !n.isTrashed,
       )
       .toSorted(stableSortByOrderKeyFn("favoriteOrderHint"));
   },
@@ -148,6 +159,7 @@ export const selectByWorkspaceAndSearchTerm = createSelector(
         (n) =>
           n.workspaceId === workspaceId &&
           n.kind === NoteKind.Document &&
+          !n.isFolderNote &&
           (n.title ?? "").toLowerCase().includes(query.toLowerCase()) &&
           !n.isTrashed,
       )

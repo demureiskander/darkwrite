@@ -56,7 +56,12 @@ const selectChildrenOfExpandedNotes = createSelector(
     const buckets: Record<string, Note[]> = {};
     for (const note of all) {
       const parentId = note.parentId;
-      if (parentId && !note.isTrashed && expandedSet.has(parentId)) {
+      if (
+        parentId &&
+        !note.isFolderNote &&
+        !note.isTrashed &&
+        expandedSet.has(parentId)
+      ) {
         buckets[parentId] ??= [];
         buckets[parentId].push(note);
       }

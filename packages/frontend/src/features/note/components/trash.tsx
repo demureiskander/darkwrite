@@ -64,6 +64,7 @@ const TrashItem = memo(function ({
   const { note } = useNoteById(noteId);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const store = useAppStore();
   if (!note) return null;
 
   return (
@@ -124,9 +125,16 @@ const TrashItem = memo(function ({
         <TextTooltip text={t("sidebar.trash.delete")}>
           <Button
             aria-label={t("sidebar.trash.delete")}
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
-              dispatch(permanentlyDeleteNote(noteId));
+              const ids = resolveTrashBatchIds(
+                [noteId],
+                selectAllNotes(store.getState()),
+              );
+              for (const id of ids) {
+                const result = await dispatch(permanentlyDeleteNote(id));
+                if (result.isErr()) return;
+              }
             }}
             variant="ghost"
             className="size-8 shrink-0 p-0 text-destructive hover:bg-destructive/15 hover:text-destructive"

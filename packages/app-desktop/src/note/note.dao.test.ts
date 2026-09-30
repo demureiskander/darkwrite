@@ -57,6 +57,7 @@ describe("NoteDAO", () => {
       modifiedAt: new Date(),
       icon: null,
       folderColor: null,
+      isFolderNote: false,
       isFavorite: false,
       isTrashed: null,
       trashedAt: null,

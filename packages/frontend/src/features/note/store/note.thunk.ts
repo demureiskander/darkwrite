@@ -26,6 +26,7 @@ import type { AppDispatch, AppGetState } from "@/features/store/types";
 import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace.thunk";
 import { KeyedDebouncedUpdater } from "@/lib/debounced-updater";
 import {
+  selectAllNotes,
   selectAllNotesAsMap,
   selectFavorites,
   selectNoteById,
@@ -119,6 +120,40 @@ export const createNote =
           );
       })
       .orTee(() => dispatch(act.removeNote(note.id)));
+  };
+
+/** Open the folder's single hidden note, creating it on first use. */
+export const openFolderNote =
+  (folderId: string) => (dispatch: AppDispatch, getState: AppGetState) => {
+    const folder = selectNoteById(getState(), folderId);
+    if (!folder || folder.kind !== NoteKind.Folder || folder.isTrashed)
+      return dwErrAsync("Folder not found.");
+
+    const existing = selectAllNotes(getState()).find(
+      (note) =>
+        note.parentId === folder.id &&
+        note.isFolderNote,
+    );
+    if (existing) {
+      if (existing.isTrashed) {
+        return dispatch(
+          updateNote({ id: existing.id, isTrashed: false, trashedAt: null }),
+        ).map(() => {
+          navigateToNote(existing.id);
+          return existing;
+        });
+      }
+      navigateToNote(existing.id);
+      return okAsync(existing);
+    }
+
+    return dispatch(
+      createNote({
+        parentId: folder.id,
+        navigateAfter: true,
+        overrides: { isFolderNote: true },
+      }),
+    );
   };
 
 export const duplicateNote =
@@ -632,8 +667,27 @@ export const moveManyToTrash =
 export const moveToTrash = (noteId: string) => (dispatch: AppDispatch) =>
   dispatch(moveManyToTrash([noteId]));
 
-export const restoreFromTrash = (noteId: string) => (dispatch: AppDispatch) =>
-  dispatch(updateNote({ id: noteId, isTrashed: false, trashedAt: null }));
+export const restoreFromTrash =
+  (noteId: string) => (dispatch: AppDispatch, getState: AppGetState) => {
+    const notes = selectAllNotesAsMap(getState());
+    const note = notes[noteId];
+    if (!note) return dwErrAsync("Note not found.");
+
+    const ids = Object.values(notes)
+      .filter(
+        (candidate) =>
+          candidate.isTrashed &&
+          (candidate.id === note.id ||
+            (note.kind === NoteKind.Folder &&
+              isDescendant(candidate.id, note.id, notes) === true)),
+      )
+      .map((candidate) => candidate.id);
+    return dispatch(
+      updateManyNotes(
+        ids.map((id) => ({ id, isTrashed: false, trashedAt: null })),
+      ),
+    );
+  };
 
 export const permanentlyDeleteNote =
   (noteId: string) => (dispatch: AppDispatch, getState: AppGetState) => {

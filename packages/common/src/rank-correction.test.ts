@@ -30,6 +30,7 @@ function makeNote(overrides: Partial<Note> = {}): Note {
     properties: {},
     propertyOrder: [],
     ...overrides,
+    isFolderNote: overrides.isFolderNote ?? false,
   };
 }
 

@@ -29,7 +29,10 @@ export function quickSwitchItems(
 ) {
   if (!workspaceId) return [];
   const workspaceNotes = allNotes.filter(
-    (note) => note.workspaceId === workspaceId && !note.isTrashed,
+    (note) =>
+      note.workspaceId === workspaceId &&
+      !note.isFolderNote &&
+      !note.isTrashed,
   );
   const noteMap = Object.fromEntries(
     workspaceNotes.map((note) => [note.id, note]),

@@ -154,6 +154,7 @@ describe("note service tests", () => {
         kind: NoteKind.Document,
         icon: null,
         folderColor: null,
+        isFolderNote: false,
         parentId: null,
         workspaceId: workspace.id,
         orderHint: Rank.default().get(),

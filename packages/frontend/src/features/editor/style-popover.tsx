@@ -40,7 +40,7 @@ export default function StylePopover({ id }: { id: string }) {
         </PopoverTrigger>
         <TooltipContent>{t("editor.customizations.tooltip")}</TooltipContent>
       </Tooltip>
-      <PopoverContent className="w-fit h-fit p-2 mr-2 bg-view-2/80 top-highlight">
+      <PopoverContent className="h-fit w-[min(24rem,calc(100vw-1rem))] p-2 mr-2 bg-view-2/80 top-highlight">
         <StyleUI customizations={customizations} noteId={id} />
       </PopoverContent>
     </Popover>
@@ -59,7 +59,7 @@ export function StyleUI(props: {
   const { setFont, setColor, setWide } = useStylePopover();
   return (
     <div className="flex flex-col gap-2">
-      <div className="grid grid-cols-3 grid-rows-1 gap-1 [&>button]:h-fit [&>button]:flex [&>button]:w-20 [&>button]:flex-col [&>button]:gap-1 [&>button]:rounded-xl">
+      <div className="grid grid-cols-3 gap-1 [&>button]:h-fit [&>button]:min-w-0 [&>button]:flex [&>button]:flex-col [&>button]:gap-1 [&>button]:rounded-xl [&>button]:whitespace-normal">
         <Button
           onClick={() => setFont(FontStyle.SANS)}
           variant={"ghost"}
@@ -74,7 +74,9 @@ export function StyleUI(props: {
           >
             Aa
           </span>
-          <span>{t("sansText")}</span>
+          <span className="text-center text-xs leading-tight">
+            {t("sansText")}
+          </span>
         </Button>
         <Button
           onClick={() => setFont(FontStyle.MONO)}
@@ -85,7 +87,9 @@ export function StyleUI(props: {
           )}
         >
           <span className="darkwrite-mono text-3xl">Aa</span>
-          <span>{t("monoText")}</span>
+          <span className="text-center text-xs leading-tight">
+            {t("monoText")}
+          </span>
         </Button>
         <Button
           onClick={() => setFont(FontStyle.CUSTOM)}
@@ -96,7 +100,9 @@ export function StyleUI(props: {
           )}
         >
           <span className="text-3xl">A?</span>
-          <span>{t("customText")}</span>
+          <span className="text-center text-xs leading-tight">
+            {t("customText")}
+          </span>
         </Button>
       </div>
       {font === FontStyle.CUSTOM && (

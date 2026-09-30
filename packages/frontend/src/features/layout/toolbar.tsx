@@ -5,7 +5,7 @@ import FavoriteToggle from "./favorite-toggle";
 
 export default function Toolbar({ noteId }: { noteId: string }) {
   return (
-    <div className="flex gap-1">
+    <div className="flex shrink-0 gap-1">
       <ReaderModeToggle />
       <FavoriteToggle id={noteId} />
       <StylePopover id={noteId} />
