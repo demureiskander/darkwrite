@@ -67,6 +67,9 @@ msgstr "{{count}} öğe"
 msgid "folders.folderNote"
 msgstr "Klasör notu"
 
+msgid "folders.folderNotePlaceholder"
+msgstr "Bu klasör hakkında bir not yazın…"
+
 msgid "folders.itemType"
 msgstr "Klasör"
 

@@ -122,7 +122,7 @@ export const createNote =
       .orTee(() => dispatch(act.removeNote(note.id)));
   };
 
-/** Open the folder's single hidden note, creating it on first use. */
+/** Get the folder's single hidden note, creating it on first use. */
 export const openFolderNote =
   (folderId: string) => (dispatch: AppDispatch, getState: AppGetState) => {
     const folder = selectNoteById(getState(), folderId);
@@ -138,19 +138,14 @@ export const openFolderNote =
       if (existing.isTrashed) {
         return dispatch(
           updateNote({ id: existing.id, isTrashed: false, trashedAt: null }),
-        ).map(() => {
-          navigateToNote(existing.id);
-          return existing;
-        });
+        ).map(() => existing);
       }
-      navigateToNote(existing.id);
       return okAsync(existing);
     }
 
     return dispatch(
       createNote({
         parentId: folder.id,
-        navigateAfter: true,
         overrides: { isFolderNote: true },
       }),
     );

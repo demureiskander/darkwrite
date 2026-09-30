@@ -6,7 +6,6 @@ import {
   FolderPlus,
   LayoutGrid,
   List,
-  PenLine,
   Star,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -27,14 +26,12 @@ import {
 } from "@/features/navigation/navigator";
 import { NoteContextMenuContainer } from "@/features/note/note-context-menu";
 import { InlineNoteTitle } from "@/features/note/components/inline-note-title";
-import {
-  createNote,
-  openFolderNote,
-} from "@/features/note/store/note.thunk";
+import { createNote } from "@/features/note/store/note.thunk";
 import { selectAllNotes } from "@/features/note/store/note-selectors";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
 import { FolderContextMenu } from "./folder-context-menu";
+import { FolderNotePopover } from "./folder-note-popover";
 import { DraggableNode } from "./folder-dnd";
 import { sortFolderItems } from "./folder-sort";
 import { FolderSortMenu } from "./folder-sort-menu";
@@ -114,15 +111,7 @@ export function FolderBrowser() {
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 {activeFolder && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => dispatch(openFolderNote(activeFolder.id))}
-                  >
-                    <PenLine size={16} />
-                    {t("folders.folderNote")}
-                  </Button>
+                  <FolderNotePopover folderId={activeFolder.id} />
                 )}
                 <FolderSortMenu />
               </div>

@@ -267,13 +267,9 @@ describe("openFolderNote", () => {
     store.dispatch(appSessionSlice.actions.switchWorkspace(WORKSPACE_ID));
   });
 
-  it("creates and opens one hidden note for a folder", async () => {
+  it("creates one hidden note for a folder", async () => {
     const folder = makeNote({ id: "folder", kind: NoteKind.Folder });
     store.dispatch(notesSlice.actions.upsertNotes([folder]));
-    const seen = vi.fn();
-    const unsubscribe = NavigationEventBus.subscribe("note", ({ data }) =>
-      seen(data.noteId),
-    );
 
     const result = await store.dispatch(openFolderNote(folder.id));
 
@@ -286,8 +282,6 @@ describe("openFolderNote", () => {
     expect(
       selectNotesByParentId(store.getState(), WORKSPACE_ID, folder.id),
     ).toEqual([]);
-    expect(seen).toHaveBeenCalledWith(created.id);
-    unsubscribe();
   });
 
   it("opens the existing note instead of creating a second one", async () => {

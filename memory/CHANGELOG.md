@@ -36,9 +36,10 @@ The upstream Darkwrite release history remains available in `../CHANGES.md`.
 
 ### Added
 
-- Add one dedicated note per folder, opened from the new pencil-labelled
-  "Note" button in the folder header. It is created on first use, remains out
-  of ordinary document lists, and follows its folder through Trash operations.
+- Add one dedicated note per folder, edited in a compact text popover from the
+  new pencil-labelled "Note" button in the folder header. It is created on
+  first use, remains out of ordinary document lists, and follows its folder
+  through Trash operations.
 - Publish macOS, Windows, and Linux installers automatically from GitHub when
   a version tag is pushed. Add a Homebrew cask template and `brew install`
   quick-start documentation for macOS.

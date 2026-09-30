@@ -64,6 +64,9 @@ msgstr "Объектов: {{count}}"
 msgid "folders.folderNote"
 msgstr "Заметка"
 
+msgid "folders.folderNotePlaceholder"
+msgstr "Напишите заметку об этой папке…"
+
 msgid "folders.itemType"
 msgstr "Папка"
 

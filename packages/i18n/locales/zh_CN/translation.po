@@ -67,6 +67,9 @@ msgstr "{{count}} 个项目"
 msgid "folders.folderNote"
 msgstr "文件夹笔记"
 
+msgid "folders.folderNotePlaceholder"
+msgstr "写下关于此文件夹的备注…"
+
 msgid "folders.itemType"
 msgstr "文件夹"
 

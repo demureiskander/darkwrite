@@ -67,6 +67,9 @@ msgstr "{{count}} items"
 msgid "folders.folderNote"
 msgstr "Folder note"
 
+msgid "folders.folderNotePlaceholder"
+msgstr "Write a note about this folder…"
+
 msgid "folders.itemType"
 msgstr "Folder"
 

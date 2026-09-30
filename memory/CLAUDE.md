@@ -152,10 +152,10 @@ data portability, and user control.
 ## Folder navigation decisions
 
 - Folders are navigation-only tree nodes; documents remain editable content.
-- A folder may own one `isFolderNote` document, opened from the folder-header
-  Note button. It is hidden from ordinary folder contents, navigation, search,
-  favorites, previews, and the Trash list, while moves and Trash operations on
-  the folder include it as a descendant.
+- A folder may own one `isFolderNote` document, edited in a compact popover
+  from the folder-header Note button. It is hidden from ordinary folder
+  contents, navigation, search, favorites, previews, and the Trash list, while
+  moves and Trash operations on the folder include it as a descendant.
 - The left pane shows the active folder among its siblings. The main pane shows
   the active folder's children, so the same folder is not duplicated in both.
 - Folder and document views share one persistent grid/list preference.
